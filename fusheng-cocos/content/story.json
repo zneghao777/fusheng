@@ -1,0 +1,659 @@
+[
+  {
+    "id": "note",
+    "title": "@story.0.title",
+    "body": "@story.0.body",
+    "weight": 1,
+    "where": null,
+    "day": 2,
+    "seal": "@story.0.seal",
+    "sub": "@story.0.sub",
+    "conditions": [],
+    "options": [
+      {
+        "id": "note_0",
+        "label": "@story.0.options.0.label",
+        "hint": "@story.0.options.0.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 8
+          },
+          {
+            "type": "buff",
+            "nameKey": "@story.note.option0.1.arg0",
+            "v": 8,
+            "a": 2,
+            "hours": 10
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@story.note.option0.2.arg1"
+          }
+        ]
+      },
+      {
+        "id": "note_1",
+        "label": "@story.0.options.1.label",
+        "hint": "@story.0.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 3
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@story.note.option1.1.arg1"
+          }
+        ]
+      },
+      {
+        "id": "note_2",
+        "label": "@story.0.options.2.label",
+        "hint": "@story.0.options.2.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                4
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@story.note.option2.1.arg1"
+          }
+        ]
+      }
+    ],
+    "bodyVariants": [
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "normal"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "solo"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "exam"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "rich"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "single"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "blend"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "debt"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "art"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "gran"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "city"
+            ]
+          }
+        ],
+        "body": "@story.0.body"
+      }
+    ]
+  },
+  {
+    "id": "call",
+    "title": "@story.1.title",
+    "body": "@story.1.body",
+    "weight": 1,
+    "where": null,
+    "day": 4,
+    "seal": "@story.1.seal",
+    "sub": "@story.1.sub",
+    "conditions": [],
+    "options": [
+      {
+        "id": "call_0",
+        "label": "@story.1.options.0.label",
+        "hint": "@story.1.options.0.hint",
+        "effects": [
+          {
+            "type": "clock",
+            "minutes": 30
+          },
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": {
+              "op": "neg",
+              "args": [
+                8
+              ]
+            }
+          },
+          {
+            "type": "warm",
+            "delta": 8
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 6
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@story.call.option0.4.arg1"
+          }
+        ]
+      },
+      {
+        "id": "call_1",
+        "label": "@story.1.options.1.label",
+        "hint": "@story.1.options.1.hint",
+        "effects": [
+          {
+            "type": "clock",
+            "minutes": 5
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                5
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@story.call.option1.2.arg0",
+            "v": {
+              "op": "neg",
+              "args": [
+                8
+              ]
+            },
+            "a": {
+              "op": "neg",
+              "args": [
+                2
+              ]
+            },
+            "hours": 8
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@story.call.option1.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "call_2",
+        "label": "@story.1.options.2.label",
+        "hint": "@story.1.options.2.hint",
+        "effects": [
+          {
+            "type": "clock",
+            "minutes": 15
+          },
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": {
+              "op": "neg",
+              "args": [
+                3
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 3
+          },
+          {
+            "type": "warm",
+            "delta": 4
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@story.call.option2.4.arg1"
+          }
+        ]
+      }
+    ],
+    "bodyVariants": [
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "normal"
+            ]
+          }
+        ],
+        "body": "@story.1.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "solo"
+            ]
+          }
+        ],
+        "body": "@story.1.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "exam"
+            ]
+          }
+        ],
+        "body": "@story.1.bodyVariants.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "rich"
+            ]
+          }
+        ],
+        "body": "@story.1.bodyVariants.3.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "single"
+            ]
+          }
+        ],
+        "body": "@story.1.bodyVariants.4.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "blend"
+            ]
+          }
+        ],
+        "body": "@story.1.bodyVariants.5.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "debt"
+            ]
+          }
+        ],
+        "body": "@story.1.bodyVariants.6.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "art"
+            ]
+          }
+        ],
+        "body": "@story.1.bodyVariants.7.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "gran"
+            ]
+          }
+        ],
+        "body": "@story.1.bodyVariants.8.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "city"
+            ]
+          }
+        ],
+        "body": "@story.1.bodyVariants.9.body"
+      }
+    ]
+  },
+  {
+    "id": "fair",
+    "title": "@story.2.title",
+    "body": "@story.2.body",
+    "weight": 1,
+    "where": null,
+    "day": 6,
+    "seal": "@story.2.seal",
+    "sub": "@story.2.sub",
+    "conditions": [],
+    "options": [
+      {
+        "id": "fair_0",
+        "label": "@story.2.options.0.label",
+        "hint": "@story.2.options.0.hint",
+        "effects": [
+          {
+            "type": "branch",
+            "condition": {
+              "type": "moneyBelow",
+              "value": 20
+            },
+            "then": [
+              {
+                "type": "reply",
+                "whoKey": "",
+                "textKey": "@story.fair.option0.0.then.0.arg1"
+              },
+              {
+                "type": "stop"
+              }
+            ],
+            "else": []
+          },
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                20
+              ]
+            }
+          },
+          {
+            "type": "flag",
+            "key": "story.fair",
+            "value": true
+          },
+          {
+            "type": "warm",
+            "delta": 10
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 14
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@story.fair.option0.5.arg1"
+          }
+        ]
+      },
+      {
+        "id": "fair_1",
+        "label": "@story.2.options.1.label",
+        "hint": "@story.2.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                3
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "@events.sauce.option0.3.arg0",
+            "textKey": "@story.fair.option1.1.arg1"
+          }
+        ]
+      },
+      {
+        "id": "fair_2",
+        "label": "@story.2.options.2.label",
+        "hint": "@story.2.options.2.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                2
+              ]
+            }
+          },
+          {
+            "type": "warm",
+            "delta": {
+              "op": "neg",
+              "args": [
+                4
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "@events.sauce.option0.3.arg0",
+            "textKey": "@story.fair.option2.2.arg1"
+          }
+        ]
+      }
+    ],
+    "bodyVariants": [
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "normal"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "solo"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "exam"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "rich"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "single"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "blend"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "debt"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "art"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "gran"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      },
+      {
+        "conditions": [
+          {
+            "type": "originIn",
+            "ids": [
+              "city"
+            ]
+          }
+        ],
+        "body": "@story.2.body"
+      }
+    ]
+  }
+]

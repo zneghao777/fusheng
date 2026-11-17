@@ -1,0 +1,29 @@
+{
+  "name": "fusheng-cocos",
+  "version": "0.6.5",
+  "private": true,
+  "creator": {
+    "version": "3.8.8"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "content": "node tools/build-content.mjs",
+    "build:web": "node tools/build-web.mjs",
+    "serve": "python3 tools/serve.py",
+    "art:export": "node tools/export-original-art.mjs",
+    "test:web": "node tools/verify-web.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "acorn": "~8.15.0",
+    "ajv": "^8.17.1",
+    "playwright": "1.64.1",
+    "typescript": "~5.8.3",
+    "vitest": "~3.2.4"
+  },
+  "dependencies": {
+    "lz-string": "1.5.0"
+  },
+  "uuid": "011f7ae9-7013-458d-a332-ae7863e3c852"
+}

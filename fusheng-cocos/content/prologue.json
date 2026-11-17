@@ -1,0 +1,1382 @@
+{
+  "villa.normal": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.normal.2.lines.0",
+        "@prologue.villa.normal.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.solo": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.solo.2.lines.0",
+        "@prologue.villa.solo.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.exam": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.exam.2.lines.0",
+        "@prologue.villa.exam.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.rich": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.rich.2.lines.0",
+        "@prologue.villa.rich.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.single": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.single.2.lines.0",
+        "@prologue.villa.single.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.blend": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.blend.2.lines.0",
+        "@prologue.villa.blend.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.debt": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.debt.2.lines.0",
+        "@prologue.villa.debt.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.art": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.art.2.lines.0",
+        "@prologue.villa.art.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.gran": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.gran.2.lines.0",
+        "@prologue.villa.gran.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "villa.city": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.villa.normal.1.lines.0",
+        "@prologue.villa.normal.1.lines.1",
+        "@prologue.villa.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.city.2.lines.0",
+        "@prologue.villa.city.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.normal": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.normal.2.lines.0",
+        "@prologue.villa.normal.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.solo": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.solo.2.lines.0",
+        "@prologue.villa.solo.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.exam": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.exam.2.lines.0",
+        "@prologue.villa.exam.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.rich": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.rich.2.lines.0",
+        "@prologue.villa.rich.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.single": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.single.2.lines.0",
+        "@prologue.villa.single.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.blend": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.blend.2.lines.0",
+        "@prologue.villa.blend.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.debt": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.debt.2.lines.0",
+        "@prologue.villa.debt.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.art": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.art.2.lines.0",
+        "@prologue.villa.art.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.gran": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.gran.2.lines.0",
+        "@prologue.villa.gran.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "flat.city": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.flat.normal.1.lines.0",
+        "@prologue.flat.normal.1.lines.1",
+        "@prologue.flat.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.city.2.lines.0",
+        "@prologue.villa.city.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.normal": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.normal.2.lines.0",
+        "@prologue.villa.normal.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.solo": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.solo.2.lines.0",
+        "@prologue.villa.solo.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.exam": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.exam.2.lines.0",
+        "@prologue.villa.exam.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.rich": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.rich.2.lines.0",
+        "@prologue.villa.rich.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.single": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.single.2.lines.0",
+        "@prologue.villa.single.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.blend": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.blend.2.lines.0",
+        "@prologue.villa.blend.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.debt": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.debt.2.lines.0",
+        "@prologue.villa.debt.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.art": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.art.2.lines.0",
+        "@prologue.villa.art.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.gran": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.gran.2.lines.0",
+        "@prologue.villa.gran.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ],
+  "rental.city": [
+    {
+      "v": 0.97,
+      "lines": [
+        "@prologue.villa.normal.0.lines.0",
+        "@prologue.villa.normal.0.lines.1"
+      ]
+    },
+    {
+      "v": 0.76,
+      "lines": [
+        "@prologue.rental.normal.1.lines.0",
+        "@prologue.rental.normal.1.lines.1",
+        "@prologue.rental.normal.1.lines.2"
+      ]
+    },
+    {
+      "v": 0.9,
+      "lines": [
+        "@prologue.villa.city.2.lines.0",
+        "@prologue.villa.city.2.lines.1"
+      ]
+    },
+    {
+      "v": 0.92,
+      "lines": [
+        "@prologue.villa.normal.3.lines.0",
+        "{tag}"
+      ]
+    },
+    {
+      "v": 0.95,
+      "lines": [
+        "@prologue.villa.normal.4.lines.0",
+        "@prologue.villa.normal.4.lines.1"
+      ]
+    },
+    {
+      "v": 1,
+      "lines": [
+        "@prologue.villa.normal.5.lines.0",
+        "@prologue.villa.normal.5.lines.1"
+      ],
+      "final": true
+    }
+  ]
+}

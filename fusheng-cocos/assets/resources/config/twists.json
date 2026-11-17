@@ -1,0 +1,632 @@
+[
+  {
+    "id": "rent",
+    "title": "@twists.0.title",
+    "body": "@twists.0.body",
+    "weight": 1,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "rent_0",
+        "label": "@twists.0.options.0.label",
+        "hint": "@twists.0.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                70
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "rent_1",
+        "label": "@twists.0.options.1.label",
+        "hint": "@twists.0.options.1.hint",
+        "effects": [
+          {
+            "type": "branch",
+            "condition": {
+              "type": "chance",
+              "p": 0.5
+            },
+            "then": [
+              {
+                "type": "money",
+                "delta": {
+                  "op": "neg",
+                  "args": [
+                    35
+                  ]
+                }
+              },
+              {
+                "type": "reply",
+                "whoKey": "@events.landlord.option0.2.arg0",
+                "textKey": "@twists.rent.option1.0.then.1.arg1"
+              }
+            ],
+            "else": [
+              {
+                "type": "money",
+                "delta": {
+                  "op": "neg",
+                  "args": [
+                    80
+                  ]
+                }
+              },
+              {
+                "type": "reply",
+                "whoKey": "@events.landlord.option0.2.arg0",
+                "textKey": "@twists.rent.option1.0.else.1.arg1"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cut",
+    "title": "@twists.1.title",
+    "body": "@twists.1.body",
+    "weight": 1,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "cut_0",
+        "label": "@twists.1.options.0.label",
+        "hint": "@twists.1.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": 40
+          },
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": {
+              "op": "neg",
+              "args": [
+                16
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                8
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.cut.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "cut_1",
+        "label": "@twists.1.options.1.label",
+        "hint": "@twists.1.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 12
+          },
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": 6
+          },
+          {
+            "type": "buff",
+            "nameKey": "@twists.cut.option1.2.arg0",
+            "v": 9,
+            "a": 0,
+            "hours": 6
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.cut.option1.3.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hospital",
+    "title": "@twists.2.title",
+    "body": "@twists.2.body",
+    "weight": 1,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "hospital_0",
+        "label": "@twists.2.options.0.label",
+        "hint": "@twists.2.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                100
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": {
+              "op": "neg",
+              "args": [
+                20
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                6
+              ]
+            }
+          },
+          {
+            "type": "warm",
+            "delta": 10
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.hospital.option0.4.arg1"
+          }
+        ]
+      },
+      {
+        "id": "hospital_1",
+        "label": "@twists.2.options.1.label",
+        "hint": "@twists.2.options.1.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                80
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@twists.hospital.option1.1.arg0",
+            "v": {
+              "op": "neg",
+              "args": [
+                10
+              ]
+            },
+            "a": {
+              "op": "neg",
+              "args": [
+                4
+              ]
+            },
+            "hours": 10
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.hospital.option1.2.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "prize",
+    "title": "@twists.3.title",
+    "body": "@twists.3.body",
+    "weight": 1,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "prize_0",
+        "label": "@twists.3.options.0.label",
+        "hint": "@twists.3.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": 180
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 12
+          },
+          {
+            "type": "buff",
+            "nameKey": "@twists.prize.option0.2.arg0",
+            "v": 12,
+            "a": 8,
+            "hours": 8
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.prize.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "prize_1",
+        "label": "@twists.3.options.1.label",
+        "hint": "@twists.3.options.1.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": 90
+          },
+          {
+            "type": "need",
+            "key": "food",
+            "delta": 22
+          },
+          {
+            "type": "warm",
+            "delta": 10
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 14
+          },
+          {
+            "type": "reply",
+            "whoKey": "@events.sauce.option0.3.arg0",
+            "textKey": "@twists.prize.option1.4.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pipe",
+    "title": "@twists.4.title",
+    "body": "@twists.4.body",
+    "weight": 1,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "pipe_0",
+        "label": "@twists.4.options.0.label",
+        "hint": "@twists.4.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                20
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": {
+              "op": "neg",
+              "args": [
+                15
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "clean",
+            "delta": {
+              "op": "neg",
+              "args": [
+                12
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.pipe.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "pipe_1",
+        "label": "@twists.4.options.1.label",
+        "hint": "@twists.4.options.1.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                60
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "clean",
+            "delta": {
+              "op": "neg",
+              "args": [
+                18
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.pipe.option1.2.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "typhoon",
+    "title": "@twists.5.title",
+    "body": "@twists.5.body",
+    "weight": 1,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "typhoon_0",
+        "label": "@twists.5.options.0.label",
+        "hint": "@twists.5.options.0.hint",
+        "effects": [
+          {
+            "type": "xp",
+            "skill": "paint",
+            "amount": 26
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 10
+          },
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": {
+              "op": "neg",
+              "args": [
+                8
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@twists.typhoon.option0.3.arg0",
+            "v": 14,
+            "a": 10,
+            "hours": 5
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.typhoon.option0.4.arg1"
+          }
+        ]
+      },
+      {
+        "id": "typhoon_1",
+        "label": "@twists.5.options.1.label",
+        "hint": "@twists.5.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": 14
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 6
+          },
+          {
+            "type": "buff",
+            "nameKey": "@twists.typhoon.option1.2.arg0",
+            "v": 11,
+            "a": {
+              "op": "neg",
+              "args": [
+                8
+              ]
+            },
+            "hours": 6
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.typhoon.option1.3.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "catstay",
+    "title": "@twists.6.title",
+    "body": "@twists.6.body",
+    "weight": 1,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "catstay_0",
+        "label": "@twists.6.options.0.label",
+        "hint": "@twists.6.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                10
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 20
+          },
+          {
+            "type": "buff",
+            "nameKey": "@twists.catstay.option0.2.arg0",
+            "v": 18,
+            "a": 6,
+            "hours": 24
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.catstay.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "catstay_1",
+        "label": "@twists.6.options.1.label",
+        "hint": "@twists.6.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                6
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@events.oldfriend.option2.1.arg0",
+            "v": {
+              "op": "neg",
+              "args": [
+                7
+              ]
+            },
+            "a": 0,
+            "hours": 6
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.catstay.option1.2.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "oldbox",
+    "title": "@twists.7.title",
+    "body": "@twists.7.body",
+    "weight": 1,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "oldbox_0",
+        "label": "@twists.7.options.0.label",
+        "hint": "@twists.7.options.0.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 14
+          },
+          {
+            "type": "buff",
+            "nameKey": "@twists.oldbox.option0.1.arg0",
+            "v": 10,
+            "a": 2,
+            "hours": 8
+          },
+          {
+            "type": "xp",
+            "skill": "paint",
+            "amount": 10
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.oldbox.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "oldbox_1",
+        "label": "@twists.7.options.1.label",
+        "hint": "@twists.7.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 3
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@twists.oldbox.option1.1.arg1"
+          }
+        ]
+      }
+    ]
+  }
+]

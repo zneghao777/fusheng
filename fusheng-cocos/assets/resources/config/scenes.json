@@ -1,0 +1,441 @@
+{
+  "street": {
+    "id": "street",
+    "name": "@scenes.street.name",
+    "outdoor": true,
+    "floors": [
+      {
+        "y": 620,
+        "x1": 0,
+        "x2": 1280
+      }
+    ],
+    "spawn": {
+      "x": 230,
+      "y": 620
+    },
+    "props": [
+      {
+        "x": 132,
+        "y": 620,
+        "w": 80,
+        "h": 150,
+        "label": "@scenes.street.props.0.label",
+        "id": "street_0",
+        "effects": [
+          {
+            "type": "travel",
+            "scene": "home",
+            "x": null
+          }
+        ]
+      },
+      {
+        "x": 330,
+        "y": 620,
+        "w": 160,
+        "h": 190,
+        "label": "@scenes.street.props.1.label",
+        "id": "street_1",
+        "effects": [
+          {
+            "type": "travel",
+            "scene": "store",
+            "x": null
+          }
+        ]
+      },
+      {
+        "x": 720,
+        "y": 620,
+        "w": 160,
+        "h": 190,
+        "label": "@scenes.street.props.2.label",
+        "id": "street_2",
+        "effects": [
+          {
+            "type": "travel",
+            "scene": "book",
+            "x": null
+          }
+        ]
+      },
+      {
+        "x": 1030,
+        "y": 620,
+        "w": 150,
+        "h": 170,
+        "label": "@scenes.street.props.3.label",
+        "id": "street_3",
+        "effects": [
+          {
+            "type": "travel",
+            "scene": "park",
+            "x": null
+          }
+        ]
+      },
+      {
+        "id": "street_notice",
+        "x": 510,
+        "y": 620,
+        "w": 64,
+        "h": 114,
+        "label": "读市集告示 · 手账",
+        "effects": []
+      },
+      {
+        "id": "street_sketch",
+        "x": 610,
+        "y": 620,
+        "w": 70,
+        "h": 90,
+        "label": "记下旧巷灯火 · 1心力",
+        "effects": []
+      },
+      {
+        "id": "street_market",
+        "x": 865,
+        "y": 620,
+        "w": 116,
+        "h": 90,
+        "label": "周日市集",
+        "effects": []
+      }
+    ]
+  },
+  "park": {
+    "id": "park",
+    "name": "@scenes.park.name",
+    "outdoor": true,
+    "floors": [
+      {
+        "y": 620,
+        "x1": 0,
+        "x2": 1280
+      }
+    ],
+    "spawn": {
+      "x": 190,
+      "y": 620
+    },
+    "props": [
+      {
+        "x": 120,
+        "y": 620,
+        "w": 80,
+        "h": 120,
+        "label": "@scenes.park.props.0.label",
+        "id": "park_0",
+        "effects": [
+          {
+            "type": "travel",
+            "scene": "street",
+            "x": 990
+          }
+        ]
+      },
+      {
+        "x": 430,
+        "y": 620,
+        "w": 120,
+        "h": 60,
+        "label": "梧桐写生 · 1心力",
+        "id": "park_1",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actBench"
+          }
+        ]
+      },
+      {
+        "x": 660,
+        "y": 620,
+        "w": 90,
+        "h": 50,
+        "label": "@scenes.park.props.2.label",
+        "id": "park_2",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actPigeon"
+          }
+        ]
+      },
+      {
+        "x": 950,
+        "y": 620,
+        "w": 170,
+        "h": 90,
+        "label": "池塘取材 · 1心力",
+        "id": "park_3",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actPond"
+          }
+        ]
+      }
+    ]
+  },
+  "store": {
+    "id": "store",
+    "name": "@scenes.store.name",
+    "indoor": true,
+    "floors": [
+      {
+        "y": 620,
+        "x1": 60,
+        "x2": 1220
+      }
+    ],
+    "spawn": {
+      "x": 190,
+      "y": 620
+    },
+    "props": [
+      {
+        "x": 120,
+        "y": 620,
+        "w": 70,
+        "h": 120,
+        "label": "@scenes.store.props.0.label",
+        "id": "store_0",
+        "effects": [
+          {
+            "type": "travel",
+            "scene": "street",
+            "x": 330
+          }
+        ]
+      },
+      {
+        "x": 390,
+        "y": 620,
+        "w": 150,
+        "h": 170,
+        "label": "@scenes.store.props.1.label",
+        "id": "store_1",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actBento"
+          }
+        ]
+      },
+      {
+        "x": 670,
+        "y": 620,
+        "w": 140,
+        "h": 180,
+        "label": "@scenes.store.props.2.label",
+        "id": "store_2",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actDrink"
+          }
+        ]
+      },
+      {
+        "x": 980,
+        "y": 620,
+        "w": 120,
+        "h": 120,
+        "label": "找店员小林",
+        "id": "store_3",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actClerk"
+          }
+        ]
+      }
+    ]
+  },
+  "book": {
+    "id": "book",
+    "name": "@scenes.book.name",
+    "indoor": true,
+    "floors": [
+      {
+        "y": 620,
+        "x1": 60,
+        "x2": 1220
+      },
+      {
+        "y": 350,
+        "x1": 60,
+        "x2": 1070
+      },
+      {
+        "y": 350,
+        "x1": 1150,
+        "x2": 1220
+      }
+    ],
+    "spawn": {
+      "x": 190,
+      "y": 620
+    },
+    "props": [
+      {
+        "x": 120,
+        "y": 620,
+        "w": 70,
+        "h": 120,
+        "label": "@scenes.store.props.0.label",
+        "id": "book_0",
+        "effects": [
+          {
+            "type": "travel",
+            "scene": "street",
+            "x": 720
+          }
+        ]
+      },
+      {
+        "x": 240,
+        "y": 350,
+        "w": 160,
+        "h": 130,
+        "label": "翻旧书取材 · 1心力",
+        "id": "book_1",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actBrowse"
+          }
+        ]
+      },
+      {
+        "x": 550,
+        "y": 620,
+        "w": 160,
+        "h": 145,
+        "label": "@scenes.book.props.2.label",
+        "id": "book_2",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actBuyBook"
+          }
+        ]
+      },
+      {
+        "x": 980,
+        "y": 620,
+        "w": 144,
+        "h": 86,
+        "label": "找叶婆婆聊聊",
+        "id": "book_3",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actBoss"
+          }
+        ]
+      },
+      {
+        "id": "book_read",
+        "x": 740,
+        "y": 350,
+        "w": 176,
+        "h": 60,
+        "label": "在桌边读书取材 · 1心力",
+        "effects": [
+          {
+            "type": "action",
+            "id": "actBrowse"
+          }
+        ]
+      }
+    ],
+    "ladder": {
+      "x1": 1080,
+      "x2": 1140,
+      "top": 350,
+      "bot": 620
+    },
+    "decor": [
+      {
+        "kind": "shelf",
+        "x": 350,
+        "y": 620,
+        "w": 160,
+        "h": 145
+      },
+      {
+        "kind": "shelf",
+        "x": 550,
+        "y": 620,
+        "w": 160,
+        "h": 145
+      },
+      {
+        "kind": "table",
+        "x": 750,
+        "y": 620,
+        "w": 144,
+        "h": 56
+      },
+      {
+        "kind": "chair",
+        "x": 650,
+        "y": 620,
+        "w": 32,
+        "h": 72
+      },
+      {
+        "kind": "chair",
+        "x": 850,
+        "y": 620,
+        "w": 32,
+        "h": 72
+      },
+      {
+        "kind": "counter",
+        "x": 980,
+        "y": 620,
+        "w": 144,
+        "h": 86
+      },
+      {
+        "kind": "shelf",
+        "x": 240,
+        "y": 350,
+        "w": 160,
+        "h": 130
+      },
+      {
+        "kind": "shelf",
+        "x": 440,
+        "y": 350,
+        "w": 160,
+        "h": 130
+      },
+      {
+        "kind": "table",
+        "x": 740,
+        "y": 350,
+        "w": 176,
+        "h": 60
+      },
+      {
+        "kind": "chair",
+        "x": 620,
+        "y": 350,
+        "w": 34,
+        "h": 76
+      },
+      {
+        "kind": "chair",
+        "x": 860,
+        "y": 350,
+        "w": 34,
+        "h": 76
+      }
+    ]
+  }
+}

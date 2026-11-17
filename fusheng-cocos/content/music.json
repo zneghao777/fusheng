@@ -1,0 +1,76 @@
+{
+  "tracks": [
+    {
+      "id": "title",
+      "title": "昼下がり気分",
+      "author": "KK",
+      "source": "https://opentracks.com/bgm/detail/4695",
+      "resource": "music/title",
+      "fallback": "day",
+      "license": "https://opentracks.com/help/articles/license/",
+      "downloadSource": "https://opentracks.com/bgm/detail/4695/download",
+      "variant": "original",
+      "acquiredOn": "2026-10-22"
+    },
+    {
+      "id": "day",
+      "title": "高原の小さなカフェにて",
+      "author": "のる",
+      "source": "https://opentracks.com/bgm/detail/17543",
+      "resource": "music/day",
+      "fallback": "title",
+      "license": "https://opentracks.com/help/articles/license/",
+      "downloadSource": "https://opentracks.com/bgm/detail/17543/download",
+      "variant": "loop / track 2",
+      "acquiredOn": "2026-10-22"
+    },
+    {
+      "id": "book",
+      "title": "坂道のカフェ",
+      "author": "のる",
+      "source": "https://opentracks.com/bgm/detail/15187",
+      "resource": "music/book",
+      "fallback": "day",
+      "license": "https://opentracks.com/help/articles/license/",
+      "downloadSource": "https://opentracks.com/bgm/detail/15187/download",
+      "variant": "loop / track 2",
+      "acquiredOn": "2026-10-22"
+    },
+    {
+      "id": "market",
+      "title": "陽気な週末",
+      "author": "BGMer",
+      "source": "https://bgmer.net/music/088/",
+      "resource": "music/market",
+      "fallback": "day",
+      "license": "https://bgmer.net/terms/",
+      "downloadSource": "https://www.youtube.com/watch?v=Gf0uXcaizsk",
+      "variant": "original",
+      "acquiredOn": "2026-10-22"
+    },
+    {
+      "id": "night",
+      "title": "まどろみのしらべ · ピアノver.",
+      "author": "nostalgic BGM / BGMer",
+      "source": "https://bgmer.net/music/m11_pf/",
+      "resource": "music/night",
+      "fallback": "book",
+      "license": "https://bgmer.net/terms/",
+      "downloadSource": "https://www.youtube.com/watch?v=ZwmMqG-kt5Q",
+      "variant": "original",
+      "acquiredOn": "2026-10-22"
+    },
+    {
+      "id": "recap",
+      "title": "日曜のおわりに",
+      "author": "BGMer",
+      "source": "https://bgmer.net/music/444/",
+      "resource": "music/recap",
+      "fallback": "title",
+      "license": "https://bgmer.net/terms/",
+      "downloadSource": "https://www.youtube.com/watch?v=TCEl2hujuG0",
+      "variant": "original",
+      "acquiredOn": "2026-10-22"
+    }
+  ]
+}

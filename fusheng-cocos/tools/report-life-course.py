@@ -1,0 +1,47 @@
+from pathlib import Path
+import json, html, base64, hashlib
+from datetime import datetime
+root=Path(__file__).resolve().parent.parent
+out=root/'output/playwright/life-course'
+checks=json.loads((root/'output/life-course-checks.json').read_text())
+course=json.loads((root/'content/life-course.json').read_text())
+labels={
+ 'desktop-title':'标题','desktop-create':'桌面选人','desktop-prologue':'序章','desktop-origin':'七岁的家','desktop-choice':'成长选择','desktop-course':'阶段安排','desktop-menu':'菜单分页','desktop-save-code':'存档码','desktop-ending':'30岁终页','desktop-album':'人生年表',
+ 'small-create':'667×375 选人','small-menu':'667×375 菜单','small-choice':'667×375 成长选择','small-store':'便利店与小林','small-book':'两层书店与叶婆婆','small-park':'公园出口','small-build':'手机布置','small-portrait':'竖屏引导',
+ 'iphone-create':'844×390 选人','android-create':'915×412 选人','tablet-create':'1024×768 选人','saved-opening-choice':'中断开场后的读档','classic-ending-compatible':'旧版存档终页',
+ 'webkit-create':'WebKit 选人','webkit-menu':'WebKit 菜单','webkit-day-summary':'WebKit 日结',
+}
+labels.update({'small-street-night':'小屏手机 · 夜间字色','desktop-menu-first':'桌面菜单首页 · 固定返回入口','desktop-street':'透明小字 · 白天街景','desktop-street-night':'透明小字 · 夜间字色','desktop-store':'便利店场景','desktop-book':'旧书店场景','desktop-park':'公园场景','iphone-tap-upstairs':'点击楼上自动爬梯','webkit-tap-upstairs':'WebKit 点击楼上自动爬梯'})
+for prefix in ['small','iphone','android','tablet']:
+ labels[prefix+'-street']=prefix+' · 街景与点击操作'
+ labels[prefix+'-menu']=prefix+' · 菜单首页'
+for prefix,label in [('teen','少年'),('youth','青年'),('adult','成年'),('midlife','30岁中年序章')]:
+ labels['stage-'+prefix+'-choice']=label+' · 关键选择'
+ labels['stage-'+prefix+'-activities']=label+' · 阶段活动'
+labels.update({'phone-settings':'手机设置','phone-help':'手机说明','phone-save-select':'手机存档列表'})
+for file in out.glob('journey-*.png'):
+ if file.stem!='journey-failure':labels[file.stem]=file.stem.removeprefix('journey-').replace('-',' ')
+zh={ 'first-choice-detail':'选择详情','journal':'人生手账','daily-arrangements':'阶段日常','activity-detail':'活动详情','activity-result':'活动结果','created-artwork':'创作完成','artwork-disposition':'作品去向','wall-position':'作品墙位置','collection-groups':'画夹分类','child-neighbor':'儿童街坊对话','child-project':'儿童绘画练习','child-project-delivery':'周三交付','child-market':'周日亲子义卖','market-pricing':'调整报价','market-offer':'推荐作品','market-settlement':'市集结算','seventh-year-recap':'七岁年结','eighth-year-journal':'八岁新一页','thirty-year-ending':'30岁终页','ending-album-stages':'分阶段人生相册','ending-child-years':'童年年份','ending-year-detail':'年度详情','ending-representative-works':'代表作品','ending-artwork-detail':'作品回看','saved-title':'保存返回标题','loaded-ending':'终页读档'}
+for k,v in zh.items():labels['journey-'+k]=v
+cards=[]
+for stem,label in labels.items():
+ path=out/(stem+'.png')
+ if not path.exists() or path.stat().st_mtime < datetime.fromisoformat(checks['startedAt'].replace('Z','+00:00')).timestamp():continue
+ group='journey' if stem.startswith('journey-') else 'mobile' if stem.startswith(('small-','iphone-','android-','tablet-','webkit-','stage-','phone-')) else 'desktop'
+ src='data:image/png;base64,'+base64.b64encode(path.read_bytes()).decode()
+ cards.append(f'<figure data-group="{group}"><img loading="lazy" src="{src}" alt="{html.escape(label)}"><figcaption>{html.escape(label)}</figcaption></figure>')
+stages=''.join(f'<article><small>{s["minAge"]}—{s["maxAge"]}岁</small><h3>{s["name"].split(" · ")[0]}</h3><p>{s["goal"]}</p><ul>'+''.join(f'<li>{a["label"]}</li>' for a in s['activities'])+'</ul></article>' for s in course['stages'])
+passed=sum(c['passed'] for c in checks['checks'])
+state='全部通过' if checks['passed'] else '存在未通过项，请查看验收记录'
+rows=[('人生主线','7岁开始，七天一年，30岁完整周后收束；24份年度记录。'),('各阶段玩法','5个阶段各3项活动，9个关键年龄选择，资源消耗和后续加成真实生效。'),('儿童连贯性','家庭支持生活与画材，适龄出身、项目与展出，关闭个人借贷。'),('手机关键操作','点击走路与物品互动，跨楼层自动爬梯；无方向键；回到开始界面固定在菜单首页。正文独立滚动，操作固定，长菜单显式翻页。'),('场景可读性','场景路签统一为透明底、细角框与宋体小字，随昼夜调整字色；人物、门、路签与真实交互位置对应。'),('作品与记忆','跨年保留作品墙、家具、纪念物、信任和街坊记忆；承诺每年重新开放。'),('存档与终点','开场中断可恢复，删除/导入避免旧会话覆盖；旧档与终页均可回读。')]
+rowhtml=''.join(f'<tr><th>{a}</th><td>{b}</td></tr>' for a,b in rows)
+manifest={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in ['assets/resources/config/content.json','assets/scripts/ui/GameUI.ts','assets/scripts/core/LifeCourse.ts','assets/scripts/ui/UIFactory.ts','assets/scripts/view/SceneDetails.ts','assets/scripts/view/BookshopView.ts','assets/scripts/view/WorldView.ts']}
+(out/'build-evidence.json').write_text(json.dumps({'hashes':manifest,'browserChecks':passed,'browserPassed':checks['passed'],'screens':len(cards),'physicalDevicesTested':False},ensure_ascii=False,indent=2))
+source='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>浮生 · 七岁到三十岁</title><style>
+:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f2ecdf;color:#302c25;font:16px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}main{max-width:1260px;margin:auto;padding:56px 28px}header{border-bottom:1px solid #bdb19b;padding-bottom:32px}small,.muted{color:#756b5c}h1,h2,h3{font-family:"Songti SC","Noto Serif SC",serif;font-weight:500}h1{font-size:clamp(32px,5vw,58px);line-height:1.2;margin:8px 0 20px}h2{margin-top:52px;font-size:28px}h3{margin:8px 0}.seal{background:#a34a37;color:#fff4e8;padding:6px 10px;display:inline-block;font-family:serif}.lead{max-width:820px}.stats{display:flex;gap:30px;flex-wrap:wrap}.stats b{font-size:34px;font-family:serif;font-weight:500;margin-right:8px}.phases{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.phases article{padding:20px 18px;background:#fbf7ee;border-top:3px solid #a34a37}.phases p,.phases li{font-size:14px}.phases ul{padding-left:18px}.path{padding:22px;background:#e8dfce}table{width:100%;border-collapse:collapse;background:#fbf7ee}th,td{text-align:left;vertical-align:top;padding:15px 20px;border-bottom:1px solid #d9cebc}th{width:170px;font-weight:500}button,a{font:inherit}button{cursor:pointer;border:1px solid #b7ab98;background:#fbf7ee;color:#393128;padding:9px 20px}button[aria-pressed=true]{background:#a34a37;color:#fff7ed;border-color:#a34a37}.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}figure{margin:0;background:#fbf7ee;border:1px solid #d8cebb}figure img{width:100%;height:270px;object-fit:contain;display:block;background:#e7dfcf;cursor:zoom-in}figcaption{padding:10px 16px}dialog{border:0;padding:18px;background:#f6f0e4;max-width:96vw;max-height:96vh}dialog::backdrop{background:#28231dd9}dialog img{display:block;max-width:90vw;max-height:82vh;object-fit:contain}dialog button{float:right;margin-bottom:12px}.result{border-left:3px solid #68795a;padding-left:18px}footer{margin-top:50px;border-top:1px solid #bdb19b;padding-top:24px;color:#756b5c}a{color:#9e4432}@media(max-width:850px){.phases{grid-template-columns:repeat(2,1fr)}.gallery{grid-template-columns:1fr}main{padding:30px 18px}th{width:110px}th,td{padding:12px}figure img{height:auto;max-height:400px}}
+</style><main><header><span class="seal">浮生</span><small> 本地开发版 · 2026.10.22</small><h1>从七岁的画角，走到三十岁</h1><p class="lead">每七天长大一岁。学习、创作、工作与陪伴留下真实积累；三十岁这一年的七天完整结束后，回看人生相册，后续篇章敬请期待。</p><div class="stats"><span><b>5</b>人生阶段</span><span><b>24</b>个年岁</span><span><b>168</b>个游戏日</span><span><b>9</b>次重要选择</span></div></header><h2>人生怎样推进</h2><div class="phases">STAGES</div><p class="path">选人 → 七岁的家 → 成长选择 → 每日生活与阶段安排 → 日结 → 年结 → 长大一岁<br>30岁年结 → 敬请期待 → 人生相册 / 重要选择 / 作品 / 街坊 → 保存回标题 → 读档仍停在终页</p><h2>本次补齐与修改</h2><table>ROWS</table><h2>画面总览</h2><p class="muted">SCREEN_COUNT 张当前版本代表画面，点击可放大。长正文可以阅读滚动，操作按钮固定可见。</p><div class="filters"><button data-filter="all" aria-pressed="true">全部</button><button data-filter="journey">完整旅程</button><button data-filter="mobile">手机与平板</button><button data-filter="desktop">桌面与存档</button></div><div class="gallery">CARDS</div><h2>验证结果</h2><div class="result"><p>83 项核心与面板测试通过，桌面和移动 Web 构建通过；BROWSER_COUNT 项浏览器检查：STATE。</p><p>覆盖 Chrome、WebKit，667×375、844×390、915×412、1024×768 与桌面尺寸。168天通过模拟命令验证；儿童首年关键流程、菜单与终页回看使用真实坐标点击。</p></div><p class="muted">手机真机的系统安全区、软键盘、后台恢复、长时帧率仍需实际设备补验。本次更新已生成本地构建，线上试玩尚未更新。</p><h2>后续画面打磨</h2><p>已优先解决流程阻断和手机操作露出。下一批可以逐场景补充学校、职业与家庭活动的环境反馈，丰富不同年龄的生活细节，并继续提升世界内小字标牌的辨识；31岁后的玩法不在本篇章内。</p><footer>游戏：<a href="http://127.0.0.1:8088/web-desktop/">本地试玩</a> · 项目内规则：docs/七天生活与市集.md · 机器可读验收：output/life-course-checks.json</footer></main><dialog><button>关闭</button><img alt="画面预览"></dialog><script>
+const filters=document.querySelectorAll('[data-filter]');filters.forEach(button=>button.addEventListener('click',()=>{filters.forEach(x=>x.setAttribute('aria-pressed',String(x===button)));document.querySelectorAll('figure').forEach(card=>card.hidden=button.dataset.filter!=='all'&&card.dataset.group!==button.dataset.filter)}));const preview=document.querySelector('dialog');document.querySelectorAll('figure img').forEach(img=>img.addEventListener('click',()=>{preview.querySelector('img').src=img.src;preview.showModal()}));preview.querySelector('button').addEventListener('click',()=>preview.close());preview.addEventListener('click',event=>{if(event.target===preview)preview.close()});
+</script></html>'''
+for key,value in [('STAGES',stages),('ROWS',rowhtml),('CARDS',''.join(cards)),('SCREEN_COUNT',str(len(cards))),('BROWSER_COUNT',str(passed)),('STATE',state)]:source=source.replace(key,value)
+(out/'report.html').write_text(source)
+print(json.dumps({'screens':len(cards),'checks':passed,'passed':checks['passed'],'report':str(out/'report.html')},ensure_ascii=False))

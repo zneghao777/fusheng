@@ -1,0 +1,23 @@
+{
+  "scene.enterHome": "回家",
+  "scene.enterStore": "便利店",
+  "scene.enterBook": "旧书店",
+  "scene.enterPark": "公园",
+  "scene.exitAlley": "回巷口",
+  "scene.notice": "街巷\n手账",
+  "scene.sketch": "旧巷写生",
+  "scene.market": "周日小市集",
+  "scene.marketPreparing": "十点开张",
+  "scene.marketInvitation": "带幅画来吧",
+  "scene.marketSoon": "周日小集",
+  "scene.marketClosed": "散集 · 再会",
+  "scene.treeStudy": "梧桐写生",
+  "scene.bench": "坐一会儿",
+  "scene.pigeons": "喂鸽子",
+  "scene.pondStudy": "池塘取材",
+  "scene.pond": "看看池塘",
+  "scene.food": "热便当",
+  "scene.drinks": "清凉饮品",
+  "scene.lin": "小林",
+  "scene.ye": "叶婆婆"
+}

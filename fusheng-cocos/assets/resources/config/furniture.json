@@ -1,0 +1,162 @@
+{
+  "bed": {
+    "name": "@furniture.bed.name",
+    "w": 140,
+    "h": 56,
+    "price": 180,
+    "use": {
+      "label": "@furniture.bed.use.label",
+      "duration": 1.1,
+      "actionId": "bed"
+    },
+    "buildable": false
+  },
+  "stove": {
+    "name": "@furniture.stove.name",
+    "w": 70,
+    "h": 70,
+    "price": 120,
+    "use": {
+      "label": "@furniture.stove.use.label",
+      "duration": 4.2,
+      "actionId": "stove"
+    },
+    "buildable": false
+  },
+  "fridge": {
+    "name": "@furniture.fridge.name",
+    "w": 56,
+    "h": 100,
+    "price": 100,
+    "use": {
+      "label": "@furniture.fridge.use.label",
+      "duration": 2.4,
+      "actionId": "fridge"
+    },
+    "buildable": false
+  },
+  "shower": {
+    "name": "@furniture.shower.name",
+    "w": 64,
+    "h": 92,
+    "price": 90,
+    "use": {
+      "label": "@furniture.shower.use.label",
+      "duration": 3.4,
+      "actionId": "shower"
+    },
+    "buildable": false
+  },
+  "sofa": {
+    "name": "@furniture.sofa.name",
+    "w": 140,
+    "h": 56,
+    "price": 150,
+    "use": {
+      "label": "@furniture.sofa.use.label",
+      "duration": 4,
+      "actionId": "sofa"
+    },
+    "buildable": false
+  },
+  "tv": {
+    "name": "@furniture.tv.name",
+    "w": 90,
+    "h": 62,
+    "price": 130,
+    "use": {
+      "label": "@furniture.tv.use.label",
+      "duration": 5,
+      "actionId": "tv"
+    },
+    "buildable": false
+  },
+  "easel": {
+    "name": "@furniture.easel.name",
+    "w": 62,
+    "h": 92,
+    "price": 160,
+    "use": {
+      "label": "@furniture.easel.use.label",
+      "duration": 7.6,
+      "actionId": "easel"
+    },
+    "buildable": true
+  },
+  "desk": {
+    "name": "@furniture.desk.name",
+    "w": 100,
+    "h": 64,
+    "price": 110,
+    "use": {
+      "label": "@furniture.desk.use.label",
+      "duration": 4.6,
+      "actionId": "desk"
+    },
+    "buildable": false
+  },
+  "tea": {
+    "name": "@furniture.tea.name",
+    "w": 80,
+    "h": 40,
+    "price": 90,
+    "use": {
+      "label": "@furniture.tea.use.label",
+      "duration": 3.6,
+      "actionId": "tea"
+    },
+    "buildable": true
+  },
+  "plant": {
+    "name": "@furniture.plant.name",
+    "w": 44,
+    "h": 62,
+    "price": 45,
+    "use": {
+      "label": "@furniture.plant.use.label",
+      "duration": 2,
+      "actionId": "plant"
+    },
+    "buildable": true
+  },
+  "bookshelf": {
+    "name": "@furniture.bookshelf.name",
+    "w": 72,
+    "h": 110,
+    "price": 110,
+    "use": {
+      "label": "@furniture.bookshelf.use.label",
+      "duration": 4.2,
+      "actionId": "bookshelf"
+    },
+    "buildable": true
+  },
+  "wardrobe": {
+    "name": "@furniture.wardrobe.name",
+    "w": 80,
+    "h": 110,
+    "price": 90,
+    "use": {
+      "label": "@furniture.wardrobe.use.label",
+      "duration": 2.2,
+      "actionId": "wardrobe"
+    },
+    "buildable": false
+  },
+  "lamp": {
+    "name": "@furniture.lamp.name",
+    "w": 30,
+    "h": 92,
+    "price": 30,
+    "use": null,
+    "buildable": true
+  },
+  "rug": {
+    "name": "@furniture.rug.name",
+    "w": 120,
+    "h": 14,
+    "price": 25,
+    "use": null,
+    "buildable": true
+  }
+}

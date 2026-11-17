@@ -1,0 +1,5024 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#f3eddf">
+<title>浮生 · 纸片屋</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#15140f;overflow:hidden;
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    color:#2b2a26;-webkit-font-smoothing:antialiased;user-select:none}
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  #wrap{position:relative;width:min(100vw,177.7778vh);height:min(56.25vw,100vh);
+    font-size:16px;overflow:hidden;background:#f3eddf;
+    box-shadow:0 0 80px rgba(0,0,0,.65)}
+  @supports (height:100dvh){
+    #stage{height:100dvh}
+    #wrap{width:min(100vw,177.7778dvh);height:min(56.25vw,100dvh)}
+  }
+  canvas{display:block;width:100%;height:100%}
+  #ui{position:absolute;inset:0;pointer-events:none;font-size:1em}
+  #ui > *{pointer-events:auto}
+
+  /* ---------- 纸张通用 ---------- */
+  .paper{
+    background:
+      repeating-linear-gradient(0deg,rgba(120,110,90,.028) 0 1px,transparent 1px 4px),
+      linear-gradient(180deg,rgba(252,248,238,.97),rgba(240,233,218,.97));
+    border:1px solid rgba(43,42,38,.42);
+    box-shadow:0 .35em .9em rgba(40,34,24,.22), inset 0 0 2.2em rgba(190,175,145,.22);
+    border-radius:1px;
+    position:relative;
+  }
+  .paper::before,.paper::after{
+    content:"";position:absolute;width:.55em;height:.55em;border:1px solid rgba(43,42,38,.38);
+  }
+  .paper::before{left:.32em;top:.32em;border-right:0;border-bottom:0}
+  .paper::after{right:.32em;bottom:.32em;border-left:0;border-top:0}
+
+  /* ---------- 顶栏 ---------- */
+  #topbar{
+    position:absolute;left:0;right:0;top:0;height:3.3em;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 1.1em;gap:.8em;
+    background:linear-gradient(180deg,rgba(246,240,228,.94),rgba(246,240,228,.55));
+    border-bottom:1px solid rgba(43,42,38,.22);
+  }
+  #topbar .grp{display:flex;align-items:center;gap:.55em}
+  .chip{
+    font-size:.82em;letter-spacing:.04em;padding:.22em .6em;border:1px solid rgba(43,42,38,.35);
+    background:rgba(255,252,244,.6);border-radius:1px;cursor:pointer;color:#2b2a26;
+    font-family:inherit;transition:all .16s ease;white-space:nowrap;
+  }
+  .chip:hover{background:#2b2a26;color:#f6f0e4}
+  .chip.solid{background:rgba(166,64,47,.9);color:#fdf7ec;border-color:rgba(120,42,30,.6)}
+  .chip.solid:hover{background:#8f3427}
+  .stat{font-size:.86em;letter-spacing:.03em;display:flex;align-items:baseline;gap:.25em}
+  .stat b{font-size:1.16em;font-weight:600;font-variant-numeric:tabular-nums}
+  .brand{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    font-size:1.02em;letter-spacing:.42em;text-indent:.42em;color:rgba(43,42,38,.72);
+  }
+  .sep{width:1px;height:1.1em;background:rgba(43,42,38,.22)}
+  .dimsep{opacity:.32;margin:0 .25em}
+
+  /* ---------- 需求面板（压缩成两条窄带） ---------- */
+  #needs{
+    position:absolute;left:.8em;bottom:.5em;width:12.6em;padding:.42em .62em .5em;
+  }
+  #needs h4{
+    font-family:"Songti SC","STSong",serif;font-size:.72em;font-weight:600;letter-spacing:.26em;
+    color:rgba(43,42,38,.6);margin-bottom:.34em;display:flex;justify-content:space-between;align-items:baseline;
+  }
+  #needs h4 span{letter-spacing:.04em;font-size:1.06em;color:#a6402f}
+  .ngrid{display:grid;grid-template-columns:1fr 1fr;gap:.16em .6em}
+  .need{display:flex;align-items:center;gap:.3em}
+  .need .nm{font-size:.64em;width:2.1em;color:rgba(43,42,38,.7);flex:none}
+  .need .bar{flex:1;height:.46em;background:rgba(43,42,38,.11);position:relative;border-radius:.1em;overflow:hidden}
+  .need .bar i{position:absolute;left:0;top:0;bottom:0;display:block;transition:width .4s ease}
+  .need .vl{display:none}
+  .b-energy i{background:linear-gradient(90deg,#8a7550,#6d5b3c)}
+  .b-food i{background:linear-gradient(90deg,#a86a52,#8a4a37)}
+  .b-clean i{background:linear-gradient(90deg,#6f8e93,#506e75)}
+  .b-fun i{background:linear-gradient(90deg,#8a7a96,#6a5a78)}
+
+  /* ---------- 任务条 ---------- */
+  #tasks{
+    position:absolute;right:.8em;bottom:.5em;display:flex;align-items:center;gap:.6em;
+    padding:.42em .7em .44em;
+  }
+  .tlabel{font-family:"Songti SC","STSong",serif;font-size:.7em;letter-spacing:.2em;
+    color:rgba(43,42,38,.5);flex:none}
+  #tasks ul{list-style:none;display:flex;gap:.75em;flex-wrap:nowrap}
+  #tasks li{
+    font-size:.68em;color:rgba(43,42,38,.86);display:flex;align-items:center;gap:.32em;
+    white-space:nowrap;transition:all .2s;
+  }
+  #tasks li .bx{flex:none;width:.78em;height:.78em;border:1px solid rgba(43,42,38,.45);
+    display:flex;align-items:center;justify-content:center;font-size:.72em;line-height:1;background:rgba(255,255,255,.4)}
+  #tasks li.done{color:rgba(43,42,38,.34);text-decoration:line-through}
+  #tasks li.done .bx{background:#2b2a26;color:#f6f0e4;border-color:#2b2a26;text-decoration:none}
+  .tcount{font-size:.68em;color:#a6402f;flex:none;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+
+  /* ---------- 底部提示 ---------- */
+  #hintbar{
+    position:absolute;left:50%;bottom:.62em;transform:translateX(-50%);
+    font-size:.66em;letter-spacing:.08em;color:rgba(43,42,38,.46);white-space:nowrap;
+    background:rgba(246,240,228,.72);padding:.22em .8em;border-radius:1px;
+  }
+  #hintbar b{color:rgba(43,42,38,.72);font-weight:600}
+
+  /* ---------- 提示气泡 ---------- */
+  #toasts{position:absolute;left:50%;bottom:6.5em;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:.35em;pointer-events:none}
+  .toast{
+    font-size:.78em;padding:.42em .9em;background:rgba(43,42,38,.9);color:#f6f0e4;
+    border-radius:1px;letter-spacing:.03em;white-space:nowrap;
+    animation:tin .25s ease, tout .4s ease 2.6s forwards;
+  }
+  @keyframes tin{from{opacity:0;transform:translateY(.5em)}to{opacity:1;transform:none}}
+  @keyframes tout{to{opacity:0;transform:translateY(-.4em)}}
+
+  /* ---------- 模态 ---------- */
+  #mask{
+    position:absolute;inset:0;background:rgba(28,25,18,.42);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:40;
+  }
+  #mask.on{opacity:1;pointer-events:auto}
+  #modal{width:31em;max-height:86%;overflow:auto;padding:1.5em 1.7em 1.3em;
+    transform:translateY(.6em);transition:transform .26s cubic-bezier(.2,.9,.3,1)}
+  #mask.on #modal{transform:none}
+  #modal::-webkit-scrollbar{width:.3em}
+  #modal::-webkit-scrollbar-thumb{background:rgba(43,42,38,.3)}
+  #modal h2{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;font-size:1.32em;font-weight:600;
+    letter-spacing:.1em;margin-bottom:.15em;display:flex;align-items:center;gap:.55em;
+  }
+  #modal h2 .seal{
+    flex:none;width:1.35em;height:1.35em;background:#a6402f;color:#fdf7ec;
+    display:flex;align-items:center;justify-content:center;font-size:.72em;letter-spacing:0;
+    font-family:"Songti SC",serif;transform:rotate(-3deg);border-radius:1px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);
+  }
+  #modal .sub{font-size:.74em;color:rgba(43,42,38,.55);letter-spacing:.12em;margin-bottom:1em}
+  #modal .body{font-size:.86em;line-height:1.85;color:rgba(43,42,38,.9)}
+  #modal .body p{margin-bottom:.6em}
+  #modal .body .dim{color:rgba(43,42,38,.55);font-size:.94em}
+  #modal .btns{display:flex;flex-direction:column;gap:.45em;margin-top:1.15em}
+  .btn{
+    font-family:inherit;font-size:.84em;text-align:left;padding:.62em .9em;cursor:pointer;
+    background:rgba(255,252,244,.55);border:1px solid rgba(43,42,38,.34);border-radius:1px;
+    color:#2b2a26;transition:all .15s ease;line-height:1.5;
+  }
+  .btn:hover{background:#2b2a26;color:#f6f0e4;padding-left:1.15em}
+  .btn .hint{display:block;font-size:.86em;opacity:.6;margin-top:.15em}
+  .btn.primary{background:#a6402f;color:#fdf7ec;border-color:#8a3225;text-align:center;letter-spacing:.2em}
+  .btn.primary:hover{background:#8f3427;padding-left:.9em}
+  .btn.ghost{text-align:center;letter-spacing:.16em;font-size:.78em;opacity:.75}
+
+  /* 结算表 */
+  .rows{display:flex;flex-direction:column;gap:.3em;margin:.7em 0 .3em}
+  .rows .r{display:flex;justify-content:space-between;font-size:.82em;padding:.22em 0;
+    border-bottom:1px dotted rgba(43,42,38,.18)}
+  .rows .r b{font-weight:600;font-variant-numeric:tabular-nums}
+  .tlist{list-style:none;margin:.5em 0 .2em}
+  .tlist li{font-size:.8em;line-height:1.9;color:rgba(43,42,38,.85)}
+  .tlist li.ok{color:#5c6b4f}
+  .tlist li.no{color:rgba(43,42,38,.42)}
+  .quote{
+    font-family:"Songti SC","STSong",serif;font-size:.92em;line-height:1.9;letter-spacing:.05em;
+    padding:.7em .9em;background:rgba(166,64,47,.06);border-left:2px solid rgba(166,64,47,.5);
+    margin-top:.7em;color:rgba(43,42,38,.88);
+  }
+
+  /* ---------- 布置面板 ---------- */
+  #build{
+    position:absolute;right:1em;top:4.1em;width:15.4em;padding:.85em .9em 1em;
+    opacity:0;pointer-events:none;transform:translateX(.6em);transition:all .22s ease;
+  }
+  #build.on{opacity:1;pointer-events:auto;transform:none}
+  #build h3{font-family:"Songti SC","STSong",serif;font-size:.92em;letter-spacing:.22em;font-weight:600;
+    margin-bottom:.15em}
+  #build .bsub{font-size:.68em;color:rgba(43,42,38,.5);margin-bottom:.7em;letter-spacing:.06em}
+  .cat{display:flex;flex-direction:column;gap:.3em}
+  .citem{
+    border:1px solid rgba(43,42,38,.3);background:rgba(255,252,244,.5);padding:.42em .55em;
+    cursor:pointer;transition:all .14s;text-align:left;font-family:inherit;color:#2b2a26;
+    display:flex;justify-content:space-between;align-items:baseline;gap:.5em;
+  }
+  .citem:hover{background:rgba(43,42,38,.08)}
+  .citem.on{background:#2b2a26;color:#f6f0e4;border-color:#2b2a26}
+  .citem .cn{font-size:.78em;letter-spacing:.08em}
+  .citem .cp{font-size:.68em;opacity:.62;font-variant-numeric:tabular-nums}
+  .citem.on .cp{opacity:.85}
+  #build .btip{font-size:.66em;line-height:1.7;color:rgba(43,42,38,.52);margin-top:.7em;
+    border-top:1px dashed rgba(43,42,38,.2);padding-top:.5em}
+
+  /* ---------- 全屏页：开始 / 创建 ---------- */
+  .screen{
+    position:absolute;inset:0;z-index:60;display:none;
+    align-items:center;justify-content:center;
+    background:
+      repeating-linear-gradient(0deg,rgba(120,110,90,.03) 0 1px,transparent 1px 5px),
+      radial-gradient(120% 90% at 50% 40%,rgba(255,253,246,.97),rgba(236,228,211,.995));
+  }
+  .screen.on{display:flex}
+  #ui.screening #topbar,
+  #ui.screening #needs,
+  #ui.screening #tasks,
+  #ui.screening #hintbar,
+  #ui.screening #toasts,
+  #ui.screening #build,
+  #ui.screening #mask{opacity:0;pointer-events:none;transition:opacity .2s}
+
+  .menu-inner{display:flex;align-items:center;gap:3.2em;padding:0 3em;width:100%;max-width:60em}
+  .menu-brand{text-align:center;flex:none}
+  .menu-title{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;font-size:3.4em;letter-spacing:.32em;
+    text-indent:.32em;color:#2b2a26;line-height:1.15;
+  }
+  .menu-sub{font-size:.76em;letter-spacing:.6em;text-indent:.6em;color:rgba(43,42,38,.46);margin-top:.8em}
+  .menu-seal{
+    width:2.4em;height:2.4em;background:#a6402f;color:#fdf7ec;margin:1.3em auto 0;
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Songti SC",serif;font-size:1.05em;transform:rotate(-4deg);
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);
+  }
+  .menu-right{flex:1;min-width:0}
+  .menu-note-top{font-size:.76em;letter-spacing:.16em;color:rgba(43,42,38,.45);margin-bottom:.9em}
+  .menu-foot{font-size:.66em;letter-spacing:.08em;color:rgba(43,42,38,.38);margin-top:.9em}
+  .slots{display:flex;flex-direction:column;gap:.55em}
+  .slot{
+    display:flex;align-items:center;gap:.9em;padding:.7em .9em;
+    background:rgba(255,252,244,.55);border:1px solid rgba(43,42,38,.3);
+    transition:all .16s;
+  }
+  .slot:hover{background:rgba(255,252,244,.85)}
+  .slot .sno{
+    flex:none;width:2.1em;height:2.1em;border:1px solid rgba(43,42,38,.35);
+    display:flex;align-items:center;justify-content:center;font-size:.8em;
+    font-family:"Songti SC",serif;color:rgba(43,42,38,.6);
+  }
+  .slot .sinfo{flex:1;min-width:0}
+  .slot .sname{font-size:.92em;letter-spacing:.06em;display:flex;align-items:baseline;gap:.5em}
+  .slot .sname b{font-weight:600}
+  .slot .sname i{font-style:normal;font-size:.72em;color:rgba(43,42,38,.45);letter-spacing:.08em}
+  .slot .smeta{font-size:.7em;color:rgba(43,42,38,.5);margin-top:.25em;letter-spacing:.05em}
+  .slot .sacts{display:flex;gap:.35em;flex:none}
+  .slot.empty{background:rgba(255,252,244,.28);border-style:dashed}
+  .slot .empty-txt{font-size:.8em;color:rgba(43,42,38,.42);letter-spacing:.1em}
+
+  .create-inner{width:100%;max-width:52em;padding:0 2em}
+  .create-head h2{
+    font-family:"Songti SC","STSong",serif;font-size:1.5em;font-weight:600;letter-spacing:.2em;
+  }
+  .create-head .sub{font-size:.72em;color:rgba(43,42,38,.45);letter-spacing:.1em;margin-top:.35em}
+  .tabs{display:flex;gap:.4em;margin:1.2em 0 .9em}
+  .tab{
+    font-family:inherit;font-size:.78em;padding:.42em 1em;cursor:pointer;
+    background:rgba(255,252,244,.5);border:1px solid rgba(43,42,38,.3);color:#2b2a26;
+    letter-spacing:.08em;transition:all .15s;
+  }
+  .tab:hover{background:rgba(43,42,38,.07)}
+  .tab.on{background:#2b2a26;color:#f6f0e4;border-color:#2b2a26}
+  .char-strip{display:flex;gap:.7em;flex-wrap:wrap}
+  .ccard{
+    width:7.2em;padding:.5em .4em .6em;cursor:pointer;text-align:center;
+    background:rgba(255,252,244,.5);border:1px solid rgba(43,42,38,.28);transition:all .15s;
+  }
+  .ccard:hover{transform:translateY(-2px);background:rgba(255,252,244,.85)}
+  .ccard.on{border-color:#a6402f;box-shadow:0 0 0 1px rgba(166,64,47,.5) inset;background:rgba(255,250,240,.95)}
+  .ccard canvas{display:block;margin:0 auto;width:5.4em;height:6.8em}
+  .ccard .cname{font-size:.78em;letter-spacing:.12em;margin-top:.3em}
+  .char-info{display:flex;gap:1.4em;align-items:center;margin-top:1.4em;
+    border-top:1px dashed rgba(43,42,38,.22);padding-top:1.2em}
+  .ci-portrait{flex:none;width:8em;height:11em;background:rgba(255,252,244,.4);
+    border:1px solid rgba(43,42,38,.18);display:flex;align-items:flex-end;justify-content:center}
+  .ci-portrait canvas{width:100%;height:100%}
+  .ci-text h3{font-family:"Songti SC","STSong",serif;font-size:1.3em;letter-spacing:.16em;font-weight:600}
+  .ci-tag{font-size:.8em;line-height:1.9;color:rgba(43,42,38,.72);margin-top:.5em;max-width:22em}
+  .ci-bonus{font-size:.72em;color:#a6402f;letter-spacing:.08em;margin-top:.6em}
+  .create-actions{display:flex;gap:.6em;justify-content:flex-end;margin-top:1.4em}
+  .create-actions .btn{min-width:9em;text-align:center}
+
+  /* ---------- 标题页 ---------- */
+  .home-inner{text-align:center;padding:0 2em}
+  .home-actions{display:flex;flex-direction:column;align-items:center;gap:.55em;margin-top:2.4em}
+  .home-btn{
+    width:12.5em;padding:.72em 0;cursor:pointer;font-family:"Songti SC","STSong",serif;
+    font-size:.98em;letter-spacing:.3em;text-indent:.3em;color:#2b2a26;
+    background:rgba(255,252,244,.55);border:1px solid rgba(43,42,38,.32);
+    transition:all .18s ease;
+  }
+  .home-btn:hover{background:#2b2a26;color:#f6f0e4;border-color:#2b2a26}
+  .home-btn.primary{background:rgba(166,64,47,.92);color:#fdf7ec;border-color:#8a3225}
+  .home-btn.primary:hover{background:#8f3427;color:#fdf7ec}
+  .home-foot{margin-top:2.2em;font-size:.68em;letter-spacing:.12em;color:rgba(43,42,38,.36)}
+
+  /* ---------- 通用页头 ---------- */
+  .page-inner{width:100%;max-width:44em;padding:0 2em}
+  .page-head h2{
+    font-family:"Songti SC","STSong",serif;font-size:1.6em;font-weight:600;letter-spacing:.2em;
+  }
+  .page-head .sub{font-size:.74em;color:rgba(43,42,38,.45);letter-spacing:.1em;margin-top:.45em}
+  .page-actions{display:flex;justify-content:flex-end;margin-top:1.5em}
+  .load-tip{font-size:.72em;color:rgba(43,42,38,.4);letter-spacing:.1em;margin-top:.9em;text-align:center}
+
+  /* ---------- 存档位选择 ---------- */
+  .slot-picker{display:flex;gap:.5em;margin-top:1.2em}
+  .spick{
+    flex:1;padding:.5em .7em;cursor:pointer;text-align:left;font-family:inherit;
+    background:rgba(255,252,244,.45);border:1px solid rgba(43,42,38,.28);
+    color:#2b2a26;transition:all .15s ease;
+  }
+  .spick:hover{background:rgba(255,252,244,.9)}
+  .spick.on{border-color:#a6402f;box-shadow:inset 0 0 0 1px rgba(166,64,47,.4);background:rgba(255,250,240,.95)}
+  .spick .sn{font-size:.74em;letter-spacing:.1em}
+  .spick .sd{font-size:.64em;color:rgba(43,42,38,.5);margin-top:.18em;letter-spacing:.04em}
+  .spick.full{opacity:.36;cursor:not-allowed}
+
+  /* ---------- 前置叙事 ---------- */
+  #prologue{position:absolute;inset:0;z-index:70;display:none;cursor:pointer;overflow:hidden}
+  #prologue.on{display:block}
+  #prologue .veil{
+    position:absolute;inset:0;
+    background:
+      repeating-linear-gradient(0deg,rgba(120,110,90,.022) 0 1px,transparent 1px 5px),
+      radial-gradient(120% 92% at 46% 42%,rgba(250,246,236,.965),rgba(238,231,217,.995));
+    opacity:1;transition:opacity 1.6s ease;
+  }
+  #pro-chapter{
+    position:absolute;left:7.5%;top:15%;transform:translateX(-50%);
+    font-family:"Songti SC","STSong",serif;font-size:1.5em;letter-spacing:.2em;
+    color:rgba(43,42,38,.3);
+  }
+  #pro-mark{
+    position:absolute;left:7.5%;top:26%;width:2px;height:0;
+    background:linear-gradient(180deg,rgba(43,42,38,.7),rgba(43,42,38,0));
+    transition:height 1.5s cubic-bezier(.2,.8,.3,1);
+  }
+  #pro-body{position:absolute;left:10.5%;top:50%;transform:translateY(-50%);width:46em;max-width:62%}
+  #pro-lines{display:flex;flex-direction:column;gap:.08em}
+  .pro-line{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    font-size:1.3em;line-height:2.02;letter-spacing:.09em;color:#2b2a26;
+    opacity:1;
+    animation:proIn 1.05s cubic-bezier(.2,.8,.3,1) var(--d,0s) backwards forwards;
+  }
+  .pro-line.soft{color:rgba(43,42,38,.66)}
+  .pro-line.final{color:#a6402f}
+  @keyframes proIn{
+    from{opacity:0;transform:translateY(16px);filter:blur(5px)}
+    to{opacity:1;transform:none;filter:blur(0)}
+  }
+  #pro-dots{position:absolute;left:10.5%;bottom:15%;display:flex;gap:.42em}
+  .pdot{width:.36em;height:.36em;border-radius:50%;background:rgba(43,42,38,.16);transition:background .45s}
+  .pdot.on{background:#a6402f}
+  #pro-skip{
+    position:absolute;right:2em;top:1.7em;font-size:.72em;letter-spacing:.24em;
+    color:rgba(43,42,38,.4);padding:.32em .7em;border:1px solid rgba(43,42,38,.18);
+    transition:all .15s;
+  }
+  #pro-skip:hover{color:#2b2a26;border-color:rgba(43,42,38,.4)}
+  #pro-foot{
+    position:absolute;left:50%;bottom:6.5%;transform:translateX(-50%);
+    font-size:.68em;letter-spacing:.26em;color:rgba(43,42,38,.34);
+    animation:breathe 2.8s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.3}50%{opacity:.8}}
+
+  /* ---------- 触屏适配 ---------- */
+  #wrap,#cv{touch-action:none}
+  #touch{position:absolute;inset:0;z-index:35;display:none;pointer-events:none}
+  body.touch #touch{display:block}
+  body.touch.ui-blocked #touch{display:none}
+  .tbtn{
+    pointer-events:auto;border:1px solid rgba(43,42,38,.34);
+    background:rgba(250,246,236,.84);color:#2b2a26;
+    font-family:inherit;line-height:1;display:flex;align-items:center;justify-content:center;
+    -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;
+    box-shadow:0 2px 8px rgba(40,34,24,.16);
+    transition:transform .08s, background .08s, opacity .12s;
+  }
+  .tbtn.on{background:rgba(43,42,38,.88);color:#f6f0e4;transform:scale(.94)}
+  .tbtn.dim{opacity:.5}
+  .tpad{
+    position:absolute;left:calc(14px + env(safe-area-inset-left));
+    bottom:calc(14px + env(safe-area-inset-bottom));
+    display:grid;grid-template-columns:repeat(3,var(--tb));grid-template-rows:repeat(2,var(--tb));
+    gap:6px;pointer-events:none;--tb:clamp(44px,11.5vh,56px);
+  }
+  .tpad .tbtn{width:var(--tb);height:var(--tb);border-radius:50%;font-size:calc(var(--tb)*.36)}
+  .tpad .up{grid-column:2;grid-row:1}
+  .tpad .left{grid-column:1;grid-row:2}
+  .tpad .down{grid-column:2;grid-row:2}
+  .tpad .right{grid-column:3;grid-row:2}
+  .tactions{
+    position:absolute;right:calc(14px + env(safe-area-inset-right));
+    bottom:calc(14px + env(safe-area-inset-bottom));
+    display:flex;align-items:flex-end;gap:10px;pointer-events:none;
+    --tb:clamp(44px,11.5vh,56px);
+  }
+  .tactions .tbtn{border-radius:999px;height:var(--tb);min-width:var(--tb);padding:0 .8em;font-size:calc(var(--tb)*.28);letter-spacing:.06em}
+  #tInteract{height:calc(var(--tb)*1.16);min-width:calc(var(--tb)*1.9);font-size:calc(var(--tb)*.3);background:rgba(166,64,47,.92);color:#fdf7ec;border-color:rgba(120,42,30,.55)}
+  #tInteract.on{background:#8f3427}
+  #tJump{height:calc(var(--tb)*.92)}
+  #tMenu{width:calc(var(--tb)*.8);min-width:0;padding:0;font-size:calc(var(--tb)*.26)}
+
+  body.touch .brand{display:none}
+  body.touch #topbar{padding:0 .7em;gap:.5em}
+  body.touch #topbar .grp{gap:.4em}
+  body.touch .chip{font-size:10px;padding:7px 9px;min-height:34px}
+  body.touch .stat{font-size:10px}
+  body.touch .stat b{font-size:12px}
+  body.touch .sep{height:.9em}
+  body.touch #needs{left:.55em;bottom:auto;top:3.55em;width:13.2em;padding:.35em .5em .4em}
+  body.touch #needs h4{font-size:9px}
+  body.touch .need .nm{font-size:9px;width:2.2em}
+  body.touch #tasks{bottom:auto;top:3.55em;right:.55em;padding:.35em .55em .38em;max-width:55%;overflow:hidden}
+  body.touch #tasks ul{gap:.5em;row-gap:2px;flex-wrap:wrap;overflow:hidden}
+  body.touch #tasks li,body.touch .tlabel,body.touch .tcount{font-size:9px}
+  body.touch #hintbar{display:none}
+  body.touch #toasts{bottom:9.2em}
+  body.touch #build{top:3.7em;right:.6em;width:14em;max-height:calc(100% - 4.2em);overflow-y:auto;-webkit-overflow-scrolling:touch}
+  body.touch #build .btip{display:none}
+  body.touch #modal{width:min(90%,396px);max-height:calc(100% - 14px);padding:14px 16px 12px}
+  body.touch #modal h2{padding-right:2.4em}
+  #modalClose{
+    display:none;position:absolute;right:8px;top:8px;width:34px;height:34px;
+    border:1px solid rgba(43,42,38,.25);background:rgba(255,252,244,.8);
+    color:#2b2a26;font-family:inherit;font-size:20px;line-height:1;
+    align-items:center;justify-content:center;cursor:pointer;
+  }
+  body.touch #modalClose{display:flex}
+  body.touch #create.on,body.touch #load.on{
+    align-items:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 0 26px;
+  }
+  body.touch .create-inner,body.touch .page-inner{padding:0 1.2em}
+  body.touch .home-btn{width:220px;padding:14px 0;font-size:13px}
+  body.touch .btn{min-height:42px;padding:10px 16px;font-size:12px}
+  body.touch .tab{min-height:40px;padding:8px 14px;font-size:12px}
+  body.touch .slot{padding:12px}
+  body.touch .citem{padding:11px 10px}
+
+  #rotate{
+    position:fixed;inset:0;z-index:999;display:none;flex-direction:column;
+    align-items:center;justify-content:center;gap:10px;background:#f3eddf;text-align:center;
+    font-family:"PingFang SC","Hiragino Sans GB",system-ui,sans-serif;color:#2b2a26;
+  }
+  #rotate .rbig{font-family:"Songti SC","STSong",serif;font-size:20px;letter-spacing:.18em}
+  #rotate .rsmall{font-size:12px;color:rgba(43,42,38,.55);letter-spacing:.08em}
+  #rotate .rbtn{margin-top:8px;border:1px solid rgba(43,42,38,.3);background:transparent;
+    padding:10px 18px;font-family:inherit;font-size:12px;color:#2b2a26}
+  @media (orientation:portrait){
+    body.touch:not(.portrait-ok) #rotate{display:flex}
+  }
+
+  .noanim *{transition:none!important;animation:none!important}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="wrap">
+    <canvas id="cv"></canvas>
+
+    <div id="ui">
+      <div id="topbar">
+        <div class="grp">
+          <div class="stat"><b id="hAge">7</b><span>岁</span></div>
+          <div class="sep"></div>
+          <div class="stat"><span>第</span><b id="hWeek">1</b><span>周</span><span class="dimsep">·</span><span>第</span><b id="hDay">1</b><span>天</span></div>
+          <div class="sep"></div>
+          <div class="stat"><b id="hClock">07:00</b></div>
+          <div class="sep"></div>
+          <div class="stat"><b id="hScene">家</b></div>
+          <div class="sep"></div>
+          <div class="stat"><b id="hMoney">120</b><span>文</span></div>
+        </div>
+        <div class="brand">浮生 · 纸片屋</div>
+        <div class="grp">
+          <button class="chip" data-act="speed" id="btnSpeed">1×</button>
+          <button class="chip" data-act="char">人物</button>
+          <button class="chip" data-act="build">布置</button>
+          <button class="chip" data-act="menu">菜单</button>
+        </div>
+      </div>
+
+      <div id="needs" class="paper">
+        <h4>状 态<span id="hMood">平静</span></h4>
+        <div class="ngrid">
+          <div class="need"><span class="nm">体力</span><div class="bar b-energy"><i id="nEnergy"></i></div><span class="vl" id="vEnergy">0</span></div>
+          <div class="need"><span class="nm">饱腹</span><div class="bar b-food"><i id="nFood"></i></div><span class="vl" id="vFood">0</span></div>
+          <div class="need"><span class="nm">整洁</span><div class="bar b-clean"><i id="nClean"></i></div><span class="vl" id="vClean">0</span></div>
+          <div class="need"><span class="nm">兴致</span><div class="bar b-fun"><i id="nFun"></i></div><span class="vl" id="vFun">0</span></div>
+        </div>
+      </div>
+
+      <div id="tasks" class="paper">
+        <span class="tlabel">今日</span>
+        <ul id="taskList"></ul>
+        <span class="tcount" id="hProgress">0/3</span>
+      </div>
+
+      <div id="hintbar"><b>A/D</b> 走 · <b>W/S</b> 爬 · <b>E</b> 互动 · <b>B</b> 布置</div>
+
+      <div id="toasts"></div>
+
+      <div id="build" class="paper">
+        <h3>布 置</h3>
+        <div class="bsub">钱要花在看得见的地方</div>
+        <div class="cat" id="cat"></div>
+        <div class="btip">左键放置 · 右键回收（退六成）· 再按 B 收起<br>摆件不挡路，放心塞。</div>
+      </div>
+
+      <div id="mask">
+        <div id="modal" class="paper"></div>
+      </div>
+
+      <div id="home" class="screen on">
+        <div class="home-inner">
+          <div class="menu-brand">
+            <div class="menu-title">浮 生</div>
+            <div class="menu-sub">纸 片 屋</div>
+            <div class="menu-seal">浮</div>
+          </div>
+          <div class="home-actions">
+            <button class="home-btn primary" id="btnHomeNew">开 始 游 戏</button>
+            <button class="home-btn" id="btnHomeLoad">读 取 存 档</button>
+            <button class="home-btn" id="btnHomeHelp">说 明</button>
+          </div>
+          <div class="home-foot">一个普通人，一间纸糊的屋子，从七岁到三十岁</div>
+        </div>
+      </div>
+
+      <div id="load" class="screen">
+        <div class="page-inner">
+          <div class="page-head">
+            <h2>开始游戏</h2>
+            <div class="sub">接着上次的日子过</div>
+          </div>
+          <div class="slots" id="loadList"></div>
+          <div class="page-actions">
+            <button class="btn ghost" data-back="home">返回</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="create" class="screen">
+        <div class="create-inner">
+          <div class="page-head">
+            <h2>新建存档</h2>
+            <div class="sub">选个位置，选个人，然后过二十三年</div>
+          </div>
+          <div class="slot-picker" id="slotPicker"></div>
+          <div class="tabs" id="genderTabs">
+            <button class="tab on" data-g="f">女生 · 4</button>
+            <button class="tab" data-g="m">男生 · 2</button>
+          </div>
+          <div class="char-strip" id="charStrip"></div>
+          <div class="char-info">
+            <div class="ci-portrait"><canvas id="charBig" width="200" height="280"></canvas></div>
+            <div class="ci-text">
+              <h3 id="ciName">小丁</h3>
+              <div class="ci-tag" id="ciTag"></div>
+              <div class="ci-bonus" id="ciBonus"></div>
+            </div>
+          </div>
+          <div class="create-actions">
+            <button class="btn ghost" data-back="home">返回</button>
+            <button class="btn primary" id="btnCreateGo">开始这一生</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="prologue">
+        <div class="veil"></div>
+        <div id="pro-chapter">序</div>
+        <div id="pro-mark"></div>
+        <div id="pro-body"><div id="pro-lines"></div></div>
+        <div id="pro-dots"></div>
+        <div id="pro-skip">跳 过</div>
+        <div id="pro-foot">点击继续 · 空格也可以</div>
+      </div>
+
+      </div>
+
+      <div id="touch">
+        <div class="tpad">
+          <button class="tbtn up" data-k="up" aria-label="上">↑</button>
+          <button class="tbtn left" data-k="left" aria-label="左">←</button>
+          <button class="tbtn down" data-k="down" aria-label="下">↓</button>
+          <button class="tbtn right" data-k="right" aria-label="右">→</button>
+        </div>
+        <div class="tactions">
+          <button class="tbtn" id="tMenu" aria-label="菜单">菜单</button>
+          <button class="tbtn" id="tJump" aria-label="跳">跳</button>
+          <button class="tbtn" id="tInteract" aria-label="互动">互动</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="rotate">
+  <div class="rbig">把手机横过来</div>
+  <div class="rsmall">横屏才装得下一间屋子</div>
+  <button class="rbtn" id="rotateOk">仍然竖屏进入</button>
+</div>
+
+<script>
+/* =========================================================
+   浮生 · 纸片屋   —  单文件 MVP
+   2D 侧视生活模拟 / 水墨纸面 / 无外部依赖
+   ========================================================= */
+
+/* ---------------- 基础 ---------------- */
+window.addEventListener('error', function(e){
+  try{
+    const d = document.createElement('div');
+    d.id = 'jserr';
+    d.style.cssText = 'position:fixed;left:0;bottom:0;z-index:99999;background:#a6402f;color:#fff;font:12px monospace;padding:4px 8px';
+    d.textContent = 'JS: ' + (e.message||'?') + ' @' + (e.lineno||'');
+    document.body.appendChild(d);
+  }catch(_){}
+});
+
+const W = 1280, H = 720;
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const wrapEl = document.getElementById('wrap');
+const TOUCH = /[?&]touch=1/.test(location.search) ||
+  (navigator.maxTouchPoints > 0 &&
+   (window.matchMedia('(pointer: coarse)').matches || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)));
+if(TOUCH) document.body.classList.add('touch');
+let G = ctx;                 // 当前绘制上下文（离屏缓存时会切换）
+let DPR = 1;
+
+const INK = '#2b2a26';
+const INK_SOFT = 'rgba(43,42,38,.55)';
+const RED = '#a6402f';
+
+function fit(){
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(W * DPR);
+  cv.height = Math.round(H * DPR);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const r = wrapEl.getBoundingClientRect();
+  const fs = r.height / 720 * 16;
+  wrapEl.style.fontSize = (TOUCH ? Math.max(11, fs) : fs) + 'px';
+}
+window.addEventListener('resize', fit);
+
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+const rand = (a,b)=>a+Math.random()*(b-a);
+const ri = (a,b)=>Math.floor(a+Math.random()*(b-a+1));
+const pick = arr=>arr[Math.floor(Math.random()*arr.length)];
+
+/* 稳定噪声：同一坐标永远同一抖动，避免画面抖动 */
+function nz(x,y,s){
+  s = s || 0;
+  const v = Math.sin(x*12.9898 + y*78.233 + s*37.719) * 43758.5453;
+  return v - Math.floor(v);
+}
+
+/* ---------------- 绘制工具 ---------------- */
+function rr(x,y,w,h,r){
+  r = Math.min(r, w/2, h/2);
+  G.beginPath();
+  G.moveTo(x+r,y);
+  G.arcTo(x+w,y,x+w,y+h,r);
+  G.arcTo(x+w,y+h,x,y+h,r);
+  G.arcTo(x,y+h,x,y,r);
+  G.arcTo(x,y,x+w,y,r);
+  G.closePath();
+}
+
+function rough(x1,y1,x2,y2,opt){
+  opt = opt || {};
+  const w = opt.w===undefined?2:opt.w;
+  const a = opt.a===undefined?.7:opt.a;
+  const c = opt.c || INK;
+  const seed = opt.seed || 1;
+  const dx = x2-x1, dy = y2-y1;
+  const len = Math.hypot(dx,dy) || 1;
+  const n = Math.max(1, Math.round(len/24));
+  G.save();
+  G.strokeStyle = c; G.globalAlpha = a; G.lineWidth = w; G.lineCap='round';
+  G.beginPath();
+  for(let i=0;i<=n;i++){
+    const t = i/n;
+    const px = x1+dx*t, py = y1+dy*t;
+    const amp = (i===0||i===n) ? .8 : 2.6;
+    const j = (nz(px,py,seed)-.5)*amp;
+    const nx = -dy/len*j, ny = dx/len*j;
+    if(i===0) G.moveTo(px+nx,py+ny);
+    else G.lineTo(px+nx,py+ny);
+  }
+  G.stroke();
+  G.restore();
+}
+
+function wash(x,y,w,h,a,c){
+  G.save();
+  G.globalAlpha = a===undefined?.06:a;
+  G.fillStyle = c || '#3a3830';
+  G.fillRect(x,y,w,h);
+  G.restore();
+}
+
+function txt(s,x,y,opt){
+  opt = opt || {};
+  const size = opt.size || 14;
+  G.save();
+  G.globalAlpha = opt.alpha===undefined?1:opt.alpha;
+  G.fillStyle = opt.color || INK;
+  G.textAlign = opt.align || 'left';
+  G.textBaseline = 'middle';
+  G.font = (opt.weight?opt.weight+' ':'') + size + 'px ' + (opt.font || '"Songti SC","STSong","Noto Serif SC",serif');
+  G.fillText(s,x,y);
+  G.restore();
+}
+
+function hexToRgb(h){
+  const n = parseInt(h.slice(1),16);
+  return [ (n>>16)&255, (n>>8)&255, n&255 ];
+}
+function mixHex(a,b,t){
+  const A = hexToRgb(a), B = hexToRgb(b);
+  return 'rgb('+Math.round(A[0]+(B[0]-A[0])*t)+','+Math.round(A[1]+(B[1]-A[1])*t)+','+Math.round(A[2]+(B[2]-A[2])*t)+')';
+}
+
+/* ---------------- 纸张纹理 ---------------- */
+const paper = document.createElement('canvas');
+paper.width = W; paper.height = H;
+(function buildPaper(){
+  const p = paper.getContext('2d');
+  p.fillStyle = '#f3eddf';
+  p.fillRect(0,0,W,H);
+
+  const g = p.createLinearGradient(0,0,W*.4,H);
+  g.addColorStop(0,'rgba(255,253,246,.85)');
+  g.addColorStop(.5,'rgba(248,242,230,.25)');
+  g.addColorStop(1,'rgba(214,202,180,.30)');
+  p.fillStyle = g; p.fillRect(0,0,W,H);
+
+  // 纸纤维
+  p.lineWidth = 1;
+  for(let i=0;i<2400;i++){
+    const x = Math.random()*W, y = Math.random()*H;
+    const l = 4 + Math.random()*22, a = Math.random()*Math.PI;
+    p.strokeStyle = Math.random()<.5
+      ? 'rgba(120,108,86,'+(0.012+Math.random()*0.03)+')'
+      : 'rgba(255,255,255,'+(0.04+Math.random()*0.12)+')';
+    p.beginPath();
+    p.moveTo(x,y);
+    p.lineTo(x+Math.cos(a)*l, y+Math.sin(a)*l*0.45);
+    p.stroke();
+  }
+
+  // 水渍 / 淡墨块
+  for(let i=0;i<46;i++){
+    const x = Math.random()*W, y = Math.random()*H, r = 40+Math.random()*190;
+    const rg = p.createRadialGradient(x,y,0,x,y,r);
+    rg.addColorStop(0,'rgba(122,108,84,'+(0.012+Math.random()*0.022)+')');
+    rg.addColorStop(.7,'rgba(122,108,84,0.006)');
+    rg.addColorStop(1,'rgba(122,108,84,0)');
+    p.fillStyle = rg;
+    p.beginPath(); p.arc(x,y,r,0,7); p.fill();
+  }
+
+  // 四角压暗
+  const vg = p.createRadialGradient(W/2,H/2,H*0.35,W/2,H/2,H*0.95);
+  vg.addColorStop(0,'rgba(120,104,78,0)');
+  vg.addColorStop(1,'rgba(120,104,78,.16)');
+  p.fillStyle = vg; p.fillRect(0,0,W,H);
+})();
+
+/* ---------------- 住宅：三档建模 ---------------- */
+const house = document.createElement('canvas');
+house.width = W; house.height = H;
+const hctx = house.getContext('2d');
+
+const HOUSES = {
+  villa: {
+    id:'villa', name:'三层小楼', tierName:'富裕', tier:0,
+    x1:70, x2:1210, roofY:78,
+    f1:600, f2:430, f3:250,
+    floors:[600,430,250],
+    ladder:{ x1:1040, x2:1078, top:250, bot:600 },
+    doorX:1150,
+    windows:[ {x:430,y:430,w:150,h:112}, {x:230,y:280,w:140,h:110}, {x:820,y:100,w:130,h:108} ],
+    labels:[ ['灶房',158,470,17], ['客厅',742,470,17], ['浴室',940,470,17],
+             ['卧房',172,326,17], ['画室',640,326,17], ['书房',900,140,17] ]
+  },
+  flat: {
+    id:'flat', name:'两层住宅', tierName:'小康', tier:1,
+    x1:110, x2:1170, roofY:90,
+    f1:600, f2:344,
+    floors:[600,344],
+    ladder:{ x1:1020, x2:1058, top:344, bot:600 },
+    doorX:1118,
+    windows:[ {x:466,y:412,w:132,h:118}, {x:196,y:142,w:132,h:122} ],
+    labels:[ ['灶房',168,416,18], ['客堂',758,416,18], ['浴间',900,416,18], ['卧房',172,180,18], ['画室',618,180,18] ]
+  },
+  rental: {
+    id:'rental', name:'单层平房', tierName:'贫困', tier:2,
+    x1:150, x2:1130, roofY:120,
+    f1:600,
+    floors:[600],
+    ladder:null,
+    doorX:1086,
+    windows:[ {x:700,y:250,w:110,h:110}, {x:300,y:330,w:84,h:72} ],
+    labels:[ ['屋子',186,470,18] ]
+  }
+};
+
+let HOUSE = HOUSES.flat;
+
+function vlabel(str,x,y,size){
+  size = size || 19;
+  for(let i=0;i<str.length;i++){
+    txt(str[i], x, y+i*(size+6), { size:size, align:'center', alpha:.19 });
+  }
+}
+
+function setHouse(id){
+  HOUSE = HOUSES[id] || HOUSES.flat;
+  buildHouse();
+}
+
+function floorSegs(){
+  const h = HOUSE;
+  const segs = [{ y:h.f1, x1:h.x1, x2:h.x2 }];
+  const L = h.ladder;
+  for(const fy of h.floors){
+    if(fy >= h.f1) continue;
+    if(L){
+      segs.push({ y:fy, x1:h.x1, x2:L.x1 - 10 });
+      segs.push({ y:fy, x1:L.x2 + 10, x2:h.x2 });
+    } else {
+      segs.push({ y:fy, x1:h.x1, x2:h.x2 });
+    }
+  }
+  return segs;
+}
+
+function buildHouse(){
+  const h = HOUSE;
+  G = hctx;
+  G.setTransform(1,0,0,1,0,0);
+  G.clearRect(0,0,W,H);
+  G.lineCap = 'round'; G.lineJoin = 'round';
+
+  const rich = h.tier === 0;
+  const poor = h.tier === 2;
+  const cx = (h.x1 + h.x2)/2;
+  const upper = h.floors.filter(fy => fy < h.f1).sort((a,b)=>b-a);
+  const ceil1 = upper.length ? upper[0] : h.roofY;
+  const topFloor = upper.length ? upper[upper.length-1] : h.f1;
+
+  // 室内底色
+  G.fillStyle = rich ? 'rgba(255,253,246,.46)' : (poor ? 'rgba(238,232,218,.30)' : 'rgba(255,252,242,.34)');
+  G.fillRect(h.x1, h.roofY, h.x2-h.x1, h.f1-h.roofY);
+
+  // ---- 屋顶 ----
+  const rL = h.x1-36, rR = h.x2+36, rApex = h.roofY - (rich?48:(poor?26:42));
+  G.save();
+  G.globalAlpha = .14; G.lineWidth = 26; G.strokeStyle = INK;
+  G.beginPath(); G.moveTo(rL,h.roofY+10); G.quadraticCurveTo(cx,rApex,rR,h.roofY+10); G.stroke();
+  G.restore();
+  G.save();
+  G.globalAlpha = poor?.62:.8; G.lineWidth = rich?8:7; G.strokeStyle = INK;
+  G.beginPath(); G.moveTo(rL,h.roofY+10); G.quadraticCurveTo(cx,rApex,rR,h.roofY+10); G.stroke();
+  G.restore();
+
+  const tiles = rich?30:22;
+  for(let i=1;i<tiles;i++){
+    const t = i/tiles;
+    const bx = rL + (rR-rL)*t;
+    const by = h.roofY+10 - ((h.roofY+10)-rApex)*4*t*(1-t);
+    rough(bx, by+4, bx-2, by+16, {w:1.1,a:.18,seed:i});
+  }
+
+  // ---- 墙体 ----
+  G.fillStyle = 'rgba(120,108,86,.04)';
+  G.fillRect(h.x1, h.roofY, h.x2-h.x1, 690-h.roofY);
+  rough(h.x1,h.roofY,h.x1,690,{w:3.6,a:poor?.7:.86});
+  rough(h.x2,h.roofY,h.x2,690,{w:3.6,a:poor?.7:.86});
+  rough(h.x1,h.roofY,h.x2,h.roofY,{w:3.6,a:poor?.7:.86});
+  rough(h.x1,690,h.x2,690,{w:3.8,a:.9});
+
+  for(let i=0;i<22;i++){
+    const x = h.x1+30 + i*47;
+    if(x > h.x2-10) break;
+    rough(x, h.roofY+14, x+rand(-2,2), 688, {w:.8,a:.035,seed:i+3});
+  }
+
+  // ---- 各层楼板 ----
+  upper.forEach((fy,si)=>{
+    const segs = h.ladder
+      ? [[h.x1,h.ladder.x1-10],[h.ladder.x2+10,h.x2]]
+      : [[h.x1,h.x2]];
+    segs.forEach((s,ii)=>{
+      G.fillStyle = 'rgba(72,64,48,.12)';
+      G.fillRect(s[0],fy-6,s[1]-s[0],16);
+      rough(s[0],fy-6,s[1],fy-6,{w:2.8,a:.8,seed:si*11+ii*3+10});
+      rough(s[0],fy+10,s[1],fy+10,{w:2.8,a:.8,seed:si*11+ii*3+12});
+      for(let x=s[0]+18;x<s[1]-6;x+=34){
+        rough(x,fy-4,x,fy+8,{w:.9,a:.10,seed:x});
+      }
+    });
+    const sg = G.createLinearGradient(0,fy+10,0,fy+92);
+    sg.addColorStop(0,'rgba(60,55,45,.10)');
+    sg.addColorStop(1,'rgba(60,55,45,0)');
+    G.fillStyle = sg;
+    G.fillRect(h.x1,fy+10,h.x2-h.x1,82);
+  });
+
+  // ---- 一层地面 ----
+  G.fillStyle = 'rgba(72,64,48,.055)';
+  G.fillRect(h.x1,h.f1,h.x2-h.x1,70);
+  rough(h.x1,h.f1,h.x2,h.f1,{w:3.2,a:.8});
+  for(let x=h.x1+20;x<h.x2-10;x+=36){
+    rough(x,h.f1+2,x+2,688,{w:.9,a:.07,seed:x+5});
+  }
+  wash(h.x1,684,h.x2-h.x1,6,.16);
+
+  // ---- 梯子 ----
+  if(h.ladder){
+    const L = h.ladder;
+    G.globalAlpha = .62; G.lineWidth = 2.4; G.strokeStyle = INK;
+    rough(L.x1+2,topFloor+12,L.x1+2,L.bot,{w:2.6,a:.55});
+    rough(L.x2-2,topFloor+12,L.x2-2,L.bot,{w:2.6,a:.55});
+    for(let y=topFloor+24;y<L.bot-2;y+=30){
+      rough(L.x1+4,y,L.x2-4,y,{w:2.2,a:.5,seed:y});
+    }
+  }
+
+  // ---- 门 ----
+  const dw = poor?54:62, dh = poor?112:122;
+  const dx1 = h.doorX - dw, dy1 = h.f1 - dh;
+  G.fillStyle = 'rgba(72,64,48,.10)';
+  G.fillRect(dx1,dy1,dw,dh);
+  rough(dx1,dy1,dx1,h.f1,{w:2.8,a:.75});
+  rough(dx1+dw,dy1,dx1+dw,h.f1,{w:2.8,a:.75});
+  rough(dx1,dy1,dx1+dw,dy1,{w:2.8,a:.75});
+  rough(dx1+dw/2,dy1+8,dx1+dw/2,h.f1-4,{w:1.2,a:.22});
+  G.beginPath(); G.arc(dx1+12, h.f1-54, 3, 0, 7); G.fillStyle=INK; G.globalAlpha=.6; G.fill(); G.globalAlpha=1;
+  G.save(); G.globalAlpha=.5; G.fillStyle=RED;
+  G.fillRect(dx1-8, dy1+10, 5, 50);
+  G.restore();
+
+  // ---- 印章 ----
+  G.save();
+  G.translate(h.x2-16, h.f1-168); G.rotate(-.06);
+  G.globalAlpha=.8; G.fillStyle=RED;
+  G.fillRect(0,0,20,20);
+  G.globalAlpha=1; G.fillStyle='#fdf7ec';
+  G.font='11px "Songti SC",serif'; G.textAlign='center'; G.textBaseline='middle';
+  G.fillText('浮',10,11);
+  G.restore();
+
+  // ---- 各档位的性格细节 ----
+  if(rich){
+    // 吊灯挂在一层天花板
+    rough(cx, ceil1+10, cx, ceil1+58, {w:1.4,a:.4});
+    rough(cx-26, ceil1+58, cx+26, ceil1+58, {w:2.2,a:.5});
+    for(let i=-1;i<=1;i++){
+      G.beginPath(); G.arc(cx+i*22, ceil1+64, 4.5, 0, 7);
+      G.fillStyle='rgba(255,250,236,.9)'; G.fill();
+      G.strokeStyle=INK; G.globalAlpha=.4; G.lineWidth=1; G.stroke(); G.globalAlpha=1;
+    }
+    // 一层挂画
+    const px = h.x1 + 520, py = ceil1 + 58;
+    G.save();
+    G.fillStyle='rgba(255,253,246,.8)';
+    G.fillRect(px, py, 96, 60);
+    G.strokeStyle=INK; G.globalAlpha=.45; G.lineWidth=1.6;
+    G.strokeRect(px, py, 96, 60);
+    G.globalAlpha=.32; G.fillStyle='rgba(60,62,66,.6)';
+    G.beginPath();
+    G.moveTo(px+16, py+48);
+    G.quadraticCurveTo(px+40, py+16, px+60, py+40);
+    G.quadraticCurveTo(px+76, py+22, px+84, py+50);
+    G.lineTo(px+16, py+50); G.fill();
+    G.restore();
+    // 踢脚线
+    rough(h.x1+6, h.f1-10, h.x2-6, h.f1-10, {w:1.2,a:.18});
+    // 三楼栏杆
+    if(upper.length > 1){
+      for(let x=h.x1+6;x<h.x2-6;x+=26){
+        rough(x, topFloor-26, x, topFloor-4, {w:1.4,a:.22,seed:x});
+      }
+      rough(h.x1+4, topFloor-27, h.x2-4, topFloor-27, {w:2,a:.3});
+    }
+  }
+
+  if(poor){
+    // 裂缝
+    for(let i=0;i<3;i++){
+      const bx = h.x2-300 + i*76, by = 210 + i*52;
+      rough(bx,by,bx+12,by+26,{w:1,a:.26,seed:i+31});
+      rough(bx+12,by+26,bx-2,by+48,{w:1,a:.22,seed:i+37});
+      rough(bx-2,by+48,bx+14,by+66,{w:.9,a:.18,seed:i+41});
+    }
+    // 水渍
+    const wg = G.createRadialGradient(h.x2-230,190,4,h.x2-230,190,90);
+    wg.addColorStop(0,'rgba(122,104,74,.10)');
+    wg.addColorStop(1,'rgba(122,104,74,0)');
+    G.fillStyle = wg;
+    G.beginPath(); G.arc(h.x2-230,190,90,0,7); G.fill();
+    // 明管
+    rough(h.x2-28, h.roofY+30, h.x2-28, h.f1, {w:3,a:.28});
+    for(let y=h.roofY+60;y<h.f1;y+=90){
+      G.beginPath(); G.arc(h.x2-28,y,4,0,7);
+      G.strokeStyle=INK; G.globalAlpha=.28; G.lineWidth=1.4; G.stroke(); G.globalAlpha=1;
+    }
+    // 晾衣绳
+    const lx1 = h.x1+60, lx2 = h.x2-90, ly = h.roofY+74;
+    rough(lx1,ly,lx2,ly+16,{w:1,a:.3});
+    [[lx1+60,'#c9b9a4'],[lx1+210,'#b9c2c4']].forEach(it=>{
+      const gx = it[0], gy = ly + 16*((gx-lx1)/(lx2-lx1));
+      G.fillStyle = it[1]; G.globalAlpha=.55;
+      G.beginPath();
+      G.moveTo(gx-11,gy); G.lineTo(gx+11,gy); G.lineTo(gx+8,gy+42); G.lineTo(gx-8,gy+42);
+      G.closePath(); G.fill();
+      G.globalAlpha=.4; G.strokeStyle=INK; G.lineWidth=1; G.stroke();
+      G.globalAlpha=1;
+    });
+    // 吊灯泡
+    rough(560, h.roofY+16, 560, h.roofY+72, {w:1.1,a:.3});
+    G.beginPath(); G.arc(560,h.roofY+80,7,0,7);
+    G.fillStyle='rgba(255,248,222,.8)'; G.fill();
+    G.strokeStyle=INK; G.globalAlpha=.35; G.lineWidth=1.2; G.stroke(); G.globalAlpha=1;
+  }
+
+  // ---- 房间名 ----
+  (h.labels||[]).forEach(l=>vlabel(l[0], l[1], l[2], l[3]));
+
+  G = ctx;
+}
+
+/* ---------------- 状态 ---------------- */
+const SLOT_KEY = i => 'fusheng_slot_' + i;
+const SLOT_COUNT = 3;
+const GEN_DAYS = 7;
+const SPEEDS = [1,2,4];
+
+const S = {
+  slot: 0,
+  char: null,
+  house: 'flat',
+  wealth: 'mid',
+  scene: 'home',
+  story: { seen:{}, fair:false },
+  gen: 1,
+  age: 7,
+  week: 1,
+  growth: { body:0, mind:0, charm:0 },
+  day: 1,
+  clock: 7*60,          // 游戏分钟
+  money: 120,
+  needs: { energy:78, food:56, clean:70, fun:62 },
+  skills: {
+    paint:{ lv:1, xp:0 },
+    cook:{ lv:1, xp:0 },
+    social:{ lv:1, xp:0 }
+  },
+  rel: { warm:18, trust:12, tension:4 },
+  buffs: [],
+  tasks: [],
+  taskProg: {},
+  placed: [],
+  stats: { paintings:0, meals:0, earned:0, rep:0 },
+  creed: null,
+  dayStart: null,
+  player: { x:560, y:620, vy:0, facing:1, moving:false, grounded:true, climbing:false },
+  action: null,
+  speed: 1,
+  buildMode: false,
+  buildType: null,
+  mouse: { x:640, y:400 },
+  dayEnded: false,
+  eventsToday: 0
+};
+
+/* ---------------- 家具定义 ---------------- */
+function sleepNow(){ endDay(false); }
+
+const FURN = {
+  bed:      { name:'床',    w:140,h:56,  price:180, use:{ label:'睡觉',   dur:1.1, act(){ sleepNow(); } } },
+  stove:    { name:'灶台',  w:70, h:70,  price:120, use:{ label:'做饭',   dur:4.2, act(){ doCook(); } } },
+  fridge:   { name:'冰箱',  w:56, h:100, price:100, use:{ label:'翻冰箱', dur:2.4, act(){ doFridge(); } } },
+  shower:   { name:'淋浴',  w:64, h:92,  price:90,  use:{ label:'冲个澡', dur:3.4, act(){ doShower(); } } },
+  sofa:     { name:'沙发',  w:140,h:56,  price:150, use:{ label:'瘫着',   dur:4.0, act(){ doSofa(); } } },
+  tv:       { name:'电视',  w:90, h:62,  price:130, use:{ label:'看电视', dur:5.0, act(){ doTV(); } } },
+  easel:    { name:'画架',  w:62, h:92,  price:160, use:{ label:'画一幅', dur:7.6, act(){ doPaint(); } } },
+  desk:     { name:'书桌',  w:100,h:64,  price:110, use:{ label:'上网',   dur:4.6, act(){ doDesk(); } } },
+  tea:      { name:'茶桌',  w:80, h:40,  price:90,  use:{ label:'泡茶',   dur:3.6, act(){ doTea(); } } },
+  plant:    { name:'盆栽',  w:44, h:62,  price:45,  use:{ label:'浇水',   dur:2.0, act(){ doPlant(); } } },
+  bookshelf:{ name:'书架',  w:72, h:110, price:110, use:{ label:'翻书',   dur:4.2, act(){ doBook(); } } },
+  wardrobe: { name:'衣柜',  w:80, h:110, price:90,  use:{ label:'换衣服', dur:2.2, act(){ doWardrobe(); } } },
+  lamp:     { name:'台灯',  w:30, h:92,  price:30,  use:null },
+  rug:      { name:'地毯',  w:120,h:14,  price:25,  use:null }
+};
+
+const BUILDABLE = ['lamp','rug','plant','bookshelf','tea','easel'];
+
+const NPC = { x:764, y:620, name:'邻居老周' };
+
+/* 三种住宅各自的家具布置（x 为家具中心，y 为所在楼层） */
+function defaultPlaced(houseId){
+  if(houseId === 'villa'){
+    return [
+      { t:'fridge',   x:180, y:600 },
+      { t:'stove',    x:280, y:600 },
+      { t:'plant',    x:360, y:600 },
+      { t:'sofa',     x:500, y:600 },
+      { t:'rug',      x:600, y:600 },
+      { t:'tv',       x:700, y:600 },
+      { t:'tea',      x:830, y:600 },
+      { t:'shower',   x:950, y:600 },
+      { t:'bed',      x:230, y:430 },
+      { t:'lamp',     x:320, y:430 },
+      { t:'wardrobe', x:400, y:430 },
+      { t:'easel',    x:580, y:430 },
+      { t:'desk',     x:720, y:430 },
+      { t:'plant',    x:860, y:430 },
+      { t:'bookshelf',x:400, y:250 },
+      { t:'tea',      x:620, y:250 },
+      { t:'plant',    x:780, y:250 },
+      { t:'lamp',     x:900, y:250 }
+    ];
+  }
+  if(houseId === 'rental'){
+    return [
+      { t:'fridge',   x:200, y:600 },
+      { t:'stove',    x:290, y:600 },
+      { t:'plant',    x:370, y:600 },
+      { t:'bed',      x:470, y:600 },
+      { t:'sofa',     x:640, y:600 },
+      { t:'easel',    x:760, y:600 },
+      { t:'desk',     x:880, y:600 },
+      { t:'shower',   x:1010, y:600 }
+    ];
+  }
+  return [
+    { t:'fridge',   x:198, y:600 },
+    { t:'stove',    x:288, y:600 },
+    { t:'plant',    x:376, y:600 },
+    { t:'sofa',     x:522, y:600 },
+    { t:'rug',      x:612, y:600 },
+    { t:'tv',       x:690, y:600 },
+    { t:'tea',      x:826, y:600 },
+    { t:'shower',   x:948, y:600 },
+    { t:'bed',      x:230, y:344 },
+    { t:'lamp',     x:320, y:344 },
+    { t:'wardrobe', x:394, y:344 },
+    { t:'easel',    x:562, y:344 },
+    { t:'desk',     x:722, y:344 },
+    { t:'bookshelf',x:886, y:344 },
+    { t:'plant',    x:980, y:344 }
+  ];
+}
+
+/* ---------------- 每日任务 ---------------- */
+const TASK_POOL = [
+  { key:'eat',    text:'吃一顿正经饭（泡面不算）', short:'吃顿正经饭', need:1 },
+  { key:'shower', text:'洗个澡，洗掉一身班味',     short:'洗个澡', need:1 },
+  { key:'paint',  text:'画完一幅画，哪怕只有你懂', short:'画完一幅画', need:1 },
+  { key:'talk',   text:'跟邻居说上话，别当社恐',   short:'和邻居说话', need:1 },
+  { key:'earn',   text:'赚够 40 文，证明还在运转', short:'赚 40 文', need:40 },
+  { key:'water',  text:'给植物浇水，它比你更需要照顾', short:'给花浇水', need:1 },
+  { key:'tv',     text:'看会儿电视，允许自己废一下', short:'看会儿电视', need:1 },
+  { key:'book',   text:'翻两页书，装一下文化人',   short:'翻两页书', need:1 }
+];
+
+/* ---------------- 出身：随机投胎 ---------------- */
+const TASK_REQ = { eat:'stove', shower:'shower', paint:'easel', water:'plant', tv:'tv', book:'bookshelf' };
+
+const ORIGINS = [
+  {
+    id:'normal', name:'普通家庭', diff:2, money:120,
+    needs:{}, skills:{}, rel:{}, mods:{},
+    desc:'父母双全，房贷未清。你是那种在同学聚会上说"还行吧"的人。'
+  },
+  {
+    id:'solo', name:'独居青年', diff:2, money:90,
+    needs:{ fun:-12, clean:-8 }, skills:{}, rel:{}, mods:{}, remove:['sofa'],
+    desc:'房租占了工资的一半，另一半用来假装生活。屋子不大，但门一关，全是自己。'
+  },
+  {
+    id:'exam', name:'小镇做题家', diff:3, money:60,
+    needs:{ energy:-12 }, skills:{ paint:2 }, rel:{}, mods:{ income:0.9 },
+    desc:'你从县城一路考出来，行李箱里塞着一床被子和一罐咸菜。'
+  },
+  {
+    id:'rich', name:'家里有矿', diff:1, money:800,
+    needs:{ fun:12 }, skills:{}, rel:{}, mods:{ income:0.8, warm:0.9 },
+    extra:['lamp','rug'],
+    desc:'你爸说"不想努力就回家"，你当真了。这屋子是家里随手给你安置的。'
+  },
+  {
+    id:'single', name:'单亲家庭', diff:4, money:70,
+    needs:{ energy:-8, fun:-8 }, skills:{ cook:2 }, rel:{}, mods:{ warm:0.85 },
+    desc:'你妈一个人把你拉扯大。现在你一个人，把自己拉扯大。'
+  },
+  {
+    id:'blend', name:'重组家庭', diff:3, money:110,
+    needs:{}, skills:{}, rel:{ warm:-8, tension:18 }, mods:{ warm:1.15 },
+    desc:'家里多了一个人，多了一双筷子，少了一点自在。你早早学会了看眼色。'
+  },
+  {
+    id:'debt', name:'负债家庭', diff:5, money:30,
+    needs:{ fun:-10 }, skills:{}, rel:{}, mods:{ income:0.95 },
+    remove:['tv'], debt:6,
+    desc:'你爸留下的不是遗产，是账单。每个月总有那么几天，手机响得让人心慌。'
+  },
+  {
+    id:'art', name:'艺术世家', diff:2, money:100,
+    needs:{ fun:-6 }, skills:{ paint:3 }, rel:{}, mods:{ paint:1.15, income:0.95 },
+    desc:'你三岁开始拿毛笔，二十岁开始怀疑自己。墙上挂着的字，是祖辈的。'
+  },
+  {
+    id:'gran', name:'奶奶带大的', diff:3, money:80,
+    needs:{ clean:-6 }, skills:{ cook:3 }, rel:{ warm:12, trust:8 }, mods:{ foodDecay:0.85 },
+    desc:'奶奶走了以后，你学着她的样子熬粥，总差一点味道。'
+  },
+  {
+    id:'city', name:'城中村租客', diff:4, money:50,
+    needs:{ clean:-12, energy:-6 }, skills:{}, rel:{}, mods:{ income:1.05 },
+    remove:['bookshelf'],
+    desc:'握手楼，采光基本靠想象。但租金便宜，便宜是最大的优点。'
+  }
+];
+
+/* 命定变故：每局随机一件，在第 2–5 天砸下来 */
+const TWISTS = [
+  {
+    id:'rent', title:'房东涨租',
+    body:'<p>房东发来一条 60 秒的语音。你听了 15 秒就懂了：涨租。</p>',
+    opts:[
+      { label:'认了，转账', hint:'-70 文，换一夜安稳', onClick(){ addMoney(-70); } },
+      { label:'讲讲价', hint:'成败看人品', onClick(){
+          if(Math.random()<.5){ addMoney(-35); reply('房东','「行吧，看你不容易。」你松了口气，又欠了个人情。'); }
+          else { addMoney(-80); reply('房东','「那就按新的来，不满意可以搬。」你看了看窗外的房价，没说话。'); }
+        } }
+    ]
+  },
+  {
+    id:'cut', title:'稿子黄了',
+    body:'<p>合作方发来一句「不好意思，项目暂停」。你盯着这五个字，感觉这个月也暂停了。</p>',
+    opts:[
+      { label:'咬牙接低价单', hint:'钱少事多，但至少有钱', onClick(){
+          addMoney(40); addNeed('energy',-16); addNeed('fun',-8);
+          reply('','你画到凌晨两点，赚了 40 文。手在抖，但房租有了。');
+        } },
+      { label:'给自己放一天假', hint:'心情优先，钱包反对', onClick(){
+          addNeed('fun',12); addNeed('energy',6); addBuff('摆烂特权',9,0,6);
+          reply('','你把电脑合上，睡了个午觉。醒来有点慌，但也没那么慌。');
+        } }
+    ]
+  },
+  {
+    id:'hospital', title:'医院来电',
+    body:'<p>电话那头说，家里有人住院了。不严重，但得有人去。</p>',
+    opts:[
+      { label:'买票回去', hint:'-100 文，但有些事不能只打钱', onClick(){
+          addMoney(-100); addNeed('energy',-20); addNeed('fun',-6); addWarm(10);
+          reply('','你在医院走廊坐了一夜。回来的时候，行李里多了一袋家里晒的干菜。');
+        } },
+      { label:'先打钱，改天回', hint:'-80 文，成年人的无奈', onClick(){
+          addMoney(-80); addBuff('心里堵得慌',-10,-4,10);
+          reply('','钱转过去了。你盯着转账记录看了很久，没敢点开家族群。');
+        } }
+    ]
+  },
+  {
+    id:'prize', title:'天上掉下一点钱',
+    body:'<p>社区抽奖，你中了个三等奖。你甚至不记得自己什么时候报的名。</p>',
+    opts:[
+      { label:'收下，运气难得', hint:'+180 文', onClick(){
+          addMoney(180); addNeed('fun',12); addBuff('走运',12,8,8);
+          reply('','你请自己吃了顿好的。这可能是今年最像"生活"的一晚。');
+        } },
+      { label:'请老周吃饭', hint:'钱会花掉，人情会留下', onClick(){
+          addMoney(90); addNeed('food',22); addWarm(10); addNeed('fun',14);
+          reply('老周','「你小子，中奖还记得我。」他喝了两杯，说了很多以前的事。');
+        } }
+    ]
+  },
+  {
+    id:'pipe', title:'水管爆了',
+    body:'<p>半夜"砰"的一声，厨房开始下雨。你站在水里，第一次认真思考人生。</p>',
+    opts:[
+      { label:'自己修', hint:'省钱，费腰', onClick(){
+          addMoney(-20); addNeed('energy',-15); addNeed('clean',-12);
+          reply('','你折腾到凌晨，居然修好了。手上的口子值 40 文。');
+        } },
+      { label:'叫师傅', hint:'-60 文，专业的事交给专业的人', onClick(){
+          addMoney(-60); addNeed('clean',-18);
+          reply('','师傅二十分钟搞定，收钱时说：「下次别自己拧。」');
+        } }
+    ]
+  },
+  {
+    id:'typhoon', title:'台风天',
+    body:'<p>窗外风声像有人在拖家具。外卖停了，快递停了，整座城市按了暂停。</p>',
+    opts:[
+      { label:'在家画画', hint:'出不了门，正好', onClick(){
+          addXp('paint',26); addNeed('fun',10); addNeed('energy',-8); addBuff('台风创作夜',14,10,5);
+          reply('','风声很大，笔尖很稳。你画完了这个月最好的一张。');
+        } },
+      { label:'躺着听雨', hint:'允许自己什么都不做', onClick(){
+          addNeed('energy',14); addNeed('fun',6); addBuff('雨声白噪音',11,-8,6);
+          reply('','你听了两个小时雨。没干什么，但好像也没浪费。');
+        } }
+    ]
+  },
+  {
+    id:'catstay', title:'猫不走了',
+    body:'<p>那只窗台上的猫又来了。这次它直接进了屋，在沙发正中间坐下，仿佛这房子是它买的。</p>',
+    opts:[
+      { label:'留下它', hint:'-10 文猫粮，+很久的陪伴', onClick(){
+          addMoney(-10); addNeed('fun',20); addBuff('有猫了',18,6,24);
+          reply('','你给它取了个名字。它没理你，但也没走。');
+        } },
+      { label:'请它出去', hint:'你连自己都快养不起了', onClick(){
+          addNeed('fun',-6); addBuff('一点点愧疚',-7,0,6);
+          reply('','你把门打开。它看了你三秒，走了。你关上门，屋子安静得有点过分。');
+        } }
+    ]
+  },
+  {
+    id:'oldbox', title:'一箱旧物',
+    body:'<p>前室友寄来一个纸箱，附了张纸条：「这些应该是你的。」</p>',
+    opts:[
+      { label:'打开看看', hint:'回忆免费，但会收利息', onClick(){
+          addNeed('fun',14); addBuff('旧时光',10,2,8); addXp('paint',10);
+          reply('','里面有大二的照片、一张过期的电影票，和一封没寄出去的信。');
+        } },
+      { label:'先放角落', hint:'有些东西不必现在面对', onClick(){
+          addNeed('fun',3);
+          reply('','你把箱子放在墙角。它会在那儿待很久，像很多没处理的事一样。');
+        } }
+    ]
+  }
+];
+
+/* ---------------- 角色 ---------------- */
+const CHARS = [
+  { id:'ding', name:'小丁', gender:'f', hair:'bob', cloth:'#e3c9a6', skin:'#f7eedf', skirt:true,
+    acc:'none', scale:1.0, tag:'话不多，手很稳。画画的时候像换了个人。', bonus:{ skill:'paint' } },
+  { id:'shuang', name:'双双', gender:'f', hair:'braid', cloth:'#d9b6c0', skin:'#f7e9dc', skirt:true,
+    acc:'none', scale:1.02, tag:'整条巷子的人都认识她，包括那只猫。', bonus:{ skill:'social' } },
+  { id:'xin', name:'小鑫', gender:'f', hair:'pony', cloth:'#a7bcc2', skin:'#f2e4d2', skirt:false,
+    acc:'cap', scale:.98, tag:'动手能力极强，修东西比说话利索。', bonus:{ skill:'cook' } },
+  { id:'liu', name:'小六', gender:'f', hair:'curl', cloth:'#c7c0ac', skin:'#f6eadb', skirt:false,
+    acc:'none', scale:.96, tag:'昼伏夜出。白天见到她，多半是刚醒。', bonus:{ need:'energy', v:10 } },
+  { id:'kang', name:'阿康', gender:'m', hair:'short', cloth:'#b7afa0', skin:'#f0e2cd', skirt:false,
+    acc:'none', scale:1.06, tag:'老实人。别人开口借钱，他很难说不行。', bonus:{ warm:14 } },
+  { id:'wu', name:'小吴', gender:'m', hair:'buzz', cloth:'#9fa8ae', skin:'#f2e6d6', skirt:false,
+    acc:'glasses', scale:1.0, tag:'什么都懂一点，什么都不精。钱倒是攒得住。', bonus:{ money:40 } }
+];
+
+function charById(id){ return CHARS.filter(c=>c.id===id)[0] || CHARS[0]; }
+
+/* ---------------- 外面的世界 ---------------- */
+const SCENES = {
+  street: {
+    id:'street', name:'巷口', outdoor:true,
+    floors:[{ y:620, x1:0, x2:1280 }],
+    spawn:{ x:230, y:620 },
+    props:[
+      { x:132, y:620, w:80,  h:150, label:'回家',   act(){ travel('home'); } },
+      { x:330, y:620, w:160, h:190, label:'进便利店', act(){ travel('store'); } },
+      { x:720, y:620, w:160, h:190, label:'逛书店',  act(){ travel('book'); } },
+      { x:1030,y:620, w:150, h:170, label:'去公园',  act(){ travel('park'); } }
+    ]
+  },
+  park: {
+    id:'park', name:'公园', outdoor:true,
+    floors:[{ y:620, x1:0, x2:1280 }],
+    spawn:{ x:190, y:620 },
+    props:[
+      { x:120, y:620, w:80, h:120, label:'回巷口',  act(){ travel('street', 990); } },
+      { x:430, y:620, w:120, h:60, label:'坐一会儿', act(){ actBench(); } },
+      { x:660, y:620, w:90,  h:50, label:'喂鸽子',  act(){ actPigeon(); } },
+      { x:950, y:620, w:170, h:90, label:'看池塘',  act(){ actPond(); } }
+    ]
+  },
+  store: {
+    id:'store', name:'便利店', indoor:true,
+    floors:[{ y:620, x1:60, x2:1220 }],
+    spawn:{ x:190, y:620 },
+    props:[
+      { x:120, y:620, w:70,  h:120, label:'出去',      act(){ travel('street', 330); } },
+      { x:390, y:620, w:150, h:170, label:'买份便当',  act(){ actBento(); } },
+      { x:670, y:620, w:140, h:180, label:'拿瓶喝的',  act(){ actDrink(); } },
+      { x:980, y:620, w:120, h:120, label:'和店员闲聊', act(){ actClerk(); } }
+    ]
+  },
+  book: {
+    id:'book', name:'旧书店', indoor:true,
+    floors:[{ y:620, x1:60, x2:1220 }],
+    spawn:{ x:190, y:620 },
+    props:[
+      { x:120, y:620, w:70,  h:120, label:'出去',      act(){ travel('street', 720); } },
+      { x:380, y:620, w:150, h:180, label:'翻翻书架',  act(){ actBrowse(); } },
+      { x:700, y:620, w:150, h:180, label:'买一本书',  act(){ actBuyBook(); } },
+      { x:1000,y:620, w:120, h:120, label:'和老板聊聊', act(){ actBoss(); } }
+    ]
+  }
+};
+
+function sceneNow(){
+  if(S.scene === 'home') return { id:'home', name:'家', floors: floorSegs(), indoor:true };
+  return SCENES[S.scene] || SCENES.street;
+}
+
+const ARRIVE = {
+  street:'巷口。风比屋里大。',
+  park:'公园。有人在下棋，鸽子在等吃的。',
+  store:'便利店。灯很亮，冷气有点冲。',
+  book:'旧书店。纸和灰尘的味道。'
+};
+
+function travel(id, spawnX){
+  if(S.action) return;
+  const target = (id === 'home') ? null : SCENES[id];
+  if(id !== 'home' && !target) return;
+
+  S.action = null;
+  S.scene = id;
+
+  if(id === 'home'){
+    resetPlayer(true);
+  } else {
+    S.player.x = spawnX || target.spawn.x;
+    S.player.y = target.floors[0].y;
+    S.player.vy = 0; S.player.climbing = false; S.player.grounded = true; S.player.facing = 1;
+  }
+  S.clock = Math.min(S.clock + 20, 1439);
+
+  sceneFlash();
+  toast(id === 'home' ? '回来了。门在身后轻轻关上。' : ARRIVE[id]);
+  updateHUD();
+}
+
+function actBench(){
+  S.clock += 45; addNeed('energy',10); addNeed('fun',12);
+  toast('你坐在长椅上，看了一会儿别人的生活。');
+}
+function actPigeon(){
+  if(S.money < 3){ toast('连鸽子都喂不起。'); return; }
+  S.clock += 20; addMoney(-3); addNeed('fun',15); addXp('social',4);
+  toast('鸽子围过来，又很快散开。像所有关系一样。');
+}
+function actPond(){
+  S.clock += 30; addNeed('fun',10); addBuff('水面反光',8,-6,4);
+  toast('水面把云揉碎了又铺开。你站着看完了一整轮。');
+}
+function actBento(){
+  if(S.money < 14){ toast('钱不够，便当在灯下看着你。'); return; }
+  S.clock += 30; addMoney(-14); addNeed('food',42); addNeed('fun',5);
+  toast('微波炉叮了一声。今天也算有热饭吃。');
+}
+function actDrink(){
+  if(S.money < 7){ toast('差三文钱。店员假装没看见。'); return; }
+  S.clock += 10; addMoney(-7); addNeed('energy',10); addBuff('冰镇续命',7,6,3);
+  toast('冰的。一口气下去，人醒了一半。');
+}
+function actClerk(){
+  S.clock += 25; addNeed('fun',7); addXp('social',8);
+  toast('店员说"欢迎光临"的语气，像在念课文。但你还是回了句谢谢。');
+}
+function actBrowse(){
+  S.clock += 50; addNeed('fun',14); addXp('paint',10);
+  toast('站着看了半本。老板没赶你，这很难得。');
+}
+function actBuyBook(){
+  if(S.money < 36){ toast('定价 36。你把它放了回去，摆正。'); return; }
+  S.clock += 25; addMoney(-36); addNeed('fun',13); addXp('paint',16); addBuff('有书在手',10,2,8);
+  toast('买了。塑封没拆，但抱着它走路的感觉不错。');
+}
+function actBoss(){
+  S.clock += 35; addNeed('fun',8); addXp('social',10); addWarm(3);
+  toast('老板说这条街二十年没变过。你信了。');
+}
+
+/* ---------------- 出身 ---------------- */
+const ORIGIN_WEALTH = {
+  rich:'rich', art:'rich',
+  normal:'mid', solo:'mid', blend:'mid', gran:'mid',
+  exam:'poor', single:'poor', city:'poor', debt:'poor'
+};
+const WEALTH_HOUSE = { rich:'villa', mid:'flat', poor:'rental' };
+const WEALTH_NAME = { rich:'富裕', mid:'小康', poor:'贫困' };
+const AGE_MAX = 30;
+
+function rollOrigin(){
+  const o = pick(ORIGINS);
+  S.origin = { id:o.id, name:o.name, diff:o.diff, desc:o.desc, mods:o.mods||{}, debt:o.debt||0 };
+  S.wealth = ORIGIN_WEALTH[o.id] || 'mid';
+  S.house = WEALTH_HOUSE[S.wealth];
+  setHouse(S.house);
+
+  S.money = o.money;
+  S.needs = { energy:78, food:56, clean:70, fun:62 };
+  if(o.needs){
+    for(const k in o.needs){ S.needs[k] = clamp(S.needs[k] + o.needs[k], 0, 100); }
+  }
+  S.skills = { paint:{lv:1,xp:0}, cook:{lv:1,xp:0}, social:{lv:1,xp:0} };
+  if(o.skills) for(const k in o.skills){ S.skills[k].lv = o.skills[k]; }
+  S.rel = { warm:18, trust:12, tension:4 };
+  if(o.rel){ for(const k in o.rel){ S.rel[k] = clamp(S.rel[k] + o.rel[k], 0, 100); } }
+
+  S.placed = defaultPlaced(S.house);
+  if(o.remove) S.placed = S.placed.filter(f=>o.remove.indexOf(f.t) < 0);
+  if(o.extra){
+    for(const t of o.extra){
+      const x = findFreeX(t, HOUSE.f1);
+      if(x) S.placed.push({ t:t, x:x, y:HOUSE.f1 });
+    }
+  }
+
+  // 变故与剧情错开，避免同一天弹两个面板
+  const tw = pick(TWISTS);
+  let twDay = ri(2,5);
+  if(twDay===2 || twDay===4 || twDay===6) twDay++;
+  if(twDay>7) twDay = 3;
+  S.twist = { id:tw.id, week:1, day:twDay, fired:false };
+  S.story = { seen:{}, fair:false };
+  S.scene = 'home';
+
+  S.day = 1; S.clock = 7*60; S.gen = 1;
+  S.age = 7; S.week = 1;
+  S.growth = { body:0, mind:0, charm:0 };
+  S.stats = { paintings:0, meals:0, earned:0, rep:0 };
+  S.creed = null; S.buffs = []; S.eventsToday = 0; S.dayEnded = false;
+  resetPlayer();
+
+  return o;
+}
+
+function applyCharacter(c){
+  S.char = {
+    id:c.id, name:c.name, gender:c.gender,
+    look:{ hair:c.hair, cloth:c.cloth, skin:c.skin, skirt:c.skirt, acc:c.acc, scale:c.scale }
+  };
+  const b = c.bonus || {};
+  if(b.skill) S.skills[b.skill].lv += 1;
+  if(b.need) S.needs[b.need] = clamp(S.needs[b.need] + b.v, 0, 100);
+  if(b.warm) S.rel.warm = clamp(S.rel.warm + b.warm, 0, 100);
+  if(b.money) S.money += b.money;
+}
+
+function resetPlayer(atDoor){
+  if(S.scene === 'home'){
+    S.player.x = atDoor ? (HOUSE.doorX - 120) : (HOUSE.x1 + 300);
+    S.player.y = HOUSE.f1;
+  } else {
+    const sc = SCENES[S.scene] || SCENES.street;
+    S.player.x = sc.spawn.x;
+    S.player.y = sc.spawn.y;
+  }
+  S.player.vy = 0;
+  S.player.climbing = false;
+  S.player.grounded = true;
+  S.player.facing = 1;
+}
+
+function findFreeX(t, fy){
+  const d = FURN[t];
+  for(let x=HOUSE.x1+40; x<=HOUSE.x2-40; x+=20){
+    let ok = true;
+    for(const o of S.placed){
+      if(o.y !== fy) continue;
+      if(Math.abs(o.x - x) < (d.w + FURN[o.t].w)/2 - 4){ ok = false; break; }
+    }
+    if(ok) return x;
+  }
+  return null;
+}
+
+function stars(n){
+  n = clamp(n,1,5);
+  let s = '';
+  for(let i=0;i<5;i++) s += (i<n ? '★' : '☆');
+  return s;
+}
+
+function originTrait(o){
+  const m = (o && o.mods) || {};
+  const out = [];
+  if(m.income && m.income < 1) out.push('赚钱偏难');
+  if(m.income && m.income > 1) out.push('来钱稍快');
+  if(m.warm && m.warm < 1) out.push('人情偏冷');
+  if(m.warm && m.warm > 1) out.push('人缘不错');
+  if(m.paint && m.paint > 1) out.push('画更值钱');
+  if(m.foodDecay && m.foodDecay < 1) out.push('饿得慢');
+  if(o && o.debt) out.push('背着利息');
+  return out.length ? out.join(' · ') : '普普通通，全靠自己';
+}
+
+function genTasks(){
+  const avail = t => !TASK_REQ[t.key] || S.placed.some(f=>f.t===TASK_REQ[t.key]);
+  let pool = TASK_POOL.filter(avail);
+  if(pool.length < 3) pool = TASK_POOL.slice();
+  const chosen = pool.slice().sort(()=>Math.random()-.5).slice(0,3);
+  S.tasks = chosen.map(t=>({ key:t.key, text:t.text, short:t.short, need:t.need, done:false }));
+  S.taskProg = {};
+  updateTasksUI();
+}
+
+function bump(key, amt){
+  if(amt===undefined) amt = 1;
+  for(const t of S.tasks){
+    if(t.key===key && !t.done){
+      S.taskProg[key] = (S.taskProg[key]||0) + amt;
+      if(S.taskProg[key] >= t.need){
+        t.done = true;
+        addNeed('fun', 6);
+        S.stats.rep += 1;
+        toast('✓ ' + t.text);
+      }
+      updateTasksUI();
+    }
+  }
+}
+
+/* ---------------- 数值工具 ---------------- */
+function addNeed(k,v){
+  S.needs[k] = clamp(S.needs[k]+v, 0, 100);
+}
+function addMoney(v){
+  S.money = Math.max(0, S.money + v);
+}
+function mods(){
+  const out = { income:1, warm:1, foodDecay:1, cookCost:1, paint:1 };
+  const list = [];
+  if(S.origin && S.origin.mods) list.push(S.origin.mods);
+  if(S.creed && S.creed.mods) list.push(S.creed.mods);
+  for(const m of list){
+    for(const k in m){ out[k] = (out[k]||1) * m[k]; }
+  }
+  return out;
+}
+function earnMoney(v){
+  const m = mods().income || 1;
+  const got = Math.max(1, Math.round(v*m));
+  S.money += got;
+  S.stats.earned += got;
+  bump('earn', got);
+  return got;
+}
+function addWarm(v){
+  const m = mods().warm || 1;
+  S.rel.warm = clamp(S.rel.warm + v*m*(1 + (S.growth.charm||0)*0.01), 0, 100);
+}
+function addBuff(name, valence, arousal, hours){
+  S.buffs = S.buffs.filter(b=>b.name!==name);
+  S.buffs.push({ name:name, v:valence, a:arousal||0, until: S.clock + (hours||3)*60 });
+  if(S.buffs.length>5) S.buffs.shift();
+}
+
+function skillName(k){
+  return { paint:'绘画', cook:'烹饪', social:'社交' }[k] || k;
+}
+function xpNeed(lv){ return 30 + lv*22; }
+function addXp(k,n){
+  const s = S.skills[k];
+  if(!s) return;
+  s.xp += n * (1 + (S.growth.mind||0)*0.02);
+  while(s.xp >= xpNeed(s.lv) && s.lv < 10){
+    s.xp -= xpNeed(s.lv);
+    s.lv++;
+    toast(skillName(k) + ' 升到 Lv.' + s.lv);
+  }
+}
+
+/* ---------------- 情绪 ---------------- */
+function moodInfo(){
+  const n = S.needs;
+  const avg = (n.energy+n.food+n.clean+n.fun)/4;
+  let v = (avg-50)*1.25;
+  let a = 30 + (n.fun-50)*0.45 + (n.energy-50)*0.25;
+  for(const b of S.buffs){
+    v += b.v; a += b.a;
+  }
+  v = clamp(v,-100,100); a = clamp(a,0,100);
+
+  let label, desc;
+  if(v>=18){
+    if(a>=58){ label='兴奋'; desc='你像刚充满电的扫地机器人，横冲直撞。'; }
+    else { label='满足'; desc='一种"今天也还行"的踏实感，不多，但够用。'; }
+  } else if(v>=-8){
+    label='平静'; desc='平静得像一潭死水，但死水也有死水的好。';
+  } else if(v>=-34){
+    if(a>=48){ label='烦躁'; desc='看什么都想叹气，包括自己。'; }
+    else { label='低落'; desc='心里像压着一张没写完的待办清单。'; }
+  } else {
+    label='疲惫'; desc='灵魂已经下班，身体还坐在工位上。';
+  }
+
+  const why = [];
+  if(n.food<38) why.push('肚子有点空');
+  if(n.energy<32) why.push('睡眠欠账');
+  if(n.clean<35) why.push('该洗洗了');
+  if(n.fun<35) why.push('太久没干点开心的事');
+  for(const b of S.buffs){
+    if(b.v>=6 && why.length<4) why.push(b.name);
+    if(b.v<=-6 && why.length<4) why.push(b.name);
+  }
+  if(!why.length) why.push('暂时没什么毛病');
+
+  return { v:v, a:a, label:label, desc:desc, why:why };
+}
+
+/* ---------------- 时间 ---------------- */
+function fmtClock(c){
+  const t = Math.floor(c)%1440;
+  const h = Math.floor(t/60), m = Math.floor(t%60);
+  return (h<10?'0':'')+h + ':' + (m<10?'0':'')+m;
+}
+function hourNow(){ return (Math.floor(S.clock/60))%24; }
+function darkness(){
+  const h = (S.clock/60)%24;
+  if(h>=7 && h<18) return 0;
+  if(h>=18 && h<21) return (h-18)/3*0.40;
+  if(h>=21 || h<5) return 0.40;
+  if(h>=5 && h<7) return (7-h)/2*0.40;
+  return 0;
+}
+
+/* ---------------- 事件 ---------------- */
+let modalOpen = false;
+
+function openModal(opt){
+  modalOpen = true;
+  const mask = document.getElementById('mask');
+  const m = document.getElementById('modal');
+  let html = '<button id="modalClose" aria-label="关闭">×</button>';
+  html += '<h2><span class="seal">'+(opt.seal||'浮')+'</span>'+opt.title+'</h2>';
+  if(opt.sub) html += '<div class="sub">'+opt.sub+'</div>';
+  html += '<div class="body">'+(opt.body||'')+'</div>';
+  if(opt.buttons && opt.buttons.length){
+    html += '<div class="btns">';
+    opt.buttons.forEach((b,i)=>{
+      html += '<button class="btn '+(b.cls||'')+'" data-i="'+i+'">'+b.label+
+              (b.hint?'<span class="hint">'+b.hint+'</span>':'')+'</button>';
+    });
+    html += '</div>';
+  }
+  m.innerHTML = html;
+  mask.classList.add('on');
+
+  const mc = m.querySelector('#modalClose');
+  if(mc) mc.addEventListener('click', closeModal);
+
+  const btns = m.querySelectorAll('.btn');
+  btns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = parseInt(btn.getAttribute('data-i'),10);
+      const b = opt.buttons[i];
+      if(b.keepOpen){
+        if(b.onClick) b.onClick();
+        return;
+      }
+      closeModal();
+      if(b.onClick) b.onClick();
+    });
+  });
+}
+
+function closeModal(){
+  modalOpen = false;
+  document.getElementById('mask').classList.remove('on');
+}
+
+/* ---------------- 主动画 ---------------- */
+function startAction(f){
+  if(S.action || modalOpen) return;
+  const d = FURN[f.t];
+  if(!d || !d.use) return;
+  S.player.facing = f.x > S.player.x ? 1 : -1;
+  S.action = { f:f, t:0, dur:d.use.dur, label:d.use.label };
+  spawnInk(f.x, f.y - (d.h||40) - 6, 5);
+}
+
+function finishAction(){
+  const a = S.action;
+  S.action = null;
+  if(!a) return;
+  const d = FURN[a.f.t];
+  if(d && d.use && d.use.act) d.use.act();
+}
+
+/* ---------------- 行为 ---------------- */
+const PAINT_TITLES = ['无题','窗外的云','一只很累的猫','关于不想上班的一切','午后三点半','椅子上的光','纸片人自画像','楼下的树'];
+
+function doCook(){
+  const cost = Math.round(8 * (mods().cookCost || 1));
+  if(S.money < cost){ toast('钱不够，连锅都懒得响。'); return; }
+  addMoney(-cost);
+  addNeed('food', 46);
+  addNeed('fun', 5);
+  addNeed('clean', -4);
+  addBuff('热乎饭', 10, 6, 4);
+  addXp('cook', 14);
+  S.stats.meals++;
+  bump('eat');
+  toast('锅气起来了。番茄炒蛋，仪式感拉满。');
+  spawnInk(288, 540, 6);
+}
+
+function doFridge(){
+  addNeed('food', 18);
+  addNeed('fun', 3);
+  if(Math.random()<.35) addBuff('翻到好吃的', 8, 4, 3);
+  toast('冰箱里有一瓶不知道哪年的酱。你选择了忽略它。');
+}
+
+function doShower(){
+  addNeed('clean', 66);
+  addNeed('fun', 4);
+  addNeed('energy', 3);
+  addBuff('清爽', 9, 2, 5);
+  addXp('social', 3);
+  bump('shower');
+  toast('洗掉了一身班味（虽然你并没有班可上）。');
+}
+
+function doSofa(){
+  addNeed('energy', 12);
+  addNeed('fun', 10);
+  addNeed('clean', -2);
+  toast('你在沙发上瘫成了一个有思想的形状。');
+}
+
+function doTV(){
+  addNeed('fun', 24);
+  addNeed('energy', -3);
+  bump('tv');
+  toast('看了四十分钟，什么也没记住，但心情确实好了点。');
+}
+
+function doPaint(){
+  const lv = S.skills.paint.lv;
+  const m = moodInfo();
+  const q = clamp(46 + lv*6 + m.v*0.24 + rand(-9,9), 22, 100);
+  const base = q*0.85;
+  const got = earnMoney(base*(mods().paint||1));
+  addNeed('fun', 9);
+  addNeed('energy', -9);
+  addNeed('clean', -3);
+  addXp('paint', 20);
+  S.stats.paintings++;
+  bump('paint');
+  const title = pick(PAINT_TITLES);
+  toast('画完了。《'+title+'》卖了 '+got+' 文（成色 '+Math.round(q)+'）。');
+  spawnInk(562, 280, 10);
+}
+
+function doDesk(){
+  addNeed('fun', 13);
+  addNeed('energy', -2);
+  addXp('paint', 5);
+  if(Math.random()<.28){
+    addBuff('灵感闪现', 12, 10, 4);
+    toast('刷到一个绝妙的构图，你赶紧记了下来。');
+  } else {
+    toast('刷了会儿手机，收获 3 个新焦虑和 2 个冷笑话。');
+  }
+}
+
+function doTea(){
+  addNeed('fun', 10);
+  addNeed('energy', 7);
+  addBuff('静心', 11, -8, 5);
+  toast('水开了，心也勉强静了。');
+}
+
+function doPlant(){
+  addNeed('fun', 7);
+  bump('water');
+  toast('植物活得比你规律，这让你有点惭愧。');
+}
+
+function doBook(){
+  addNeed('fun', 11);
+  addXp('paint', 8);
+  bump('book');
+  toast('翻了三页，觉得自己文化了一点。');
+}
+
+function doWardrobe(){
+  addNeed('clean', 9);
+  addNeed('fun', 5);
+  toast('换了身衣服，感觉能重新做人了。');
+}
+
+/* ---------------- 邻居 ---------------- */
+function npcActive(){
+  const h = hourNow();
+  return h>=9 && h<21;
+}
+
+function talkToNpc(){
+  if(!npcActive()){
+    toast('这个点，老周大概已经睡了。');
+    return;
+  }
+  const opts = [
+    {
+      label:'「最近怎么样？」',
+      hint:'安全牌，永远不会出错',
+      onClick(){ 
+        addWarm(4); addXp('social',8); bump('talk');
+        reply('老周','「就那样。上班、下班、等周末。你呢，我看你这屋子……挺有风格的。」');
+      }
+    },
+    {
+      label:'「进来坐坐？我泡茶。」',
+      hint:'花点时间，换点人情',
+      onClick(){
+        addWarm(7); addNeed('fun',7); addNeed('clean',-2);
+        S.rel.trust = clamp(S.rel.trust+5,0,100);
+        addXp('social',10); bump('talk');
+        S.clock += 40;
+        reply('老周','「那我就不客气了。」他在沙发上坐下，你们聊了四十分钟，谁也没提正事。');
+      }
+    },
+    {
+      label:'「能不能借我点钱？」',
+      hint:'开口很难，但钱很实在',
+      onClick(){
+        if(S.rel.trust>=30){
+          addMoney(60); addWarm(3);
+          reply('老周','「就这点？」他掏出一百，你只留了六十。人情记下了。');
+        } else {
+          S.rel.trust = clamp(S.rel.trust-4,0,100);
+          reply('老周','「……我最近也紧。」他没看你，你也没再问。');
+        }
+      }
+    },
+    {
+      label:'「我先忙了。」',
+      hint:'社交能量已耗尽',
+      onClick(){
+        addNeed('fun',-2);
+        reply('老周','「行，你忙。」他摆摆手，走了两步又回头：「记得吃饭。」');
+      }
+    }
+  ];
+  openModal({
+    title:'邻居老周',
+    seal:'邻',
+    sub:'一个住在隔壁、永远有空的普通人',
+    body:'<p>老周站在客厅中间，手里拎着一个空碗，像是刚打完酱油路过。</p>',
+    buttons: opts
+  });
+}
+
+function reply(who, text){
+  openModal({
+    title: who,
+    seal:'话',
+    sub:'',
+    body:'<p>'+text+'</p>',
+    buttons:[{ label:'嗯。', cls:'primary', onClick(){} }]
+  });
+}
+
+/* ---------------- 出门 ---------------- */
+function goOut(){
+  if(S.action) return;
+  travel('street');
+}
+
+/* ---------------- 随机事件 ---------------- */
+const EVENTS = [
+  {
+    id:'delivery', w:10, where:'home',
+    title:'门口有个快递',
+    body:'<p>门口多了个快递。你最近没买东西，但它确实写着你的名字。</p>',
+    opts:[
+      { label:'拆开看看', hint:'万一是惊喜呢', onClick(){
+          if(Math.random()<.5){ addMoney(45); addNeed('fun',9);
+            reply('','是一箱不知道谁寄的橘子。附言：多吃水果。（你多了 45 文，因为你不吃橘子。）'); }
+          else { addNeed('fun',5);
+            reply('','是一本《如何不再拖延》。你把它放进了"待读"那一摞，那一摞现在有十四本。'); }
+        } },
+      { label:'原样退回', hint:'不属于我的，我不碰', onClick(){
+          addNeed('fun',-3);
+          reply('','你把它放回门口。世界清净了，也有点空。');
+        } }
+    ]
+  },
+  {
+    id:'emo', w:9, cond(){ return hourNow()>=21 || hourNow()<2; },
+    title:'深夜 emo',
+    body:'<p>夜里十一点，脑子里突然开始循环播放五年前的尴尬片段。高清，无删减。</p>',
+    opts:[
+      { label:'爬起来画画', hint:'把情绪换成稿费', onClick(){
+          addNeed('energy',-12); addNeed('fun',14); addXp('paint',12);
+          reply('','你画了一团很抽象的东西。但它确实是你。');
+        } },
+      { label:'灌杯热水继续睡', hint:'成年人的自我修复', onClick(){
+          addNeed('energy',4); addNeed('fun',-4);
+          reply('','热水下肚，emo 暂时退场。明天见。');
+        } },
+      { label:'给朋友发消息', hint:'凌晨的对话框最诚实', onClick(){
+          addWarm(3); addXp('social',6); addNeed('fun',8);
+          reply('','对方回了个"哈哈哈"。你居然被治愈了，人类的门槛真低。');
+        } }
+    ]
+  },
+  {
+    id:'sauce', w:10, where:'home',
+    title:'邻居来借酱油',
+    body:'<p>敲门声。老周举着一个空碗：「那个……你家有酱油吗？」眼神诚恳得像在借钱。</p>',
+    opts:[
+      { label:'有，拿去', hint:'邻里关系，从一瓶酱油开始', onClick(){
+          addWarm(6); S.rel.trust=clamp(S.rel.trust+8,0,100); addMoney(-2);
+          reply('老周','「够意思。」他倒了半碗，还回来的时候多了一块豆腐。');
+        } },
+      { label:'「只剩一点点了」', hint:'省酱油，费人情', onClick(){
+          S.rel.trust=clamp(S.rel.trust-3,0,100);
+          reply('老周','「哦，那算了。」他笑着走了，笑得有点客气。');
+        } },
+      { label:'顺便留他吃饭', hint:'花 15 文，换一顿热闹', onClick(){
+          addMoney(-15); addNeed('food',20); addWarm(10); S.rel.trust=clamp(S.rel.trust+6,0,100);
+          reply('','一顿饭吃了两小时。你俩都没提酱油的事。');
+        } }
+    ]
+  },
+  {
+    id:'landlord', w:8, where:'home',
+    title:'房东发来两个字',
+    body:'<p>「在吗？」——两个字，杀伤力堪比体检报告。</p>',
+    opts:[
+      { label:'秒回，交租', hint:'-60 文，换一夜安稳', onClick(){
+          addMoney(-60); addBuff('无债一身轻',8,0,8);
+          reply('房东','「收到，早点睡。」你盯着这四个字，竟然有点感动。');
+        } },
+      { label:'已读不回', hint:'鸵鸟战术，成本未知', onClick(){
+          addWarm(-2); addBuff('心虚',-8,-4,6);
+          reply('','你把手机扣在桌上。它安静了，但你知道它还会响。');
+        } },
+      { label:'「最近手头有点紧」', hint:'赌一把人情', onClick(){
+          if(Math.random()<.55){
+            reply('房东','「那下个月一起吧。」你松了口气，欠的人情又厚了一层。');
+            S.rel.tension=clamp(S.rel.tension+4,0,100);
+          } else {
+            addMoney(-60);
+            reply('房东','「理解，但月底得清一下哈。」你默默转了钱。');
+          }
+        } }
+    ]
+  },
+  {
+    id:'inspire', w:7,
+    title:'灵感砸头',
+    body:'<p>你盯着天花板，突然想到一个绝妙的构图。它正在以每秒三秒的速度消失。</p>',
+    opts:[
+      { label:'立刻画下来', hint:'体力换作品', onClick(){
+          addXp('paint',25); addNeed('fun',12); addNeed('energy',-10); addBuff('创作高峰',14,12,4);
+          reply('','你画得手都抖了，但那种"对"的感觉，很久没有了。');
+        } },
+      { label:'记在备忘录', hint:'下次再说，但至少有下次', onClick(){
+          addNeed('fun',4); addBuff('心里有谱',7,2,8);
+          reply('','你打了三行字。第二天大概会看不懂，但此刻你很满足。');
+        } },
+      { label:'算了，反正会忘', hint:'放过自己', onClick(){
+          addNeed('fun',-6);
+          reply('','你翻了个身。灵感站在原地，看了你一会儿，走了。');
+        } }
+    ]
+  },
+  {
+    id:'cat', w:8, where:'home',
+    title:'窗台上有一只猫',
+    body:'<p>窗台上坐着一只猫。它看了你一眼，那眼神像在评估你的存款。</p>',
+    opts:[
+      { label:'喂它', hint:'-10 文，换一点被需要', onClick(){
+          addMoney(-10); addNeed('fun',18); addBuff('被猫选中',14,6,6);
+          reply('','它吃完了，舔了舔嘴，走了。没有道谢，但你心情很好。');
+        } },
+      { label:'跟它对视', hint:'一场意志力的较量', onClick(){
+          addNeed('fun',9);
+          reply('','你们对视了四十秒。它先移开视线。你赢了，虽然没人看见。');
+        } },
+      { label:'关窗', hint:'拒绝一切亲密关系', onClick(){
+          addNeed('fun',-4);
+          reply('','窗关上了。玻璃上留下一个猫爪印，像句没说完的话。');
+        } }
+    ]
+  },
+  {
+    id:'takeout', w:9,
+    title:'外卖满减',
+    body:'<p>外卖 App 提示：再买 12 元可减 15 元。数学上你赚了，生理上你亏了。</p>',
+    opts:[
+      { label:'凑单', hint:'-12 文，撑到扶墙', onClick(){
+          addMoney(-12); addNeed('food',26); addNeed('fun',7);
+          reply('','你吃完了。胃在感谢你，理智在骂你。');
+        } },
+      { label:'只点一杯奶茶', hint:'-18 文，糖分续命', onClick(){
+          addMoney(-18); addNeed('fun',15); addNeed('food',4);
+          reply('','三分糖。你喝得很慢，像在给今天续命。');
+        } },
+      { label:'关掉，煮碗面', hint:'成年人的胜利总是很安静', onClick(){
+          addNeed('food',16); addNeed('fun',-4); addBuff('克制',9,0,5);
+          reply('','你煮了碗面，加了个蛋。省钱，且体面。');
+        } }
+    ]
+  },
+  {
+    id:'oldfriend', w:6,
+    title:'一个很久没联系的人',
+    body:'<p>对话框弹出来：「在吗？」头像是五年前的你们。</p>',
+    opts:[
+      { label:'「在」', hint:'接住这段关系', onClick(){
+          addXp('social',12); addWarm(5); addNeed('fun',7);
+          reply('对方','「没事，就是突然想起你。」你们聊了半小时，谁也没提为什么断了联系。');
+        } },
+      { label:'回个问号', hint:'低成本试探', onClick(){
+          if(Math.random()<.5){ addNeed('fun',-6); reply('对方','「帮我砍一刀。」你笑了一下，把手机扣在桌上。'); }
+          else { addWarm(8); addNeed('fun',10); reply('对方','「我想你了。」你盯着这句话，不知道该回什么。'); }
+        } },
+      { label:'假装没看见', hint:'有些门不必再开', onClick(){
+          addNeed('fun',-2); addBuff('一点点愧疚',-6,0,5);
+          reply('','你把对话框划掉了。它明天会沉到列表底部，像很多事一样。');
+        } }
+    ]
+  }
+];
+
+function tryRandomEvent(){
+  if(modalOpen || S.action || S.dayEnded) return;
+  if(S.eventsToday >= 2) return;
+  const h = hourNow();
+  if(h < 8) return;
+  const pool = EVENTS.filter(e=>(!e.where||e.where===S.scene) && (!e.cond || e.cond()));
+  if(!pool.length) return;
+  const total = pool.reduce((s,e)=>s+e.w,0);
+  let r = Math.random()*total, chosen = pool[0];
+  for(const e of pool){ r -= e.w; if(r<=0){ chosen=e; break; } }
+  S.eventsToday++;
+  openModal({
+    title: chosen.title,
+    seal:'事',
+    sub:'意外 · 第 ' + S.eventsToday + ' 件',
+    body: chosen.body,
+    buttons: chosen.opts
+  });
+}
+
+/* ---------------- 年龄与成长 ---------------- */
+function stageOf(age){
+  if(age <= 13) return 'kid';
+  if(age <= 23) return 'young';
+  return 'mid';
+}
+const STAGE_NAME = { kid:'小孩', young:'青年', mid:'中年' };
+
+function growthUp(){
+  const g = S.growth;
+  const before = { body:g.body, mind:g.mind, charm:g.charm };
+  const inc = ()=> Math.random() < .22 ? 2 : 1;
+  g.body += inc();
+  g.mind += inc();
+  if(S.age >= 14) g.charm += inc();
+  else if(Math.random() < .45) g.charm += 1;
+  return { body:g.body-before.body, mind:g.mind-before.mind, charm:g.charm-before.charm };
+}
+
+function nextWealth(){
+  const w = S.wealth;
+  if(w === 'poor' && S.money >= 450) return 'mid';
+  if(w === 'mid' && S.money >= 1100) return 'rich';
+  if(w === 'rich' && S.money < 500) return 'mid';
+  if(w === 'mid' && S.money < 90) return 'poor';
+  return w;
+}
+
+function applyWealth(nw){
+  if(nw === S.wealth) return false;
+  S.wealth = nw;
+  S.house = WEALTH_HOUSE[nw];
+  setHouse(S.house);
+  S.placed = defaultPlaced(S.house);
+  resetPlayer();
+  return true;
+}
+
+function startNewDay(){
+  S.clock = 7*60;
+  S.needs.energy = 100;
+  addNeed('food', -14);
+  addNeed('clean', -8);
+  addNeed('fun', -5);
+  S.buffs = [];
+  S.eventsToday = 0;
+  S.dayEnded = false;
+  S.scene = 'home';
+  resetPlayer();
+  genTasks();
+  S.dayStart = { money:S.money, needs: Object.assign({}, S.needs) };
+  updateHUD();
+}
+
+function refreshTwistSchedule(){
+  if(!S.twist || (S.twist.fired && S.week - (S.twist.week||1) >= 3)){
+    const tw = pick(TWISTS);
+    let day = ri(2,5);
+    if(day === 2 || day === 4 || day === 6) day++;
+    S.twist = { id:tw.id, week:S.week, day:day, fired:false };
+  }
+}
+
+function advanceWeek(){
+  S.day = 1;
+  S.week++;
+
+  // 三十岁这一周过完，这一代就到这里
+  if(S.age >= AGE_MAX){
+    S.dayEnded = false;
+    showLegacy();
+    return;
+  }
+
+  S.age++;
+  const grew = growthUp();
+  const nw = nextWealth();
+  const moved = applyWealth(nw);
+
+  startNewDay();
+  if(S.origin && S.origin.debt){
+    addMoney(-S.origin.debt);
+    toast('利息自动扣了 ' + S.origin.debt + ' 文。你甚至没收到任何通知。');
+  }
+  refreshTwistSchedule();
+  updateHUD();
+  save();
+
+  showBirthday(grew, moved);
+}
+
+function showBirthday(grew, moved){
+  const stage = stageOf(S.age);
+  const prevStage = stageOf(S.age - 1);
+
+  let line;
+  if(stage === 'kid') line = '裤腿又短了一截。大人说再长就得买新的了。';
+  else if(stage === 'young') line = '肩膀宽了点，说话也不那么心虚了。';
+  else line = '楼下的小孩开始叫你叔叔/阿姨。你回头看了两次才确定是在叫你。';
+
+  let stageLine = '';
+  if(stage !== prevStage){
+    if(stage === 'young') stageLine = '<p class=dim style=color:#a6402f>从今天起，你算个青年了。能干的活儿多了，要担的事也多了。</p>';
+    else stageLine = '<p class=dim style=color:#a6402f>不知不觉，你走到了中年这一档。</p>';
+  }
+
+  const moveLine = moved
+    ? '<p>家里' + (S.wealth === 'rich' ? '宽裕了' : (S.wealth === 'poor' ? '紧巴了' : '变了样')) +
+      '，你们搬到了<b>' + HOUSE.name + '</b>（' + HOUSE.tierName + '）。</p>' +
+      '<p class=dim>旧家具能卖的都卖了，新住处自带一套。</p>'
+    : '';
+
+  const body =
+    '<p>' + S.age + ' 岁。' + line + '</p>' +
+    stageLine +
+    moveLine +
+    '<div class=rows>' +
+      '<div class=r><span>体格</span><b>+' + grew.body + '　（共 ' + S.growth.body + '）</b></div>' +
+      '<div class=r><span>心智</span><b>+' + grew.mind + '　（共 ' + S.growth.mind + '）</b></div>' +
+      '<div class=r><span>人缘</span><b>+' + grew.charm + '　（共 ' + S.growth.charm + '）</b></div>' +
+      '<div class=r><span>住处</span><b>' + HOUSE.name + '（' + HOUSE.tierName + '）</b></div>' +
+    '</div>';
+
+  openModal({
+    title: (moved ? '搬家了' : '又长一岁') + ' · ' + S.age + ' 岁',
+    seal: moved ? '迁' : '长',
+    sub: '第 ' + S.week + ' 周 · ' + STAGE_NAME[stage],
+    body: body,
+    buttons: [{ label:'继续过日子', cls:'primary', onClick(){} }]
+  });
+}
+
+/* ---------------- 日终 ---------------- */
+function endDay(auto){
+  if(S.dayEnded) return;
+  S.dayEnded = true;
+  S.action = null;
+
+  const done = S.tasks.filter(t=>t.done).length;
+  const total = S.tasks.length || 3;
+  const delta = S.money - (S.dayStart ? S.dayStart.money : S.money);
+  const m = moodInfo();
+
+  let line;
+  if(!auto){
+    if(done === total) line = '三件事全中。你甚至有点像个自律的人——注意，是"像"。';
+    else if(done === total-1) line = '差一件。人生嘛，差一件是常态，别往心里去。';
+    else if(done === 1) line = '只完成了一件。但至少你没躺平——呃，躺了，但起来了。';
+    else line = '三件事一件没做。你没有失败，你只是把今天过成了周末。';
+  } else {
+    line = '你在沙发上睡着了，灯还亮着。这一天就这么被时间收走了，不找零。';
+  }
+
+  const rows =
+    '<div class="rows">' +
+      '<div class="r"><span>今日三件事</span><b>' + done + ' / ' + total + '</b></div>' +
+      '<div class="r"><span>钱包变动</span><b>' + (delta>=0?'+':'') + delta + ' 文</b></div>' +
+      '<div class="r"><span>当前情绪</span><b>' + m.label + '</b></div>' +
+      '<div class="r"><span>年龄</span><b>' + S.age + ' 岁 · 第 ' + S.week + ' 周</b></div>' +
+    '</div>';
+
+  const list = '<ul class="tlist">' + S.tasks.map(t=>
+      '<li class="' + (t.done?'ok':'no') + '">' + (t.done?'✓':'✗') + ' ' + t.text + '</li>'
+    ).join('') + '</ul>';
+
+  const weekEnd = S.day >= GEN_DAYS;
+  const left = GEN_DAYS - S.day;
+
+  openModal({
+    title: '第 ' + S.day + ' 天 · 收工',
+    seal:'日',
+    sub: auto ? ('第 ' + S.week + ' 周 · 你是被沙发收留的')
+              : ('第 ' + S.week + ' 周 · ' + (left>0 ? '还剩 ' + left + ' 天' : '这周最后一天')),
+    body: list + rows + '<div class="quote">' + line + '</div>',
+    buttons: [{
+      label: weekEnd ? '这一周过完了' : '睡吧，明天还得过',
+      cls:'primary',
+      onClick(){
+        if(weekEnd) advanceWeek();
+        else nextDay();
+      }
+    }]
+  });
+
+  save();
+}
+
+/* ---------------- 剧情节点 ---------------- */
+const STORY = [
+  {
+    day: 2, id:'note', title:'门后的纸条', seal:'旧',
+    sub:'上一任住户留下的',
+    body(){
+      return '<p>你在门后发现一张对折的纸条，纸边已经发黄。</p>' +
+        '<p>「如果你也住进来了——冰箱第二层别放太久，老周会来借酱油，' +
+        '画画比上班强，但也强不了多少。</p>' +
+        '<p>另外，别把三件事写在纸上。写下来就变成任务了。」</p>';
+    },
+    opts(){
+      return [
+        { label:'留着，贴回墙上', hint:'有点用，至少提醒你别放太久', onClick(){
+            addNeed('fun',8); addBuff('前任的祝福',8,2,10);
+            reply('','你把纸条重新贴在门后。屋子好像多了一点别人的体温。');
+          } },
+        { label:'折好，收进抽屉', hint:'不扔，但也不看', onClick(){
+            addNeed('fun',3);
+            reply('','你把它收进抽屉最里面。那里已经有三样东西了。');
+          } },
+        { label:'算了，扔掉', hint:'有些话不必留着', onClick(){
+            addNeed('fun',-4);
+            reply('','你把它揉了。纸团划过一道弧线，进了垃圾桶。');
+          } }
+      ];
+    }
+  },
+  {
+    day: 4, id:'call', title:'家里的电话', seal:'家',
+    sub:'该来的还是会来',
+    body(){
+      const o = S.origin ? S.origin.id : 'normal';
+      let who = '家里', line = '「最近怎么样？」';
+      if(o === 'rich'){ who = '爸'; line = '「钱够不够？不够就说，别硬撑。」'; }
+      else if(o === 'single'){ who = '妈'; line = '「最近吃饭了吗？别老吃外卖。」'; }
+      else if(o === 'debt'){ who = '陌生号码'; line = '「你爸那笔钱，这个月能不能先还一部分？」'; }
+      else if(o === 'gran'){ who = '姑姑'; line = '「你奶奶的老房子要拆了，你回不回来看看？」'; }
+      else if(o === 'art'){ who = '老师'; line = '「有个小展，你要不要送两张画过去？」'; }
+      else if(o === 'blend'){ who = '继母'; line = '「你爸让我问问，过年回不回来。」'; }
+      else if(o === 'exam'){ who = '家里'; line = '「在城里还习惯吗？不行就回来考个编。」'; }
+      else if(o === 'city'){ who = '家里'; line = '「房租又涨了吧？要不回来住。」'; }
+      return '<p>电话响了三声，你接起来。</p>' +
+        '<p class="dim">' + who + '</p><p>「' + line + '」</p>';
+    },
+    opts(){
+      return [
+        { label:'聊久一点', hint:'半小时，换一点踏实', onClick(){
+            S.clock += 30; addNeed('energy',-8); addWarm(8); addNeed('fun',6);
+            reply('','你们聊了半小时，从天气聊到谁家孩子结婚了。挂掉之后，屋子安静得有点响。');
+          } },
+        { label:'说忙，改天再聊', hint:'其实也没那么忙', onClick(){
+            S.clock += 5; addNeed('fun',-5); addBuff('心里有点堵',-8,-2,8);
+            reply('','「行，你忙。」电话那头顿了一下才挂。你盯着屏幕看了一会儿。');
+          } },
+        { label:'什么都不说，听一会儿', hint:'有时候听就够了', onClick(){
+            S.clock += 15; addNeed('energy',-3); addNeed('fun',3); addWarm(4);
+            reply('','你们谁都没说话。听筒里有一点电流声，像很远的地方在下雨。');
+          } }
+      ];
+    }
+  },
+  {
+    day: 6, id:'fair', title:'老周的提议', seal:'摊',
+    sub:'巷口周末有个市集',
+    body(){
+      return '<p>老周敲开门，手里拎着两瓶汽水。</p>' +
+        '<p>「巷口周末有个市集，摆摊不要钱。你那画……要不要拿几张去卖？」</p>' +
+        '<p class="dim">他说这话的时候没看你，像是怕你拒绝。</p>';
+    },
+    opts(){
+      return [
+        { label:'答应他', hint:'-20 文置办，可能赚回来，也可能不', onClick(){
+            if(S.money < 20){ reply('','你翻了翻口袋，笑着说不巧。老周说没事，下次。'); return; }
+            addMoney(-20); S.story.fair = true; addWarm(10); addNeed('fun',14);
+            reply('','你们凑钱买了张折叠桌，还借了把遮阳伞。老周说，卖不掉也没关系，就当晒太阳。');
+          } },
+        { label:'再想想', hint:'拖到明天，通常就没有明天了', onClick(){
+            addNeed('fun',-3);
+            reply('老周','「行，你想想。」他把汽水放在桌上，走了。');
+          } },
+        { label:'不去了，最近没状态', hint:'诚实，但有点凉', onClick(){
+            addNeed('fun',-2); addWarm(-4);
+            reply('老周','「哦，那算了。」他笑了一下，那个笑你见过很多次。');
+          } }
+      ];
+    }
+  }
+];
+
+function showStoryModal(st){
+  openModal({
+    title: st.title,
+    seal: st.seal || '事',
+    sub: st.sub || '',
+    body: st.body(),
+    buttons: st.opts()
+  });
+}
+
+function nextDay(){
+  S.day++;
+  startNewDay();
+  toast('第 ' + S.day + ' 天。天亮了，你又行了。');
+  save();
+
+  const st = STORY.filter(s => s.day === S.day && !(S.story && S.story.seen[s.id]))[0];
+  if(st){
+    if(!S.story) S.story = { seen:{}, fair:false };
+    S.story.seen[st.id] = true;
+    setTimeout(()=>showStoryModal(st), 700);
+  } else if(S.twist && !S.twist.fired && (S.twist.week||1) === S.week && S.twist.day === S.day){
+    S.twist.fired = true;
+    setTimeout(triggerTwist, 700);
+  }
+}
+
+function triggerTwist(){
+  const tw = TWISTS.filter(t=>t.id === S.twist.id)[0];
+  if(!tw) return;
+  openModal({
+    title: tw.title,
+    seal:'变',
+    sub:'命定变故 · 该来的总会来',
+    body: tw.body,
+    buttons: tw.opts
+  });
+}
+
+/* ---------------- 传承 ---------------- */
+const CREEDS = [
+  { id:'chi', name:'吃亏是福', desc:'关系升温 +30%，但赚得少一成', mods:{ warm:1.3, income:0.9 } },
+  { id:'eat', name:'先吃饭再说', desc:'饿得慢 20%，做饭更省', mods:{ foodDecay:0.8, cookCost:0.8 } },
+  { id:'bad', name:'不要太乖', desc:'画作收入 +25%，但人情淡 15%', mods:{ paint:1.25, warm:0.85 } }
+];
+
+function endingLine(){
+  const score = S.stats.paintings*2 + Math.round(S.money/40) + Math.round(S.rel.warm/8) + S.stats.rep;
+  if(score >= 22) return '你把日子过出样子了：有画，有钱，还有人惦记。';
+  if(score >= 12) return '不算好，但也不算白过。至少这间屋子有灯亮着。';
+  if(score >= 5) return '这一年过得潦草。但你还站着，这就不容易。';
+  return '你活下来了。在这个世界里，这已经算一种成就。';
+}
+
+function showLegacy(){
+  const fairLine = (S.story && S.story.fair)
+    ? '<p class="dim">巷口那次市集，你们真的去了。桌子摆了一下午，卖出三张画，老周买了一瓶汽水请客。</p>'
+    : '';
+
+  const body =
+    '<p>' + S.age + ' 岁。这一代到此为止。</p>' +
+    '<p class="dim">从七岁那年起，你在这间' + HOUSE.name + '里住了 ' + (S.age-7) + ' 年。</p>' +
+    '<p>你留下的东西不多：' + S.stats.paintings + ' 幅画、' + S.money + ' 文钱，以及一些说不清的习惯。</p>' +
+    fairLine +
+    '<div class="rows">' +
+      '<div class="r"><span>活到</span><b>' + S.age + ' 岁</b></div>' +
+      '<div class="r"><span>住过的房子</span><b>' + HOUSE.name + '（' + HOUSE.tierName + '）</b></div>' +
+      '<div class="r"><span>成长（体格/心智/人缘）</span><b>' + S.growth.body + ' / ' + S.growth.mind + ' / ' + S.growth.charm + '</b></div>' +
+      '<div class="r"><span>画作 · 收入 · 声望</span><b>' + S.stats.paintings + ' 幅 · ' + S.stats.earned + ' 文 · ' + S.stats.rep + '</b></div>' +
+      '<div class="r"><span>老周对你的评价</span><b>' + Math.round(S.rel.warm) + '</b></div>' +
+    '</div>' +
+    '<div class="quote">' + endingLine() + '</div>' +
+    '<p class="dim" style="margin-top:.9em">下一代继承这间屋子和一半的积蓄。' +
+    '你可以留下一句家训——它会跟着这个家族，一直往下走。</p>';
+
+  openModal({
+    title:'传承 · 第 ' + S.gen + ' 代',
+    seal:'承',
+    sub:'一句话，会跟着这个家族很久',
+    body: body,
+    buttons: CREEDS.map(c=>({
+      label: '「' + c.name + '」',
+      hint: c.desc,
+      onClick(){ startNewGen(c); }
+    }))
+  });
+}
+
+function startNewGen(creed){
+  S.gen++;
+  S.creed = { id:creed.id, name:creed.name, mods:creed.mods };
+  S.age = 7;
+  S.week = 1;
+  S.growth = { body:0, mind:0, charm:0 };
+  S.day = 1;
+  S.clock = 7*60;
+  S.money = Math.round(S.money*0.5) + 60;
+  S.rel = { warm:10, trust:8, tension:0 };
+  S.needs = { energy:100, food:70, clean:80, fun:60 };
+  S.buffs = [];
+  S.eventsToday = 0;
+  S.dayEnded = false;
+  S.scene = 'home';
+  resetPlayer();
+  S.stats.rep += 2;
+  Object.keys(S.skills).forEach(k=>{
+    const s = S.skills[k];
+    s.lv = Math.max(1, Math.floor(s.lv*0.7));
+    s.xp = 0;
+  });
+
+  // 新一代，新的变故与剧情
+  const tw = pick(TWISTS);
+  let twDay = ri(2,5);
+  if([2,4,6].indexOf(twDay) >= 0) twDay++;
+  S.twist = { id:tw.id, week:1, day:twDay, fired:false };
+  S.story = { seen:{}, fair:false };
+
+  genTasks();
+  S.dayStart = { money:S.money, needs:Object.assign({}, S.needs) };
+  updateHUD();
+  save();
+  openModal({
+    title:'第 ' + S.gen + ' 代',
+    seal:'始',
+    sub:'家训：' + creed.name,
+    body:'<p>你在同一间屋子里醒来。窗外的树高了一点，别的都还是老样子。</p>' +
+         '<p class="dim">墙上多了一行字：「' + creed.name + '」。你不太确定是谁写的，但你觉得有道理。</p>',
+    buttons:[{ label:'开始过日子', cls:'primary', onClick(){} }]
+  });
+}
+
+/* ---------------- 布置 ---------------- */
+function toggleBuild(force){
+  if(S.scene !== 'home'){
+    if(force !== false) toast('外面就别摆了，城管下班了也不行。');
+    S.buildMode = false;
+    document.getElementById('build').classList.remove('on');
+    return;
+  }
+  S.buildMode = (force===undefined) ? !S.buildMode : force;
+  const el = document.getElementById('build');
+  el.classList.toggle('on', S.buildMode);
+  document.querySelector('[data-act="build"]').classList.toggle('solid', S.buildMode);
+  if(!S.buildMode) S.buildType = null;
+  const tip = el.querySelector('.btip');
+  if(tip) tip.innerHTML = TOUCH
+    ? '轻点放置 · 长按回收（退六成）· 再点顶栏「布置」收起<br>摆件不挡路，放心塞。'
+    : '左键放置 · 右键回收（退六成）· 再按 B 收起<br>摆件不挡路，放心塞。';
+  renderCatalog();
+  if(S.buildMode && TOUCH) toast('轻点放置，长按回收');
+}
+
+function renderCatalog(){
+  const el = document.getElementById('cat');
+  if(!el) return;
+  el.innerHTML = BUILDABLE.map(k=>{
+    const d = FURN[k];
+    return '<button class="citem ' + (S.buildType===k?'on':'') + '" data-t="' + k + '">' +
+      '<span class="cn">' + d.name + '</span><span class="cp">' + d.price + ' 文</span></button>';
+  }).join('');
+  el.querySelectorAll('.citem').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const t = b.getAttribute('data-t');
+      S.buildType = (S.buildType===t) ? null : t;
+      renderCatalog();
+    });
+  });
+}
+
+function nearestFloor(y){
+  let best = null, bd = 1e9;
+  for(const seg of floorSegs()){
+    const d = Math.abs(y - seg.y);
+    if(d<bd){ bd=d; best=seg.y; }
+  }
+  return bd<=90 ? best : null;
+}
+
+function tryPlace(mx,my){
+  if(S.scene !== 'home'){ toast('外面就别摆了，城管下班了也不行。'); return; }
+  if(!S.buildType) { toast('先在上面挑一件家具。'); return; }
+  const d = FURN[S.buildType];
+  const fy = nearestFloor(my);
+  if(!fy){ toast('得放在地板上，地板不会背叛你。'); return; }
+  const x = Math.round(mx/20)*20;
+  if(x - d.w/2 < HOUSE.x1 + 18 || x + d.w/2 > HOUSE.x2 - 18){ toast('放不下。别跟墙较劲。'); return; }
+  for(const o of S.placed){
+    if(o.y !== fy) continue;
+    if(Math.abs(o.x - x) < (d.w + FURN[o.t].w)/2 - 6){
+      toast('这儿已经有东西了。');
+      return;
+    }
+  }
+  if(S.money < d.price){ toast('钱不够。先画两张画吧。'); return; }
+  addMoney(-d.price);
+  S.placed.push({ t:S.buildType, x:x, y:fy });
+  toast('放好了：' + d.name + '（-' + d.price + ' 文）');
+  spawnInk(x, fy-20, 5);
+  updateHUD(); save();
+}
+
+function tryRemove(mx,my){
+  const fy = nearestFloor(my);
+  if(!fy) return;
+  for(let i=S.placed.length-1;i>=0;i--){
+    const o = S.placed[i], d = FURN[o.t];
+    if(o.y===fy && Math.abs(o.x-mx) < d.w/2 + 6 && my > fy-d.h-10 && my < fy+6){
+      const back = Math.round(d.price*0.6);
+      S.placed.splice(i,1);
+      addMoney(back);
+      toast('收走了：' + d.name + '（退 ' + back + ' 文）');
+      updateHUD(); save();
+      return;
+    }
+  }
+}
+
+/* ---------------- 输入 ---------------- */
+const keys = { left:false, right:false, up:false, down:false, jump:false };
+
+function keyName(e){
+  const k = e.key;
+  if(k==='a'||k==='A'||k==='ArrowLeft') return 'left';
+  if(k==='d'||k==='D'||k==='ArrowRight') return 'right';
+  if(k==='w'||k==='W'||k==='ArrowUp') return 'up';
+  if(k==='s'||k==='S'||k==='ArrowDown') return 'down';
+  return null;
+}
+
+/* 键盘与触屏共用的动作 */
+function doJump(){
+  if(!S.action && !S.buildMode && S.player.grounded){ S.player.vy = -430; S.player.grounded=false; }
+}
+
+function doInteract(){
+  if(S.buildMode) return;
+  const near = getNear();
+  if(!near){ toast('这儿没什么能互动的。'); return; }
+  if(near.t==='npc'){ talkToNpc(); return; }
+  if(near.t==='door'){ goOut(); return; }
+  if(near.t==='prop'){ if(!S.action) near.prop.act(); return; }
+  if(S.action){ return; }
+  startAction(near.ref);
+}
+
+function doBuildToggle(){
+  if(S.scene !== 'home'){ toast('外面就别摆了。'); return; }
+  toggleBuild();
+}
+
+function doMenu(){
+  if(screenOpen || proOpen || modalOpen) return;
+  showPause();
+}
+
+window.addEventListener('keydown', e=>{
+  if(e.key===' '){ e.preventDefault(); }
+  if(proOpen){
+    if(e.key===' '||e.key==='Enter'||e.key==='e'||e.key==='E'){ e.preventDefault(); proNext(); }
+    return;
+  }
+  if(screenOpen) return;
+
+  if(e.key==='Escape'){
+    if(modalOpen){ closeModal(); return; }
+    if(S.buildMode){ toggleBuild(false); return; }
+  }
+
+  if(modalOpen) return;
+
+  const k = keyName(e);
+  if(k){
+    keys[k] = true;
+    e.preventDefault();
+    if(S.action && !e.repeat && (k==='left'||k==='right')){ S.action=null; }
+    return;
+  }
+
+  if(e.key===' '){ doJump(); return; }
+  if(e.key==='e'||e.key==='E'){ doInteract(); return; }
+  if(e.key==='b'||e.key==='B'){ doBuildToggle(); return; }
+  if(e.key==='c'||e.key==='C'){ showChar(); return; }
+  if(e.key==='h'||e.key==='H'||e.key==='?'){ showHelp(); return; }
+});
+
+window.addEventListener('keyup', e=>{
+  const k = keyName(e);
+  if(k) keys[k] = false;
+});
+
+/* ---------------- 触屏控制 ---------------- */
+function bindTouchControls(){
+  const root = document.getElementById('touch');
+  if(!root) return;
+
+  root.querySelectorAll('[data-k]').forEach(btn=>{
+    const k = btn.getAttribute('data-k');
+    const press = e=>{
+      e.preventDefault();
+      keys[k] = true;
+      btn.classList.add('on');
+      if(S.action && (k==='left'||k==='right')) S.action = null;
+    };
+    const release = e=>{
+      if(e) e.preventDefault();
+      keys[k] = false;
+      btn.classList.remove('on');
+    };
+    btn.addEventListener('pointerdown', press);
+    btn.addEventListener('pointerup', release);
+    btn.addEventListener('pointercancel', release);
+    btn.addEventListener('pointerleave', release);
+    btn.addEventListener('contextmenu', e=>e.preventDefault());
+  });
+
+  const tap = (id, fn)=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('pointerdown', e=>{
+      e.preventDefault();
+      el.classList.add('on');
+      fn();
+    });
+    const off = ()=>el.classList.remove('on');
+    el.addEventListener('pointerup', off);
+    el.addEventListener('pointercancel', off);
+    el.addEventListener('pointerleave', off);
+    el.addEventListener('contextmenu', e=>e.preventDefault());
+  };
+  tap('tJump', doJump);
+  tap('tInteract', doInteract);
+  tap('tMenu', doMenu);
+
+  const ok = document.getElementById('rotateOk');
+  if(ok) ok.addEventListener('click', ()=>document.body.classList.add('portrait-ok'));
+}
+
+if(TOUCH) bindTouchControls();
+
+function canvasPos(e){
+  const r = cv.getBoundingClientRect();
+  return {
+    x: (e.clientX - r.left) / r.width * W,
+    y: (e.clientY - r.top) / r.height * H
+  };
+}
+
+cv.addEventListener('mousemove', e=>{
+  const p = canvasPos(e);
+  S.mouse.x = p.x; S.mouse.y = p.y;
+});
+cv.addEventListener('mousedown', e=>{
+  if(!S.buildMode) return;
+  const p = canvasPos(e);
+  if(e.button===0) tryPlace(p.x, p.y);
+  if(e.button===2) tryRemove(p.x, p.y);
+});
+cv.addEventListener('contextmenu', e=>{
+  if(S.buildMode) e.preventDefault();
+});
+
+/* 触屏布置：轻点放置，长按 0.55 秒回收 */
+let bTouchTimer = null, bTouchPos = null;
+cv.addEventListener('touchstart', e=>{
+  if(!S.buildMode || e.touches.length !== 1) return;
+  e.preventDefault();
+  bTouchPos = canvasPos(e.touches[0]);
+  bTouchTimer = setTimeout(()=>{
+    bTouchTimer = null;
+    tryRemove(bTouchPos.x, bTouchPos.y);
+  }, 550);
+}, {passive:false});
+cv.addEventListener('touchend', e=>{
+  if(!S.buildMode) return;
+  e.preventDefault();
+  if(bTouchTimer){
+    clearTimeout(bTouchTimer);
+    bTouchTimer = null;
+    if(bTouchPos) tryPlace(bTouchPos.x, bTouchPos.y);
+  }
+  bTouchPos = null;
+}, {passive:false});
+cv.addEventListener('touchcancel', ()=>{
+  if(bTouchTimer){ clearTimeout(bTouchTimer); bTouchTimer = null; }
+  bTouchPos = null;
+});
+
+/* ---------------- 交互检测 ---------------- */
+function getNear(){
+  const p = S.player;
+  let best = null, bd = 1e9;
+
+  if(S.scene === 'home'){
+    for(const f of S.placed){
+      const d = FURN[f.t];
+      if(!d || !d.use) continue;
+      if(Math.abs(f.y - p.y) > 14) continue;
+      const dx = Math.abs(f.x - p.x);
+      const reach = Math.max(54, d.w/2 + 20);
+      if(dx < reach && dx < bd){ bd = dx; best = { t:f.t, x:f.x, y:f.y, h:d.h, label:d.use.label, ref:f }; }
+    }
+    if(npcActive()){
+      const dx = Math.abs(NPC.x - p.x);
+      if(Math.abs(p.y-HOUSE.f1) < 14 && dx < 66 && dx < bd){
+        bd = dx; best = { t:'npc', x:NPC.x, y:HOUSE.f1, h:84, label:'找人聊聊' };
+      }
+    }
+    const dxd = Math.abs(HOUSE.doorX - p.x);
+    if(Math.abs(p.y-HOUSE.f1) < 14 && dxd < 70){
+      // 站在门槛上时，门优先于旁边的家具
+      if(dxd < 46 || dxd < bd){
+        bd = dxd; best = { t:'door', x:HOUSE.doorX, y:HOUSE.f1, h:120, label:'出门' };
+      }
+    }
+    return best;
+  }
+
+  // 户外 / 室内商铺
+  const sc = sceneNow();
+  for(const pr of (sc.props||[])){
+    if(Math.abs(pr.y - p.y) > 16) continue;
+    const dx = Math.abs(pr.x - p.x);
+    const reach = Math.max(60, pr.w/2 + 22);
+    if(dx < reach && dx < bd){
+      bd = dx; best = { t:'prop', x:pr.x, y:pr.y, h:pr.h, label:pr.label, prop:pr };
+    }
+  }
+  return best;
+}
+
+/* ---------------- 更新 ---------------- */
+let tGlobal = 0;
+let flashT = 0;
+function sceneFlash(){ flashT = .45; }
+
+function updateTime(dt){
+  const prevHour = Math.floor(S.clock/60);
+
+  if(S.clock >= 1440){ endDay(true); return; }
+
+  S.clock += dt * 12 * S.speed;
+
+  // 需求衰减
+  const dm = dt * 12 * S.speed;
+  const cm = mods();
+  S.needs.energy -= (3.0/60) * dm * (1 - Math.min(.25, (S.growth.body||0)*0.008));
+  S.needs.food   -= (4.5/60) * dm * (cm.foodDecay||1);
+  S.needs.clean  -= (2.4/60) * dm;
+  S.needs.fun    -= (3.0/60) * dm;
+
+  S.needs.energy = clamp(S.needs.energy,0,100);
+  S.needs.food   = clamp(S.needs.food,0,100);
+  S.needs.clean  = clamp(S.needs.clean,0,100);
+  S.needs.fun    = clamp(S.needs.fun,0,100);
+
+  if(S.clock >= 1440){ S.clock = 1440; endDay(true); return; }
+
+  const curHour = Math.floor(S.clock/60);
+  if(curHour !== prevHour){
+    if(Math.random() < 0.08) tryRandomEvent();
+  }
+}
+
+function updatePlayer(dt){
+  const p = S.player;
+  if(S.action){ p.moving = false; return; }
+
+  const sc = sceneNow();
+  const segs = sc.floors;
+  const lad = (S.scene === 'home') ? HOUSE.ladder : null;
+
+  let mx = 0;
+  if(keys.left) mx -= 1;
+  if(keys.right) mx += 1;
+
+  const onLadderX = !!lad && p.x > lad.x1-10 && p.x < lad.x2+10;
+
+  if(p.climbing && !onLadderX) p.climbing = false;
+  if(p.climbing && (mx!==0)) p.climbing = false;
+
+  if(onLadderX && (keys.up || keys.down) && !p.climbing){
+    p.climbing = true;
+    p.vy = 0;
+  }
+
+  if(p.climbing && lad){
+    p.moving = false;
+    const dir = (keys.down?1:0) - (keys.up?1:0);
+    p.y += dir * 150 * dt;
+    p.y = clamp(p.y, lad.top, lad.bot);
+    p.vy = 0;
+    if(p.y <= lad.top){ p.y = lad.top; p.climbing = false; p.grounded = true; }
+    if(p.y >= lad.bot){ p.y = lad.bot; p.climbing = false; p.grounded = true; }
+  } else {
+    if(mx !== 0){
+      p.x += mx * 205 * dt;
+      p.facing = mx;
+      p.moving = true;
+    } else {
+      p.moving = false;
+    }
+
+    p.vy += 1500 * dt;
+    const prevY = p.y;
+    p.y += p.vy * dt;
+
+    p.grounded = false;
+    if(p.vy >= 0){
+      for(const seg of segs){
+        if(p.x > seg.x1-2 && p.x < seg.x2+2 && prevY <= seg.y+1 && p.y >= seg.y){
+          p.y = seg.y; p.vy = 0; p.grounded = true;
+          break;
+        }
+      }
+    }
+  }
+
+  const left = (S.scene === 'home') ? HOUSE.x1 + 24 : 40;
+  const right = (S.scene === 'home') ? HOUSE.x2 - 24 : 1240;
+  p.x = clamp(p.x, left, right);
+  if(p.y > 700){ p.y = segs[0].y; p.vy = 0; }
+}
+
+function updateAction(dt){
+  if(!S.action) return;
+  S.action.t += dt;
+  if(S.action.t >= S.action.dur){
+    finishAction();
+  }
+}
+
+function updateParticles(dt){
+  for(let i=PT.length-1;i>=0;i--){
+    const p = PT[i];
+    p.x += p.vx*dt; p.y += p.vy*dt; p.vy += 60*dt; p.life -= dt;
+    if(p.life<=0) PT.splice(i,1);
+  }
+  for(let i=FT.length-1;i>=0;i--){
+    const f = FT[i];
+    f.y -= 26*dt; f.life -= dt;
+    if(f.life<=0) FT.splice(i,1);
+  }
+}
+
+function updateBuffs(){
+  const now = S.clock;
+  S.buffs = S.buffs.filter(b=>b.until > now);
+}
+
+function update(dt){
+  tGlobal += dt;
+  updateParticles(dt);
+  if(flashT > 0) flashT = Math.max(0, flashT - dt);
+  updateTouchUI();
+  if(modalOpen || S.buildMode || screenOpen) return;
+  updateTime(dt);
+  if(S.dayEnded) return;
+  updatePlayer(dt);
+  updateAction(dt);
+  updateBuffs();
+  hudAcc += dt;
+  if(hudAcc > .1){ hudAcc = 0; updateHUD(); }
+}
+
+/* ---------------- 粒子 ---------------- */
+const PT = [];
+const FT = [];
+function spawnInk(x,y,n){
+  for(let i=0;i<n;i++){
+    PT.push({ x:x+rand(-14,14), y:y+rand(-10,10), vx:rand(-22,22), vy:rand(-55,-18), r:rand(1.2,3.2), life:rand(.5,1.1), max:1.1 });
+  }
+}
+function floatText(x,y,s,color){
+  FT.push({ x:x, y:y, s:s, c:color||'#5c6b4f', life:1.6 });
+}
+
+/* ---------------- 渲染：天空 ---------------- */
+function skyCols(){
+  const h = (S.clock/60)%24;
+  let top, bot;
+  if(h<5 || h>=20){ top='#2f3852'; bot='#48536e'; }
+  else if(h<7){
+    const t=(h-5)/2;
+    top=mixHex('#2f3852','#cfd9e2',t);
+    bot=mixHex('#5a6480','#f0d9b8',t);
+  }
+  else if(h<17){ top='#cfd9e2'; bot='#ece4d1'; }
+  else {
+    const t=(h-17)/3;
+    top=mixHex('#cfd9e2','#43506e',t);
+    bot=mixHex('#ece4d1','#c9906a',t);
+  }
+  return { top:top, bot:bot, h:h };
+}
+
+function drawSkyIn(rect, big){
+  const c = skyCols();
+  const h = c.h;
+  const k = big ? 1.7 : 1;
+
+  G.save();
+  G.beginPath();
+  G.rect(rect.x,rect.y,rect.w,rect.h);
+  G.clip();
+
+  const g = G.createLinearGradient(0,rect.y,0,rect.y+rect.h);
+  g.addColorStop(0,c.top); g.addColorStop(1,c.bot);
+  G.fillStyle = g;
+  G.fillRect(rect.x,rect.y,rect.w,rect.h);
+
+  // 远山（水墨）
+  ridge(rect.x-10, rect.y+rect.h*0.70, rect.w+20, rect.h*0.30, big?.24:.15, 3);
+  ridge(rect.x-10, rect.y+rect.h*0.82, rect.w+20, rect.h*0.24, big?.34:.21, 7);
+
+  // 日月
+  if(h>=6 && h<18){
+    const t = (h-6)/12;
+    const sx = rect.x + rect.w*(0.12 + t*0.76);
+    const sy = rect.y + rect.h*(0.30 - Math.sin(t*Math.PI)*0.14);
+    G.globalAlpha=.55; G.fillStyle='#fdf3d8';
+    G.beginPath(); G.arc(sx,sy,11*k,0,7); G.fill();
+    G.globalAlpha=.14; G.fillStyle='#fff6d8';
+    G.beginPath(); G.arc(sx,sy,22*k,0,7); G.fill();
+    G.globalAlpha=1;
+  } else {
+    const hh = (h>=18)? h-18 : h+6;
+    const t = clamp(hh/12,0,1);
+    const mx = rect.x + rect.w*(0.15 + t*0.7);
+    const my = rect.y + rect.h*(0.28 - Math.sin(t*Math.PI)*0.10);
+    G.globalAlpha=.75; G.fillStyle='#f4efdf';
+    G.beginPath(); G.arc(mx,my,10*k,0,7); G.fill();
+    G.globalAlpha=.14; G.fillStyle='#8a94ab';
+    G.beginPath(); G.arc(mx-4*k,my-2*k,3*k,0,7); G.fill();
+    G.beginPath(); G.arc(mx+4*k,my+3*k,2*k,0,7); G.fill();
+    G.globalAlpha=1;
+    const stars = big ? 40 : 14;
+    for(let i=0;i<stars;i++){
+      const sx = rect.x + nz(i,1)*rect.w;
+      const sy = rect.y + nz(i,2)*rect.h*0.55;
+      G.globalAlpha = .18 + nz(i,3)*.35;
+      G.fillStyle='#f7f1df';
+      G.beginPath(); G.arc(sx,sy,.9+nz(i,4)*.8,0,7); G.fill();
+    }
+    G.globalAlpha=1;
+  }
+
+  G.restore();
+}
+
+function ridge(x,y,w,h,alpha,seed){
+  G.save();
+  G.beginPath();
+  G.moveTo(x, y+h);
+  G.lineTo(x, y+h*0.45);
+  for(let i=0;i<4;i++){
+    const x1 = x + w*(i/4), x2 = x + w*((i+1)/4);
+    const peak = y + h*(0.06 + 0.34*nz(i,seed));
+    G.quadraticCurveTo((x1+x2)/2, peak, x2, y + h*(0.42 + 0.16*nz(i+9,seed)));
+  }
+  G.lineTo(x+w, y+h);
+  G.closePath();
+  G.fillStyle = 'rgba(52,60,74,'+alpha+')';
+  G.fill();
+  G.restore();
+}
+
+function drawWindows(){
+  for(const w of HOUSE.windows){
+    drawSkyIn(w, false);
+
+    G.save();
+    G.strokeStyle = INK; G.globalAlpha=.78; G.lineWidth=3;
+    G.strokeRect(w.x, w.y, w.w, w.h);
+    G.globalAlpha=.55; G.lineWidth=2;
+    G.beginPath();
+    G.moveTo(w.x + w.w/2, w.y); G.lineTo(w.x + w.w/2, w.y + w.h);
+    G.moveTo(w.x, w.y + w.h*0.46); G.lineTo(w.x + w.w, w.y + w.h*0.46);
+    G.stroke();
+    G.restore();
+
+    G.fillStyle='rgba(72,64,48,.18)';
+    G.fillRect(w.x-6, w.y+w.h, w.w+12, 5);
+    rough(w.x-6, w.y+w.h, w.x+w.w+6, w.y+w.h, {w:2,a:.55});
+  }
+}
+
+/* ---------------- 渲染：外面的场景 ---------------- */
+function tree(x, baseY, s, seed){
+  s = s || 1;
+  G.strokeStyle = INK; G.globalAlpha=.55; G.lineWidth=3.4*s;
+  G.beginPath();
+  G.moveTo(x, baseY);
+  G.quadraticCurveTo(x-3*s, baseY-30*s, x+2*s, baseY-52*s);
+  G.stroke();
+  G.globalAlpha=1;
+  const blobs = [[0,-62,26],[-16,-52,18],[17,-54,17],[-6,-74,16],[10,-70,14]];
+  blobs.forEach((b,i)=>{
+    G.globalAlpha = .38 + (i%2)*.05;
+    G.fillStyle = '#46543f';
+    G.beginPath();
+    G.ellipse(x + b[0]*s, baseY + b[1]*s, b[2]*s, b[2]*.78*s, 0, 0, 7);
+    G.fill();
+    G.globalAlpha = .46;
+    G.strokeStyle = '#3f4a3a'; G.lineWidth = 1;
+    G.stroke();
+  });
+  G.globalAlpha=1;
+}
+
+function drawPavement(topY){
+  G.fillStyle='rgba(72,64,48,.15)';
+  G.fillRect(0,topY,W,H-topY);
+  rough(0,topY,W,topY,{w:3.4,a:.8});
+  for(let x=30;x<W;x+=64){
+    rough(x,topY+2,x+rand(-1,1),700,{w:.8,a:.07,seed:x});
+  }
+  rough(0,topY+64,W,topY+64,{w:1,a:.10});
+  G.fillStyle='rgba(72,64,48,.05)';
+  G.fillRect(0,topY+64,W,H-topY-64);
+}
+
+function drawHomeFacade(){
+  const x=42, y=300, w=180, h=320;
+  G.fillStyle='rgba(255,252,244,.55)';
+  G.fillRect(x,y,w,h);
+  // 屋顶
+  G.strokeStyle=INK; G.globalAlpha=.72; G.lineWidth=5;
+  G.beginPath(); G.moveTo(x-16,y+6); G.quadraticCurveTo(x+w/2,y-46,x+w+16,y+6); G.stroke();
+  G.globalAlpha=.5; G.lineWidth=2;
+  rough(x,y,x,y+h,{w:2.6,a:.7});
+  rough(x+w,y,x+w,y+h,{w:2.6,a:.7});
+  rough(x,y+h,x+w,y+h,{w:2.6,a:.7});
+  // 窗
+  G.globalAlpha=.55; G.lineWidth=1.8;
+  G.strokeRect(x+24,y+40,52,46);
+  G.strokeRect(x+104,y+40,52,46);
+  G.globalAlpha=.16; G.fillStyle='#8fa0aa';
+  G.fillRect(x+25,y+41,50,44); G.fillRect(x+105,y+41,50,44);
+  G.globalAlpha=1;
+  // 门
+  G.fillStyle='rgba(72,64,48,.12)';
+  G.fillRect(x+66,y+h-92,48,92);
+  rough(x+66,y+h-92,x+66,y+h,{w:2,a:.6});
+  rough(x+114,y+h-92,x+114,y+h,{w:2,a:.6});
+  rough(x+66,y+h-92,x+114,y+h-92,{w:2,a:.6});
+  G.save(); G.globalAlpha=.5; G.fillStyle=RED;
+  G.fillRect(x+58,y+h-84,4,42); G.restore();
+  // 门牌
+  txt('浮', x+90, y+h-116, { size:13, align:'center', alpha:.5 });
+}
+
+function drawShop(cx, label, awning){
+  const w=156, h=176, x=cx-w/2, y=620-h;
+  G.fillStyle='rgba(255,252,244,.5)';
+  G.fillRect(x,y,w,h);
+  rough(x,y,x,y+h,{w:2.4,a:.7});
+  rough(x+w,y,x+w,y+h,{w:2.4,a:.7});
+  rough(x,y,x+w,y,{w:2.4,a:.7});
+  // 遮阳棚
+  const stripes = 6;
+  for(let i=0;i<stripes;i++){
+    G.fillStyle = awning[i%2];
+    G.globalAlpha=.55;
+    G.beginPath();
+    G.moveTo(x + i*w/stripes, y);
+    G.lineTo(x + (i+1)*w/stripes, y);
+    G.lineTo(x + (i+1)*w/stripes - 4, y+18);
+    G.lineTo(x + i*w/stripes - 4, y+18);
+    G.closePath(); G.fill();
+  }
+  G.globalAlpha=1;
+  // 玻璃门
+  G.globalAlpha=.18; G.fillStyle='#7d8f96';
+  G.fillRect(x+22,y+54,w-44,94);
+  G.globalAlpha=.5; G.strokeStyle=INK; G.lineWidth=1.6;
+  G.strokeRect(x+22,y+54,w-44,94);
+  G.beginPath(); G.moveTo(x+w/2,y+54); G.lineTo(x+w/2,y+148); G.stroke();
+  G.globalAlpha=.10; G.fillStyle='#5a5346';
+  G.fillRect(x+30,y+84,w-60,4);
+  G.fillRect(x+30,y+108,w-60,4);
+  G.globalAlpha=1;
+
+  // 招牌
+  G.fillStyle='rgba(250,245,232,.85)';
+  G.fillRect(x+18,y-16,64,22);
+  rough(x+18,y-16,x+82,y-16,{w:1.4,a:.45});
+  txt(label, x+50, y-5, { size:12, align:'center', alpha:.8 });
+}
+
+function drawParkGate(){
+  const x=1030;
+  G.strokeStyle=INK; G.globalAlpha=.6; G.lineWidth=4;
+  G.beginPath(); G.moveTo(x-56,620); G.lineTo(x-56,470); G.stroke();
+  G.beginPath(); G.moveTo(x+56,620); G.lineTo(x+56,470); G.stroke();
+  G.globalAlpha=.45; G.lineWidth=2;
+  G.beginPath(); G.moveTo(x-64,470); G.lineTo(x+64,470); G.stroke();
+  G.globalAlpha=1;
+  txt('公园', x, 494, { size:16, align:'center', alpha:.55 });
+  tree(x-96, 620, .9, 21);
+  tree(x+96, 620, 1.0, 22);
+}
+
+function drawStreet(){
+  drawSkyIn({x:0,y:0,w:W,h:620}, true);
+  drawPavement(620);
+
+  G.save();
+  G.globalAlpha=.09; G.fillStyle='#3a4250';
+  [[20,330,110,290],[150,300,120,320],[860,340,100,280],[1150,300,110,320]].forEach(b=>{
+    G.fillRect(b[0],b[1],b[2],b[3]);
+  });
+  G.restore();
+
+  drawHomeFacade();
+  drawShop(330, '便利', ['#b98a6a','#efe6d2']);
+  drawShop(720, '书店', ['#7d8a72','#efe6d2']);
+  drawParkGate();
+
+  // 路灯
+  [230, 900].forEach(x=>{
+    rough(x,620,x,470,{w:2.6,a:.45});
+    G.beginPath(); G.arc(x,462,9,0,7);
+    G.fillStyle='rgba(255,246,214,.6)'; G.fill();
+    G.strokeStyle=INK; G.globalAlpha=.4; G.lineWidth=1.4; G.stroke(); G.globalAlpha=1;
+  });
+}
+
+function drawPark(){
+  drawSkyIn({x:0,y:0,w:W,h:620}, true);
+  drawPavement(620);
+
+  // 草地
+  G.fillStyle='rgba(94,112,82,.10)';
+  G.fillRect(0,596,W,44);
+  for(let i=0;i<70;i++){
+    const gx = nz(i,5)*W;
+    rough(gx,620,gx+rand(-3,3),604+nz(i,6)*12,{w:1.1,a:.30,seed:i});
+  }
+
+  tree(210,620,1.15,11);
+  tree(900,620,1.0,12);
+  tree(1130,620,.85,13);
+
+  // 长椅
+  const bx=430, by=620;
+  rough(bx-56,by-30,bx+56,by-30,{w:5,a:.7});
+  rough(bx-56,by-48,bx+56,by-48,{w:4,a:.6});
+  rough(bx-48,by-46,bx-48,by-30,{w:2,a:.4});
+  rough(bx+48,by-46,bx+48,by-30,{w:2,a:.4});
+  rough(bx-44,by-30,bx-44,by,{w:2.6,a:.55});
+  rough(bx+44,by-30,bx+44,by,{w:2.6,a:.55});
+
+  // 路灯
+  rough(760,620,760,470,{w:2.6,a:.4});
+  G.beginPath(); G.arc(760,462,8,0,7);
+  G.fillStyle='rgba(255,246,214,.5)'; G.fill();
+  G.strokeStyle=INK; G.globalAlpha=.35; G.lineWidth=1.2; G.stroke(); G.globalAlpha=1;
+
+  // 垃圾桶
+  G.fillStyle='rgba(72,64,48,.18)';
+  G.fillRect(508,558,34,62);
+  G.strokeStyle=INK; G.globalAlpha=.4; G.lineWidth=1.6;
+  G.strokeRect(508,558,34,62); G.globalAlpha=1;
+
+  // 池塘
+  const px=950, py=640;
+  G.save();
+  G.globalAlpha=.16; G.fillStyle='#5c7b86';
+  G.beginPath(); G.ellipse(px,py-16,120,30,0,0,7); G.fill();
+  G.globalAlpha=.35; G.strokeStyle='#44606a'; G.lineWidth=1.6;
+  for(let i=0;i<3;i++){
+    G.beginPath(); G.ellipse(px,py-16,44+i*30,10+i*7,0,0,7); G.stroke();
+  }
+  G.restore();
+  // 荷叶
+  for(let i=0;i<3;i++){
+    G.globalAlpha=.22; G.fillStyle='#5d6b52';
+    G.beginPath(); G.ellipse(px-30+i*34, py-22+((i%2)*8), 10, 4, 0, 0, 7); G.fill();
+  }
+  G.globalAlpha=1;
+
+  // 鸽子
+  for(let i=0;i<5;i++){
+    const gx = 620 + i*22, gy = 612 + (i%2)*6;
+    G.fillStyle='rgba(70,70,64,.55)';
+    G.beginPath(); G.ellipse(gx,gy,4,3,0,0,7); G.fill();
+    G.beginPath(); G.arc(gx+4,gy-4,2,0,7); G.fill();
+    G.strokeStyle='rgba(70,70,64,.4)'; G.lineWidth=1;
+    G.beginPath(); G.moveTo(gx-4,gy); G.lineTo(gx-8,gy-2); G.stroke();
+  }
+}
+
+function drawStore(){
+  // 室内墙
+  G.fillStyle='rgba(255,252,244,.42)';
+  G.fillRect(0,120,W,500);
+  rough(0,120,W,120,{w:3,a:.6});
+  drawPavement(620);
+
+  drawSkyIn({x:850,y:270,w:120,h:120}, false);
+  G.strokeStyle=INK; G.globalAlpha=.5; G.lineWidth=2;
+  G.strokeRect(850,270,120,120); G.globalAlpha=1;
+
+  G.fillStyle='rgba(255,253,246,.7)';
+  G.fillRect(180,320,92,108);
+  G.strokeStyle=INK; G.globalAlpha=.32; G.lineWidth=1.4;
+  G.strokeRect(180,320,92,108);
+  G.globalAlpha=1;
+  txt('营业中', 226, 352, { size:12, align:'center', alpha:.62, color:RED });
+  txt('24H', 226, 376, { size:9, align:'center', alpha:.35 });
+
+  // 货架 A
+  const shelf=(x,y,w,h,rows)=>{
+    G.fillStyle='rgba(255,253,246,.65)';
+    G.fillRect(x,y,w,h);
+    G.strokeStyle=INK; G.globalAlpha=.6; G.lineWidth=2.2;
+    G.strokeRect(x,y,w,h);
+    G.globalAlpha=.4; G.lineWidth=1.4;
+    for(let i=1;i<rows;i++){
+      const yy=y+h*i/rows;
+      G.beginPath(); G.moveTo(x,yy); G.lineTo(x+w,yy); G.stroke();
+    }
+    for(let r=0;r<rows;r++){
+      let bx=x+6;
+      const by=y+h*r/rows+8;
+      while(bx<x+w-8){
+        const bw=6+nz(bx,r)*8, bh=12+nz(bx,r+3)*8;
+        G.globalAlpha=.55;
+        G.fillStyle=['#b98a6a','#8a9a7a','#8d9aa8','#b7a06a'][Math.floor(nz(bx,r+7)*4)%4];
+        G.fillRect(bx,by+18-bh,bw,bh);
+        bx+=bw+4;
+      }
+    }
+    G.globalAlpha=1;
+    G.fillStyle='rgba(43,42,38,.06)';
+    G.fillRect(x,y+h,w,8);
+  };
+  shelf(300,450,180,170,4);
+  shelf(510,450,150,170,3);
+
+  // 冰柜
+  G.fillStyle='rgba(210,225,230,.45)';
+  G.fillRect(700,470,120,150);
+  G.strokeStyle=INK; G.globalAlpha=.55; G.lineWidth=2.2;
+  G.strokeRect(700,470,120,150);
+  G.globalAlpha=.35; G.lineWidth=1.4;
+  G.beginPath(); G.moveTo(700,520); G.lineTo(820,520); G.stroke();
+  G.globalAlpha=1;
+
+  // 收银台
+  G.fillStyle='rgba(255,253,246,.6)';
+  G.fillRect(900,530,170,90);
+  G.strokeStyle=INK; G.globalAlpha=.6; G.lineWidth=2.4;
+  G.strokeRect(900,530,170,90);
+  G.globalAlpha=.5;
+  G.fillRect(930,502,56,28);
+  G.strokeRect(930,502,56,28);
+  G.globalAlpha=1;
+  txt('收银', 985, 516, { size:9, align:'center', alpha:.5 });
+
+  // 吊灯
+  for(let i=0;i<3;i++){
+    const lx = 280 + i*300;
+    rough(lx,120,lx,168,{w:1.1,a:.25});
+    G.beginPath(); G.arc(lx,174,8,0,7);
+    G.fillStyle='rgba(255,248,222,.8)'; G.fill();
+    G.strokeStyle=INK; G.globalAlpha=.3; G.lineWidth=1.2; G.stroke(); G.globalAlpha=1;
+  }
+}
+
+function drawBook(){
+  G.fillStyle='rgba(255,252,244,.4)';
+  G.fillRect(0,110,W,510);
+  rough(0,110,W,110,{w:3,a:.6});
+  drawPavement(620);
+
+  const tallShelf=(x,y,w,h)=>{
+    G.fillStyle='rgba(255,253,246,.6)';
+    G.fillRect(x,y,w,h);
+    G.strokeStyle=INK; G.globalAlpha=.6; G.lineWidth=2.2;
+    G.strokeRect(x,y,w,h);
+    const rows=6;
+    for(let r=0;r<rows;r++){
+      const yy=y+h*r/rows;
+      G.globalAlpha=.35; G.lineWidth=1.2;
+      G.beginPath(); G.moveTo(x,yy); G.lineTo(x+w,yy); G.stroke();
+      let bx=x+5;
+      while(bx<x+w-6){
+        const bw=4+nz(bx,r)*6;
+        G.globalAlpha=.55;
+        G.fillStyle=['#9a6a52','#6d7d6a','#6a7a88','#8a7a5a','#7a6a80'][Math.floor(nz(bx,r+4)*5)%5];
+        G.fillRect(bx, yy+6, bw, h/rows-12);
+        bx+=bw+2;
+      }
+    }
+    G.globalAlpha=1;
+  };
+  tallShelf(300,230,180,390);
+  tallShelf(520,230,160,390);
+  tallShelf(720,230,160,390);
+
+  // 柜台
+  G.fillStyle='rgba(255,253,246,.6)';
+  G.fillRect(940,510,180,110);
+  G.strokeStyle=INK; G.globalAlpha=.6; G.lineWidth=2.4;
+  G.strokeRect(940,510,180,110);
+  G.globalAlpha=1;
+  // 柜台上的书堆
+  for(let i=0;i<3;i++){
+    G.fillStyle='rgba(160,120,90,.5)';
+    G.fillRect(975,486-i*9,54,7);
+  }
+  // 猫
+  G.fillStyle='rgba(60,58,52,.55)';
+  G.beginPath(); G.ellipse(1080,486,16,9,0,0,7); G.fill();
+  G.beginPath(); G.arc(1092,478,7,0,7); G.fill();
+  G.beginPath(); G.moveTo(1087,472); G.lineTo(1089,466); G.lineTo(1092,472); G.fill();
+  G.beginPath(); G.moveTo(1094,472); G.lineTo(1097,466); G.lineTo(1098,473); G.fill();
+}
+
+function drawOutdoorScene(){
+  const id = S.scene;
+  if(id === 'street') drawStreet();
+  else if(id === 'park') drawPark();
+  else if(id === 'store') drawStore();
+  else if(id === 'book') drawBook();
+  else drawStreet();
+}
+
+/* ---------------- 渲染：家具 ---------------- */
+function drawFurn(f, ghost){
+  const d = FURN[f.t];
+  if(!d) return;
+  const x = f.x, y = f.y;
+  const L = x - d.w/2;
+  const T = y - d.h;
+
+  // 落地阴影
+  if(!ghost && f.t !== 'rug'){
+    G.save();
+    G.globalAlpha = .10; G.fillStyle = '#3a3830';
+    G.beginPath(); G.ellipse(x, y-2, Math.min(d.w*0.48, 58), 5.5, 0, 0, 7); G.fill();
+    G.restore();
+  }
+
+  G.save();
+  if(ghost) G.globalAlpha = .42;
+
+  switch(f.t){
+    case 'bed': {
+      G.fillStyle='rgba(72,64,48,.10)'; rr(L,T+12,d.w,d.h-12,4); G.fill();
+      G.fillStyle='rgba(255,253,246,.9)'; rr(L+6,T+16,d.w-12,24,6); G.fill();
+      G.fillStyle='rgba(122,106,134,.38)'; rr(L+42,T+18,d.w-50,22,5); G.fill();
+      G.fillStyle='rgba(255,255,255,.95)'; rr(L+10,T+17,28,17,6); G.fill();
+      rough(L,T+8,L,T+d.h,{w:3,a:.82});
+      rough(L,T+8,L+9,T+8,{w:3,a:.82});
+      rough(L,y,L+d.w,y,{w:2.6,a:.7});
+      rough(L+56,T+20,L+56,T+40,{w:1.2,a:.22});
+      break;
+    }
+    case 'stove': {
+      G.fillStyle='rgba(72,64,48,.10)'; rr(L,T+20,d.w,d.h-20,3); G.fill();
+      G.fillStyle='rgba(255,253,246,.85)'; rr(L,T+10,d.w,12,2); G.fill();
+      G.strokeStyle=INK; G.globalAlpha=.6; G.lineWidth=1.6;
+      G.beginPath(); G.arc(L+18,T+6,7,0,7); G.stroke();
+      G.beginPath(); G.arc(L+50,T+6,7,0,7); G.stroke();
+      G.beginPath(); G.arc(L+50,T-2,10,Math.PI,0); G.stroke();
+      G.globalAlpha=1;
+      rough(L,T+10,L,T+d.h,{w:2.4,a:.7});
+      rough(L+d.w,T+10,L+d.w,y,{w:2.4,a:.7});
+      rough(L,T+d.h,L+d.w,y,{w:2,a:.5});
+      G.fillStyle=RED; G.globalAlpha=.65; G.fillRect(L+8,T+30,4,16); G.globalAlpha=1;
+      break;
+    }
+    case 'fridge': {
+      G.fillStyle='rgba(255,253,246,.92)'; rr(L,T,d.w,d.h,4); G.fill();
+      G.strokeStyle=INK; G.globalAlpha=.72; G.lineWidth=2.4; G.stroke();
+      G.globalAlpha=.5; G.lineWidth=1.6;
+      G.beginPath(); G.moveTo(L,T+d.h*0.36); G.lineTo(L+d.w,T+d.h*0.36); G.stroke();
+      G.beginPath(); G.moveTo(L+d.w-10,T+12); G.lineTo(L+d.w-10,T+30); G.stroke();
+      G.beginPath(); G.moveTo(L+d.w-10,T+50); G.lineTo(L+d.w-10,T+72); G.stroke();
+      G.globalAlpha=1;
+      G.fillStyle=RED; G.globalAlpha=.7; G.fillRect(L+10,T+22,10,10); G.globalAlpha=1;
+      break;
+    }
+    case 'shower': {
+      G.strokeStyle=INK; G.globalAlpha=.65; G.lineWidth=2.6;
+      G.beginPath(); G.moveTo(L+8,T); G.lineTo(L+8,T+22); G.lineTo(L+34,T+22); G.stroke();
+      G.beginPath(); G.arc(L+34,T+26,7,Math.PI*0.15,Math.PI*0.85); G.stroke();
+      G.globalAlpha=1;
+      rough(L+4,T+22,L+4,y,{w:1.4,a:.22});
+      for(let i=0;i<5;i++){
+        const dx = L+28+i*7, dy = T+36+nz(i,3)*40;
+        rough(dx,dy,dx-2,dy+9,{w:1,a:.22,seed:i});
+      }
+      G.fillStyle='rgba(72,64,48,.08)'; rr(L+10,y-8,44,8,2); G.fill();
+      rough(L+10,y-8,L+54,y-8,{w:2,a:.5});
+      break;
+    }
+    case 'sofa': {
+      G.fillStyle='rgba(72,64,48,.10)'; rr(L,T+8,d.w,d.h-8,7); G.fill();
+      G.fillStyle='rgba(140,120,100,.22)'; rr(L+4,T+4,d.w-8,24,9); G.fill();
+      G.fillStyle='rgba(255,253,246,.55)'; rr(L+10,T+18,d.w*0.36,18,6); G.fill();
+      rr(L+d.w*0.52,T+18,d.w*0.36,18,6); G.fill();
+      rough(L,T+10,L,y,{w:2.6,a:.72});
+      rough(L+d.w,T+10,L+d.w,y,{w:2.6,a:.72});
+      rough(L,y,L+d.w,y,{w:2.4,a:.6});
+      break;
+    }
+    case 'tv': {
+      G.fillStyle='rgba(72,64,48,.10)'; rr(L+d.w*0.2,T+38,d.w*0.6,14,2); G.fill();
+      G.strokeStyle=INK; G.globalAlpha=.7; G.lineWidth=2.2;
+      G.beginPath(); G.moveTo(L+d.w*0.3,T+38); G.lineTo(L+d.w*0.7,T+38); G.stroke();
+      G.fillStyle='rgba(40,42,44,.78)'; rr(L+2,T+6,d.w-4,34,4); G.fill();
+      G.globalAlpha=.5; G.fillStyle='rgba(200,215,220,.5)';
+      G.fillRect(L+8,T+12,d.w*0.3,3);
+      G.fillRect(L+8,T+18,d.w*0.18,2);
+      G.globalAlpha=.6; G.strokeStyle=INK;
+      G.beginPath(); G.moveTo(L+16,T+6); G.lineTo(L+8,T-10); G.stroke();
+      G.beginPath(); G.moveTo(L+d.w-16,T+6); G.lineTo(L+d.w-6,T-10); G.stroke();
+      G.globalAlpha=1;
+      rough(L+2,T+6,L+2,T+40,{w:1.8,a:.5});
+      break;
+    }
+    case 'easel': {
+      G.strokeStyle=INK; G.globalAlpha=.75; G.lineWidth=3;
+      G.beginPath(); G.moveTo(x,T); G.lineTo(L+4,y); G.stroke();
+      G.beginPath(); G.moveTo(x,T); G.lineTo(L+d.w-4,y); G.stroke();
+      G.beginPath(); G.moveTo(x,T+10); G.lineTo(x+6,y-4); G.stroke();
+      G.globalAlpha=1;
+      G.save();
+      G.translate(x,T+18); G.rotate(-.03);
+      G.fillStyle='rgba(255,253,246,.95)';
+      G.fillRect(-d.w/2+2,-14,d.w-6,42);
+      G.strokeStyle=INK; G.globalAlpha=.55; G.lineWidth=1.6;
+      G.strokeRect(-d.w/2+2,-14,d.w-6,42);
+      G.globalAlpha=.55; G.strokeStyle='rgba(60,62,66,.7)'; G.lineWidth=1.4;
+      G.beginPath(); G.moveTo(-18,16); G.quadraticCurveTo(-6,-6,6,10); G.stroke();
+      G.beginPath(); G.moveTo(-2,18); G.quadraticCurveTo(10,2,20,14); G.stroke();
+      G.restore();
+      G.save(); G.globalAlpha=.8; G.fillStyle=RED; G.fillRect(x+12,T+2,9,9); G.restore();
+      break;
+    }
+    case 'desk': {
+      G.fillStyle='rgba(255,253,246,.7)'; rr(L,T+8,d.w,10,2); G.fill();
+      rough(L,T+8,L+d.w,T+8,{w:2.4,a:.72});
+      rough(L+8,T+18,L+8,y,{w:2.4,a:.62});
+      rough(L+d.w-8,T+18,L+d.w-8,y,{w:2.4,a:.62});
+      G.fillStyle='rgba(40,42,44,.6)'; rr(L+d.w*0.55,T-18,d.w*0.34,28,2); G.fill();
+      G.fillStyle='rgba(255,253,246,.9)'; rr(L+12,T-4,30,12,1); G.fill();
+      rough(L+12,T-4,L+42,T-4,{w:1,a:.4});
+      G.fillStyle=RED; G.globalAlpha=.6; G.beginPath(); G.arc(L+26,T+14,3,0,7); G.fill(); G.globalAlpha=1;
+      break;
+    }
+    case 'tea': {
+      G.fillStyle='rgba(255,253,246,.55)'; rr(L,T+10,d.w,9,2); G.fill();
+      rough(L,T+10,L+d.w,T+10,{w:2.2,a:.66});
+      rough(L+6,T+18,L+8,y,{w:2,a:.55});
+      rough(L+d.w-6,T+18,L+d.w-8,y,{w:2,a:.55});
+      G.strokeStyle=INK; G.globalAlpha=.6; G.lineWidth=1.8;
+      G.beginPath(); G.arc(x-6,T+2,10,Math.PI*0.1,Math.PI*0.9); G.stroke();
+      G.beginPath(); G.moveTo(x-16,T+2); G.lineTo(x+4,T+2); G.stroke();
+      G.beginPath(); G.arc(x+16,T+6,4,0,7); G.stroke();
+      G.globalAlpha=1;
+      G.save(); G.globalAlpha=.18; G.strokeStyle='#6a6252'; G.lineWidth=1.4;
+      G.beginPath(); G.moveTo(x-8,T-8); G.quadraticCurveTo(x-2,T-18,x-8,T-28); G.stroke();
+      G.restore();
+      break;
+    }
+    case 'plant': {
+      G.fillStyle='rgba(72,64,48,.14)';
+      G.beginPath();
+      G.moveTo(L+6,y); G.lineTo(L+d.w-6,y); G.lineTo(L+d.w-11,y-22); G.lineTo(L+11,y-22);
+      G.closePath(); G.fill();
+      rough(L+6,y,L+d.w-6,y,{w:2,a:.6});
+      rough(L+11,y-22,L+d.w-11,y-22,{w:1.6,a:.45});
+      G.strokeStyle=INK; G.globalAlpha=.62; G.lineWidth=2;
+      G.beginPath(); G.moveTo(x,y-22); G.quadraticCurveTo(x-4,y-42,x-12,y-50); G.stroke();
+      G.beginPath(); G.moveTo(x,y-22); G.quadraticCurveTo(x+3,y-46,x+14,y-54); G.stroke();
+      G.beginPath(); G.moveTo(x,y-22); G.quadraticCurveTo(x+1,y-50,x-2,y-62); G.stroke();
+      G.globalAlpha=.45; G.fillStyle='#5d6b52';
+      G.beginPath(); G.ellipse(x-13,y-51,7,4,-.6,0,7); G.fill();
+      G.beginPath(); G.ellipse(x+15,y-55,7,4,.6,0,7); G.fill();
+      G.beginPath(); G.ellipse(x-2,y-63,6,4,0,0,7); G.fill();
+      G.globalAlpha=1;
+      break;
+    }
+    case 'bookshelf': {
+      G.fillStyle='rgba(255,253,246,.55)'; rr(L,T,d.w,d.h,2); G.fill();
+      G.strokeStyle=INK; G.globalAlpha=.7; G.lineWidth=2.4;
+      G.strokeRect(L,T,d.w,d.h);
+      G.globalAlpha=.45; G.lineWidth=1.6;
+      for(let i=1;i<3;i++){
+        const yy = T + d.h*(i/3);
+        G.beginPath(); G.moveTo(L,yy); G.lineTo(L+d.w,yy); G.stroke();
+      }
+      const cols = ['rgba(166,64,47,.55)','rgba(70,90,110,.5)','rgba(110,120,90,.5)','rgba(120,100,120,.45)'];
+      for(let r=0;r<3;r++){
+        let bx = L+6;
+        const by = T + d.h*(r/3) + 8;
+        while(bx < L+d.w-8){
+          const bw = 4 + nz(bx,r)*5;
+          const bh = 14 + nz(bx,r+2)*10;
+          G.globalAlpha=.75; G.fillStyle = cols[Math.floor(nz(bx,r+6)*cols.length)%cols.length];
+          G.fillRect(bx, by + (20-bh), bw, bh);
+          bx += bw + 2;
+        }
+      }
+      G.globalAlpha=1;
+      break;
+    }
+    case 'wardrobe': {
+      G.fillStyle='rgba(255,253,246,.6)'; rr(L,T,d.w,d.h,2); G.fill();
+      G.strokeStyle=INK; G.globalAlpha=.72; G.lineWidth=2.4;
+      G.strokeRect(L,T,d.w,d.h);
+      G.globalAlpha=.5; G.lineWidth=1.6;
+      G.beginPath(); G.moveTo(x,T); G.lineTo(x,y); G.stroke();
+      G.beginPath(); G.arc(x-6,T+d.h*0.5,2.2,0,7); G.stroke();
+      G.beginPath(); G.arc(x+6,T+d.h*0.5,2.2,0,7); G.stroke();
+      G.globalAlpha=1;
+      G.fillStyle=RED; G.globalAlpha=.5; G.fillRect(x-9,T+10,18,3); G.globalAlpha=1;
+      break;
+    }
+    case 'lamp': {
+      rough(x,T+16,x,y,{w:2.4,a:.6});
+      G.fillStyle='rgba(255,250,236,.85)';
+      G.beginPath();
+      G.moveTo(x-15,T+16); G.lineTo(x+15,T+16); G.lineTo(x+9,T+2); G.lineTo(x-9,T+2);
+      G.closePath(); G.fill();
+      G.strokeStyle=INK; G.globalAlpha=.55; G.lineWidth=1.6; G.stroke();
+      G.globalAlpha=1;
+      G.fillStyle='rgba(72,64,48,.16)';
+      G.beginPath(); G.ellipse(x,y-3,16,4,0,0,7); G.fill();
+      break;
+    }
+    case 'rug': {
+      G.save();
+      G.globalAlpha=.42;
+      G.fillStyle='rgba(122,102,96,.55)';
+      G.beginPath(); G.ellipse(x,y-3,d.w/2,7,0,0,7); G.fill();
+      G.globalAlpha=.62;
+      G.strokeStyle='rgba(90,74,70,.75)'; G.lineWidth=1.4;
+      G.beginPath(); G.ellipse(x,y-3,d.w/2-9,4.2,0,0,7); G.stroke();
+      G.globalAlpha=.5;
+      G.beginPath(); G.ellipse(x,y-3,d.w/2-20,2.2,0,0,7); G.stroke();
+      G.restore();
+      break;
+    }
+  }
+
+  G.restore();
+}
+
+function drawFurniture(){
+  const list = S.placed.slice().sort((a,b)=>a.y-b.y);
+  for(const f of list){
+    if(S.buildMode && S.buildType && S.buildType===f.t){}
+    drawFurn(f,false);
+  }
+}
+
+/* ---------------- 渲染：人物 ---------------- */
+function drawPerson(px,py,facing,walking,look){
+  look = look || {};
+  const stage = look.stage || 'young';
+  const kid = stage === 'kid';
+  const mid = stage === 'mid';
+  const grow = kid ? .74 : (mid ? 1.06 : 1);
+  const K = (look.scale || 1) * 1.3 * grow;
+  const R = kid ? 11.8 : 10.5;
+  G.save();
+  G.translate(px,py); G.scale(K,K); G.translate(-px,-py);
+
+  const skin = look.skin || '#f4ecdc';
+  const cloth = look.cloth || '#efe7d4';
+  const hairColor = look.hairColor || '#2b2a26';
+  const hairStyle = look.hair || 'short';
+  const acc = look.acc || 'none';
+  const skirt = !!look.skirt;
+
+  const t = tGlobal;
+  const bob = walking ? Math.abs(Math.sin(t*11))*2.2 : Math.sin(t*2.2)*.8;
+
+  const hipY = py - (kid?20:24);
+  const shoulderY = hipY - (kid?16:20) + bob*.4;
+  const headY = shoulderY - (kid?11:10) + bob*.4 + (mid?.8:0);
+
+  // 腿
+  const sw = walking ? Math.sin(t*13)*6 : 0;
+  G.strokeStyle=INK; G.lineWidth=3.2; G.globalAlpha=.9; G.lineCap='round';
+  G.beginPath(); G.moveTo(px-4,hipY+2); G.lineTo(px-4+sw,py-2); G.stroke();
+  G.beginPath(); G.moveTo(px+4,hipY+2); G.lineTo(px+4-sw,py-2); G.stroke();
+  G.globalAlpha=1;
+
+  // 身体（裙子会外扩）
+  const hem = (skirt ? 15 : 11) + (mid ? 1.8 : 0);
+  G.beginPath();
+  G.moveTo(px-(mid?9.2:8), shoulderY+4);
+  G.quadraticCurveTo(px-hem+3, hipY-9, px-hem, hipY+2);
+  G.lineTo(px+hem, hipY+2);
+  G.quadraticCurveTo(px+hem-3, hipY-9, px+(mid?9.2:8), shoulderY+4);
+  G.closePath();
+  G.fillStyle = cloth; G.fill();
+  G.strokeStyle=INK; G.lineWidth=2.2; G.globalAlpha=.85; G.stroke();
+  G.globalAlpha=1;
+  if(skirt){
+    G.strokeStyle='rgba(43,42,38,.35)'; G.lineWidth=1.1;
+    G.beginPath(); G.moveTo(px-hem+2, hipY); G.lineTo(px+hem-2, hipY); G.stroke();
+  }
+
+  // 手臂
+  const armSw = walking ? -Math.sin(t*13)*5 : 0;
+  const armLift = S.action ? 6 + Math.sin(t*8)*4 : 0;
+  G.strokeStyle=INK; G.globalAlpha=.8; G.lineWidth=2.8;
+  G.beginPath();
+  G.moveTo(px+facing*7, shoulderY+8);
+  G.lineTo(px+facing*(11)+armSw, hipY-2-armLift);
+  G.stroke();
+  G.globalAlpha=1;
+
+  // 头
+  G.beginPath(); G.arc(px, headY, R, 0, 7);
+  G.fillStyle = skin; G.fill();
+  G.strokeStyle=INK; G.lineWidth=2; G.globalAlpha=.85; G.stroke();
+  G.globalAlpha=1;
+
+  // 头发
+  G.save();
+  G.translate(px, headY); G.scale(R/10.5, R/10.5); G.translate(-px, -headY);
+  G.fillStyle = hairColor;
+  G.strokeStyle = hairColor;
+
+  if(hairStyle === 'bob'){
+    G.beginPath(); G.arc(px, headY, 11, Math.PI*1.03, Math.PI*1.97); G.fill();
+    rr(px-12.4, headY-5, 4.6, 15, 2.2); G.fill();
+    rr(px+7.8, headY-5, 4.6, 15, 2.2); G.fill();
+  } else if(hairStyle === 'braid'){
+    G.beginPath(); G.arc(px, headY, 11, Math.PI*1.03, Math.PI*1.97); G.fill();
+    for(const s of [-1,1]){
+      G.lineWidth = 4.2; G.lineCap = 'round';
+      G.beginPath();
+      G.moveTo(px + s*9, headY+2);
+      G.quadraticCurveTo(px + s*15, headY+12, px + s*11, headY+23);
+      G.stroke();
+      G.beginPath(); G.arc(px + s*11, headY+24, 2.6, 0, 7); G.fill();
+    }
+  } else if(hairStyle === 'pony'){
+    G.lineWidth = 5.2; G.lineCap = 'round';
+    G.beginPath();
+    G.moveTo(px - facing*8, headY-3);
+    G.quadraticCurveTo(px - facing*21, headY+3, px - facing*16, headY+17);
+    G.stroke();
+    G.beginPath(); G.arc(px, headY, 11, Math.PI*1.03, Math.PI*1.97); G.fill();
+  } else if(hairStyle === 'curl'){
+    for(let i=-2;i<=2;i++){
+      G.beginPath();
+      G.arc(px + i*4.7, headY-7.4 + Math.abs(i)*1.7, 4, 0, 7);
+      G.fill();
+    }
+    rr(px-12.6, headY-5, 4.4, 12, 2); G.fill();
+    rr(px+8.2, headY-5, 4.4, 12, 2); G.fill();
+  } else if(hairStyle === 'buzz'){
+    G.beginPath(); G.arc(px, headY, 10.9, Math.PI*1.12, Math.PI*1.88); G.fill();
+  } else {
+    // short
+    G.beginPath(); G.arc(px, headY, 11, Math.PI*1.04, Math.PI*1.96); G.fill();
+    G.beginPath();
+    G.moveTo(px-10, headY-3);
+    G.quadraticCurveTo(px-2, headY-11, px+6, headY-7);
+    G.quadraticCurveTo(px-1, headY-6, px-5, headY-1);
+    G.closePath(); G.fill();
+  }
+
+  if(mid){
+    G.fillStyle='rgba(224,220,206,.62)';
+    G.beginPath(); G.arc(px-9.3, headY-5.2, 2.5, 0, 7); G.fill();
+    G.beginPath(); G.arc(px+9.3, headY-5.2, 2.5, 0, 7); G.fill();
+    G.strokeStyle='rgba(43,42,38,.2)'; G.lineWidth=1;
+    G.beginPath(); G.moveTo(px-1.2, shoulderY+7); G.lineTo(px-1.2, hipY-2); G.stroke();
+    G.strokeStyle='rgba(232,228,216,.9)'; G.lineWidth=1.5; G.lineCap='round';
+    G.beginPath(); G.moveTo(px-6.4, headY-8.6); G.lineTo(px-4.4, headY-2.4); G.stroke();
+    G.beginPath(); G.moveTo(px+2.6, headY-9.4); G.lineTo(px+4.2, headY-3.2); G.stroke();
+  }
+  G.restore();
+
+  // 配饰
+  if(acc === 'cap'){
+    G.beginPath(); G.arc(px, headY-3.5, 10.2, Math.PI, 0); G.fill();
+    G.beginPath();
+    G.ellipse(px + facing*8, headY-3.2, 8.6, 2.6, 0, 0, 7);
+    G.fill();
+  }
+
+  // 眼睛
+  G.fillStyle = '#25241f';
+  G.beginPath(); G.arc(px - 3 + facing*2.2, headY+1, 1.35, 0, 7); G.fill();
+  G.beginPath(); G.arc(px + 3 + facing*2.2, headY+1, 1.35, 0, 7); G.fill();
+
+  if(acc === 'glasses'){
+    G.strokeStyle='rgba(43,42,38,.75)'; G.lineWidth=.9;
+    G.beginPath(); G.arc(px - 3 + facing*2.2, headY+1, 3.1, 0, 7); G.stroke();
+    G.beginPath(); G.arc(px + 3 + facing*2.2, headY+1, 3.1, 0, 7); G.stroke();
+    G.beginPath();
+    G.moveTo(px - 0.2 + facing*2.2, headY+1);
+    G.lineTo(px + 0.2 + facing*2.2, headY+1);
+    G.stroke();
+  }
+
+  // 嘴
+  G.strokeStyle='rgba(70,50,45,.7)'; G.lineWidth=1.1;
+  G.beginPath();
+  G.arc(px + facing*1.4, headY+4.5, 2.6, .25, Math.PI-.25);
+  G.stroke();
+
+  // 朱红点缀
+  G.strokeStyle=RED; G.globalAlpha=.75; G.lineWidth=2.4;
+  G.beginPath(); G.moveTo(px-7, shoulderY+6); G.lineTo(px+7, shoulderY+7); G.stroke();
+  G.globalAlpha=1;
+
+  G.restore();
+}
+
+function drawPlayer(){
+  const p = S.player;
+  const look = Object.assign({}, S.char ? S.char.look : {}, { stage: stageOf(S.age) });
+  drawPerson(p.x, p.y, p.facing, p.moving, look);
+}
+
+function drawNPC(){
+  if(S.scene !== 'home' || !npcActive()) return;
+  drawPerson(NPC.x, HOUSE.f1, -1, false, { cloth:'#dcd6c6', hair:'short', hairColor:'#4a463c', skin:'#efe6d4', scale:1.04, stage:'young' });
+  txt('老周', NPC.x, HOUSE.f1-84, { size:11, align:'center', alpha:.42 });
+}
+
+/* ---------------- 渲染：光 ---------------- */
+function glow(x,y,r,a){
+  const g = G.createRadialGradient(x,y,4,x,y,r);
+  g.addColorStop(0,'rgba(255,198,126,'+(0.28*a)+')');
+  g.addColorStop(.55,'rgba(255,198,126,'+(0.10*a)+')');
+  g.addColorStop(1,'rgba(255,198,126,0)');
+  G.fillStyle = g;
+  G.beginPath(); G.arc(x,y,r,0,7); G.fill();
+}
+
+function drawLights(){
+  const d = darkness();
+  if(d <= 0.005) return;
+
+  G.save();
+  G.fillStyle = 'rgba(30,38,60,'+d+')';
+  G.fillRect(0,0,W,H);
+
+  if(S.scene === 'home'){
+    for(const f of S.placed){
+      if(f.t==='lamp') glow(f.x, f.y-16, 170, d*1.15);
+      if(f.t==='tv') glow(f.x, f.y-38, 120, d*0.9);
+      if(f.t==='stove') glow(f.x, f.y-50, 100, d*0.55);
+    }
+    const cx = (HOUSE.x1 + HOUSE.x2)/2;
+    glow(cx, HOUSE.f1-110, 280, d*0.95);
+    glow(HOUSE.x1+220, HOUSE.f2-60, 230, d*0.75);
+  } else if(S.scene === 'street'){
+    glow(230, 470, 150, d*1.3);
+    glow(900, 470, 150, d*1.2);
+    glow(330, 540, 120, d*0.8);
+    glow(720, 540, 120, d*0.7);
+  } else if(S.scene === 'store'){
+    for(let i=0;i<3;i++) glow(280+i*300, 180, 240, d*0.9);
+    glow(985, 520, 180, d*0.6);
+  } else if(S.scene === 'book'){
+    glow(620, 300, 320, d*0.55);
+    glow(1030, 500, 180, d*0.7);
+  } else if(S.scene === 'park'){
+    glow(230, 470, 170, d*0.9);
+    glow(950, 600, 200, d*0.5);
+  }
+
+  G.restore();
+}
+
+/* ---------------- 渲染：提示 ---------------- */
+function drawPrompt(){
+  if(S.action || S.buildMode || modalOpen) return;
+  const near = getNear();
+  if(!near) return;
+
+  // 触屏：只留一个红点，动作名交给右下角的大按钮
+  if(TOUCH){
+    const pul = .5 + .5*Math.sin(tGlobal*3);
+    G.save();
+    G.globalAlpha = .3 + pul*.5;
+    G.fillStyle = RED;
+    G.beginPath(); G.arc(near.x, near.y - (near.h||60) - 6, 5.5, 0, 7); G.fill();
+    G.restore();
+    return;
+  }
+
+  const label = near.label;
+  const bx = near.x;
+  const by = near.y - (near.h||60) - 26;
+
+  const w = Math.max(78, label.length*15 + 40);
+  const x = bx - w/2, y = by - 13;
+
+  G.save();
+  G.globalAlpha=.94;
+  G.fillStyle='rgba(252,247,236,.96)';
+  rr(x,y,w,26,2); G.fill();
+  G.strokeStyle='rgba(43,42,38,.45)'; G.lineWidth=1; G.stroke();
+  // 小尖
+  G.beginPath();
+  G.moveTo(bx-5,y+26); G.lineTo(bx,y+32); G.lineTo(bx+5,y+26);
+  G.closePath(); G.fillStyle='rgba(252,247,236,.96)'; G.fill();
+  G.restore();
+
+  // 键帽
+  G.save();
+  G.fillStyle='rgba(166,64,47,.9)';
+  rr(x+7,y+6,14,14,2); G.fill();
+  G.restore();
+  txt('E', x+14, y+13.5, { size:10, color:'#fdf7ec', align:'center' });
+  txt(label, x+27, y+13.5, { size:12, color:INK, alpha:.85 });
+
+  // 呼吸红点
+  const pul = .5 + .5*Math.sin(tGlobal*3);
+  G.save();
+  G.globalAlpha = .25 + pul*.45;
+  G.fillStyle = RED;
+  G.beginPath(); G.arc(bx, near.y - (near.h||60) - 6, 2.6, 0, 7); G.fill();
+  G.restore();
+}
+
+function drawActionBar(){
+  if(!S.action) return;
+  const p = S.player;
+  const a = S.action;
+  const w = 76, h = 6;
+  const x = p.x - w/2, y = p.y - 104;
+  const t = clamp(a.t/a.dur,0,1);
+
+  G.save();
+  G.globalAlpha=.9;
+  G.fillStyle='rgba(252,247,236,.9)';
+  rr(x-4,y-14,w+8,26,2); G.fill();
+  G.strokeStyle='rgba(43,42,38,.4)'; G.lineWidth=1; G.stroke();
+  G.restore();
+
+  G.save();
+  G.fillStyle='rgba(43,42,38,.14)';
+  G.fillRect(x,y,w,h);
+  G.fillStyle='rgba(43,42,38,.72)';
+  G.fillRect(x,y,w*t,h);
+  G.restore();
+
+  txt(a.label, p.x, y-7, { size:11, align:'center', alpha:.8 });
+}
+
+/* ---------------- 渲染：布置幽灵 ---------------- */
+function drawGhost(){
+  if(!S.buildMode || !S.buildType || S.scene !== 'home') return;
+  const d = FURN[S.buildType];
+  const mx = S.mouse.x, my = S.mouse.y;
+  const fy = nearestFloor(my);
+  if(!fy) return;
+  const gx = Math.round(mx/20)*20;
+
+  // 网格提示线
+  G.save();
+  G.globalAlpha=.06; G.strokeStyle=INK; G.lineWidth=1;
+  for(let x=HOUSE.x1+20;x<=HOUSE.x2-20;x+=40){ G.beginPath(); G.moveTo(x,fy-70); G.lineTo(x,fy); G.stroke(); }
+  for(let y=fy-70;y<=fy;y+=40){ G.beginPath(); G.moveTo(HOUSE.x1+20,y); G.lineTo(HOUSE.x2-20,y); G.stroke(); }
+  G.restore();
+
+  drawFurn({ t:S.buildType, x:gx, y:fy }, true);
+
+  const ok = S.money >= d.price;
+  txt(ok ? (d.name + ' · ' + d.price + ' 文') : '钱不够', gx, fy - d.h - 16,
+    { size:11, align:'center', color: ok ? '#5c6b4f' : RED, alpha:.85 });
+}
+
+/* ---------------- 渲染：总装 ---------------- */
+let PORTRAIT = false;
+function drawLineup(){
+  G = ctx;
+  ctx.clearRect(0,0,W,H);
+  ctx.drawImage(paper,0,0);
+  const ages = [7, 18, 28];
+  ages.forEach((age,i)=>{
+    const x = 260 + i*380, y = 560;
+    G.save(); G.globalAlpha=.08; G.fillStyle='#3a3830';
+    G.beginPath(); G.ellipse(x,y,80,12,0,0,7); G.fill(); G.restore();
+    drawPerson(x, y, 1, false, Object.assign({}, S.char ? S.char.look : {}, { stage:stageOf(age), scale:3.2 }));
+    txt(age + ' 岁 · ' + STAGE_NAME[stageOf(age)], x, y+56, { size:20, align:'center', alpha:.72 });
+  });
+  txt('三档建模对照', W/2, 120, { size:26, align:'center', alpha:.5 });
+}
+
+function render(){
+  if(PORTRAIT){ drawLineup(); return; }
+  G = ctx;
+  ctx.clearRect(0,0,W,H);
+  ctx.drawImage(paper,0,0);
+
+  if(S.scene === 'home'){
+    ctx.drawImage(house,0,0);
+    drawWindows();
+    drawFurniture();
+    drawGhost();
+  } else {
+    drawOutdoorScene();
+  }
+
+  drawNPC();
+  drawPlayer();
+  drawLights();
+
+  // 粒子
+  for(const p of PT){
+    G.save();
+    G.globalAlpha = clamp(p.life/p.max,0,1)*.6;
+    G.fillStyle = INK;
+    G.beginPath(); G.arc(p.x,p.y,p.r,0,7); G.fill();
+    G.restore();
+  }
+  for(const f of FT){
+    G.save();
+    G.globalAlpha = clamp(f.life/1.2,0,1);
+    txt(f.s, f.x, f.y, { size:13, align:'center', color:f.c });
+    G.restore();
+  }
+
+  drawPrompt();
+  drawActionBar();
+
+  if(S.buildMode){
+    G.save();
+    G.globalAlpha=.5;
+    txt('布置模式 · 按 B 退出', W/2, 42, { size:13, align:'center', alpha:.5 });
+    G.restore();
+  }
+
+  if(flashT > 0){
+    ctx.save();
+    ctx.globalAlpha = clamp(flashT/0.45, 0, 1) * 0.92;
+    ctx.fillStyle = '#f6f0e4';
+    ctx.fillRect(0,0,W,H);
+    ctx.restore();
+  }
+
+  if(QS.get('grid') === '1'){
+    for(let y=100; y<=700; y+=50){
+      G.save(); G.globalAlpha=.45; G.strokeStyle='#c0392b'; G.lineWidth=1;
+      G.beginPath(); G.moveTo(0,y); G.lineTo(W,y); G.stroke(); G.restore();
+      txt(String(y), 5, y-6, { size:10, color:'#c0392b', alpha:.9 });
+    }
+    for(let x=100; x<=1200; x+=100){
+      G.save(); G.globalAlpha=.22; G.strokeStyle='#2b6cb0'; G.lineWidth=1;
+      G.beginPath(); G.moveTo(x,0); G.lineTo(x,H); G.stroke(); G.restore();
+      txt(String(x), x+2, 700, { size:10, color:'#2b6cb0', alpha:.9 });
+    }
+  }
+}
+
+/* ---------------- HUD ---------------- */
+let hudAcc = 0;
+
+function updateHUD(){
+  document.getElementById('hAge').textContent = S.age;
+  document.getElementById('hWeek').textContent = S.week;
+  document.getElementById('hDay').textContent = S.day;
+  document.getElementById('hClock').textContent = fmtClock(S.clock);
+  document.getElementById('hMoney').textContent = S.money;
+  document.getElementById('hScene').textContent =
+    (S.scene === 'home') ? '家' : ((SCENES[S.scene] && SCENES[S.scene].name) || '外面');
+
+  const setBar = (id, vid, v)=>{
+    document.getElementById(id).style.width = clamp(v,0,100) + '%';
+    document.getElementById(vid).textContent = Math.round(v);
+  };
+  setBar('nEnergy','vEnergy', S.needs.energy);
+  setBar('nFood','vFood', S.needs.food);
+  setBar('nClean','vClean', S.needs.clean);
+  setBar('nFun','vFun', S.needs.fun);
+
+  const m = moodInfo();
+  document.getElementById('hMood').textContent = m.label;
+
+  const done = S.tasks.filter(t=>t.done).length;
+  document.getElementById('hProgress').textContent = done + '/' + (S.tasks.length||3);
+}
+
+/* ---------------- 触屏 UI ---------------- */
+function updateTouchUI(){
+  if(!TOUCH) return;
+  const blocked = screenOpen || proOpen || modalOpen || S.buildMode;
+  document.body.classList.toggle('ui-blocked', blocked);
+  if(blocked) return;
+
+  const btn = document.getElementById('tInteract');
+  if(!btn) return;
+  const near = S.buildMode ? null : getNear();
+  const label = near ? (near.label || '互动') : '互动';
+  if(btn.textContent !== label) btn.textContent = label;
+  btn.classList.toggle('dim', !near);
+}
+
+function updateTasksUI(){
+  const ul = document.getElementById('taskList');
+  if(!ul) return;
+  ul.innerHTML = S.tasks.map(t=>
+    '<li class="' + (t.done?'done':'') + '" title="' + (t.text||'') + '">' +
+      '<span class="bx">' + (t.done?'✓':'') + '</span><span>' + (t.short || t.text) + '</span></li>'
+  ).join('');
+  const done = S.tasks.filter(t=>t.done).length;
+  const el = document.getElementById('hProgress');
+  if(el) el.textContent = done + '/' + (S.tasks.length||3);
+}
+
+function toast(s){
+  const box = document.getElementById('toasts');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = s;
+  box.appendChild(el);
+  setTimeout(()=>{ if(el.parentNode) el.parentNode.removeChild(el); }, 3100);
+  while(box.children.length > 4) box.removeChild(box.firstChild);
+}
+
+/* ---------------- 面板 ---------------- */
+function showChar(){
+  const m = moodInfo();
+  const bar = (v,c)=>'<span style="display:inline-block;width:7em;height:.5em;background:rgba(43,42,38,.12);vertical-align:middle;margin:0 .5em"><span style="display:block;height:100%;width:'+clamp(v,0,100)+'%;background:'+c+'"></span></span>';
+  const sk = (k,label)=> {
+    const s = S.skills[k];
+    return '<div class="r"><span>'+label+' <b style="opacity:.55;font-weight:400">Lv.'+s.lv+'</b></span><span>'+
+      bar(s.lv*10,'#6d5b3c')+'</span></div>';
+  };
+
+  const body =
+    (S.origin ?
+      '<div class="rows" style="margin-top:0">' +
+        '<div class="r"><span>出身 · ' + S.origin.name + '</span>' +
+        '<b style="color:#a6402f;letter-spacing:.14em">' + stars(S.origin.diff) + '</b></div>' +
+        '<div class="r"><span>住处</span><b>' + HOUSE.name + '（' + HOUSE.tierName + '）</b></div>' +
+        '<div class="r"><span>年龄</span><b>' + S.age + ' 岁 · ' + STAGE_NAME[stageOf(S.age)] + '</b></div>' +
+        '<div class="r"><span>成长</span><b>体格 ' + S.growth.body + ' · 心智 ' + S.growth.mind + ' · 人缘 ' + S.growth.charm + '</b></div>' +
+      '</div>' : '') +
+    '<p style="font-size:1.08em;margin-top:.7em">情绪：<b style="color:#a6402f;letter-spacing:.1em">'+m.label+'</b>　'+
+    '<span class="dim">效价 '+Math.round(m.v)+' / 唤醒 '+Math.round(m.a)+'</span></p>'+
+    '<p class="dim">'+m.desc+'</p>'+
+    '<p class="dim">因为：'+m.why.join('、')+'</p>'+
+    '<div class="rows" style="margin-top:1em">'+
+      sk('paint','绘画') + sk('cook','烹饪') + sk('social','社交') +
+    '</div>'+
+    '<div class="rows" style="margin-top:.6em">'+
+      '<div class="r"><span>和老周</span><b>热乎 '+Math.round(S.rel.warm)+' · 信任 '+Math.round(S.rel.trust)+' · 张力 '+Math.round(S.rel.tension)+'</b></div>'+
+    '</div>'+
+    '<div class="rows" style="margin-top:.6em">'+
+      '<div class="r"><span>累计</span><b>'+S.stats.paintings+' 幅 / '+S.stats.earned+' 文</b></div>'+
+      '<div class="r"><span>家族代数</span><b>第 '+S.gen+' 代</b></div>'+
+      (S.creed?'<div class="r"><span>家训</span><b>'+S.creed.name+'</b></div>':'')+
+    '</div>';
+
+  openModal({
+    title:'人 物',
+    seal:'我',
+    sub:'一个还在努力过日子的普通人',
+    body: body,
+    buttons:[{ label:'知道了', cls:'ghost', onClick(){} }]
+  });
+}
+
+function showHelp(){
+  const body =
+    '<p><b>怎么玩</b>：照顾四条状态（体力 / 饱腹 / 整洁 / 兴致），完成每天三件小事，'+
+    '活到第 7 天，把家训传给下一代。</p>'+
+    '<div class="rows">'+
+      '<div class="r"><span>A / D 或 ← →</span><b>走动</b></div>'+
+      '<div class="r"><span>W / S 或 ↑ ↓</span><b>爬梯子</b></div>'+
+      '<div class="r"><span>空格</span><b>跳一下</b></div>'+
+      '<div class="r"><span>E</span><b>和身边的东西互动</b></div>'+
+      '<div class="r"><span>B</span><b>布置家具（只在自己家）</b></div>'+
+      '<div class="r"><span>C</span><b>看人物面板</b></div>'+
+      '<div class="r"><span>菜单按钮</span><b>保存 / 读档 / 回标题</b></div>'+
+    '</div>'+
+    '<p class="dim" style="margin-top:.8em">出门以后能去巷口、便利店、旧书店和公园。'+
+    '不同的出身住不同的房子——别墅、老公寓、出租屋，家具和空间都不一样。</p>'+
+    '<p class="dim">钱和心情都见底的时候，先睡觉。睡觉不花钱。</p>'+
+    '<p class="dim">进度自动保存在当前存档位，也可以随时手动保存。</p>';
+
+  openModal({
+    title:'说 明',
+    seal:'问',
+    sub:'不会玩也没关系，反正人生也没有新手引导',
+    body: body,
+    buttons:[
+      { label:'继续过日子', cls:'ghost', onClick(){} },
+      { label:'回到开始界面', hint:'会自动存一下，不丢进度', onClick(){
+          save();
+          showHome();
+        } }
+    ]
+  });
+}
+
+function resetAll(){
+  try{ localStorage.removeItem(SLOT_KEY(S.slot || 1)); }catch(e){}
+  location.reload();
+}
+
+/* ---------------- 存档位 ---------------- */
+let screenOpen = true;
+let pendingSlot = 1;
+let selGender = 'f';
+let selChar = 'ding';
+
+function slotData(i){
+  try{
+    const raw = localStorage.getItem(SLOT_KEY(i));
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
+function save(){
+  if(!S.slot) return;
+  try{
+    const data = {
+      v:2, slot:S.slot, char:S.char, house:S.house, wealth:S.wealth, scene:S.scene,
+      age:S.age, week:S.week, growth:S.growth,
+      story:S.story, gen:S.gen, day:S.day, clock:S.clock, money:S.money,
+      needs:S.needs, skills:S.skills, rel:S.rel, placed:S.placed,
+      stats:S.stats, creed:S.creed, tasks:S.tasks, taskProg:S.taskProg,
+      dayStart:S.dayStart, speed:S.speed, origin:S.origin, twist:S.twist,
+      ts: Date.now()
+    };
+    localStorage.setItem(SLOT_KEY(S.slot), JSON.stringify(data));
+  }catch(e){}
+}
+
+function loadSave(d){
+  if(!d) return false;
+  S.slot = d.slot || 1;
+  S.char = d.char || {
+    id:'ding', name:'小丁', gender:'f',
+    look:{ hair:'bob', cloth:'#e3c9a6', skin:'#f7eedf', skirt:true, acc:'none', scale:1 }
+  };
+  S.house = d.house || 'flat';
+  setHouse(S.house);
+  S.scene = d.scene || 'home';
+  S.age = d.age || 7;
+  S.week = d.week || 1;
+  S.growth = Object.assign({ body:0, mind:0, charm:0 }, d.growth||{});
+  S.wealth = d.wealth || (S.house === 'villa' ? 'rich' : (S.house === 'rental' ? 'poor' : 'mid'));
+  S.story = d.story || { seen:{}, fair:false };
+  S.gen = d.gen || 1;
+  S.day = d.day || 1;
+  S.clock = d.clock || 420;
+  S.money = (d.money===undefined) ? 120 : d.money;
+  S.needs = Object.assign({ energy:80, food:60, clean:70, fun:60 }, d.needs||{});
+  S.skills = d.skills || S.skills;
+  S.rel = Object.assign({ warm:18, trust:12, tension:4 }, d.rel||{});
+  S.placed = (Array.isArray(d.placed) && d.placed.length)
+    ? d.placed.filter(f=>FURN[f.t])
+    : defaultPlaced(S.house);
+  S.stats = Object.assign({ paintings:0, meals:0, earned:0, rep:0 }, d.stats||{});
+  S.creed = d.creed || null;
+  S.tasks = Array.isArray(d.tasks) && d.tasks.length ? d.tasks : [];
+  S.taskProg = d.taskProg || {};
+  S.dayStart = d.dayStart || { money:S.money, needs:Object.assign({},S.needs) };
+  S.speed = d.speed || 1;
+  S.origin = d.origin || { id:'normal', name:'普通家庭', diff:2, desc:ORIGINS[0].desc, mods:{}, debt:0 };
+  S.twist = d.twist || null;
+  S.buffs = [];
+  S.dayEnded = false;
+  S.eventsToday = 0;
+  if(!S.tasks.length) genTasks();
+  resetPlayer();
+  return true;
+}
+
+/* ---------------- 开始界面 ---------------- */
+function houseName(id){
+  const h = HOUSES[id] || HOUSES.flat;
+  return h.name;
+}
+
+function screensOff(){
+  ['home','load','create'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('on');
+  });
+}
+
+function showHome(){
+  screenOpen = true;
+  S.action = null;
+  toggleBuild(false);
+  document.getElementById('ui').classList.add('screening');
+  screensOff();
+  document.getElementById('home').classList.add('on');
+}
+
+function showLoad(){
+  document.getElementById('ui').classList.add('screening');
+  screensOff();
+  document.getElementById('load').classList.add('on');
+  renderLoad();
+}
+
+function showCreate(preset){
+  document.getElementById('ui').classList.add('screening');
+  screensOff();
+  document.getElementById('create').classList.add('on');
+  const empties = [];
+  for(let i=1;i<=SLOT_COUNT;i++){ if(!slotData(i)) empties.push(i); }
+  pendingSlot = (preset && !slotData(preset)) ? preset : (empties[0] || 0);
+  selGender = 'f';
+  selChar = 'ding';
+  renderSlotPicker();
+  renderCharStrip();
+}
+
+function hideScreens(){
+  screenOpen = false;
+  document.getElementById('ui').classList.remove('screening');
+  screensOff();
+}
+
+function renderLoad(){
+  const list = document.getElementById('loadList');
+  if(!list) return;
+  list.innerHTML = '';
+  let hasAny = false;
+
+  for(let i=1;i<=SLOT_COUNT;i++){
+    const d = slotData(i);
+    if(d) hasAny = true;
+    const el = document.createElement('div');
+    el.className = 'slot' + (d ? '' : ' empty');
+
+    if(d){
+      const c = d.char ? d.char.name : '某人';
+      const meta = houseName(d.house) + ' · ' + (d.money||0) + ' 文 · 第 ' + (d.gen||1) + ' 代';
+      el.innerHTML =
+        '<div class="sno">0' + i + '</div>' +
+        '<div class="sinfo">' +
+          '<div class="sname"><b>' + c + '</b><i>' + (d.age||7) + ' 岁 · 第 ' + (d.week||1) + ' 周 · 第 ' + (d.day||1) + ' 天</i></div>' +
+          '<div class="smeta">' + meta + '</div>' +
+        '</div>' +
+        '<div class="sacts">' +
+          '<button class="chip" data-slot="' + i + '" data-op="load">继续</button>' +
+          '<button class="chip" data-slot="' + i + '" data-op="del">删</button>' +
+        '</div>';
+    } else {
+      el.innerHTML =
+        '<div class="sno">0' + i + '</div>' +
+        '<div class="sinfo"><div class="empty-txt">这儿还没有人生</div></div>' +
+        '<div class="sacts"><button class="chip" data-slot="' + i + '" data-op="new">在这里新建</button></div>';
+    }
+    list.appendChild(el);
+  }
+
+  if(!hasAny){
+    const tip = document.createElement('div');
+    tip.className = 'load-tip';
+    tip.textContent = '三个位置都空着。先回去新建一个吧。';
+    list.appendChild(tip);
+  }
+
+  list.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const i = parseInt(b.getAttribute('data-slot'),10);
+      const op = b.getAttribute('data-op');
+      if(op === 'new') showCreate(i);
+      if(op === 'load') continueGame(i);
+      if(op === 'del') askDelete(i);
+    });
+  });
+}
+
+function renderSlotPicker(){
+  const box = document.getElementById('slotPicker');
+  if(!box) return;
+  box.innerHTML = '';
+  for(let i=1;i<=SLOT_COUNT;i++){
+    const d = slotData(i);
+    const b = document.createElement('button');
+    b.className = 'spick' + (d ? ' full' : '') + (pendingSlot === i ? ' on' : '');
+    b.innerHTML = '<div class="sn">存档位 0' + i + '</div>' +
+      '<div class="sd">' + (d ? ((d.char?d.char.name:'某人') + ' · ' + (d.age||7) + ' 岁') : '空着') + '</div>';
+    if(!d){
+      b.addEventListener('click', ()=>{ pendingSlot = i; renderSlotPicker(); });
+    } else {
+      b.title = '这个位置已经有存档了';
+    }
+    box.appendChild(b);
+  }
+}
+
+function renderSlots(){ renderLoad(); renderSlotPicker(); }
+
+function askDelete(i){
+  const d = slotData(i);
+  if(!d) return;
+  openModal({
+    title:'删掉这一世？',
+    seal:'慎',
+    sub:'存档位 0' + i,
+    body:'<p>' + (d.char?d.char.name:'某人') + ' · 第 ' + (d.gen||1) + ' 代 · 第 ' + (d.day||1) + ' 天</p>' +
+         '<p class="dim">删了就真没了。人生可以重来，存档不行。</p>',
+    buttons:[
+      { label:'算了', cls:'ghost', onClick(){} },
+      { label:'删掉', onClick(){
+          try{ localStorage.removeItem(SLOT_KEY(i)); }catch(e){}
+          renderSlots();
+        } }
+    ]
+  });
+}
+
+function startCreate(slot){ showCreate(slot); }
+
+function lookOf(c){
+  return { hair:c.hair, cloth:c.cloth, skin:c.skin, skirt:c.skirt, acc:c.acc };
+}
+
+function drawPortrait(cvEl, look, scale){
+  const c = cvEl.getContext('2d');
+  c.setTransform(1,0,0,1,0,0);
+  c.clearRect(0,0,cvEl.width,cvEl.height);
+  const prev = G;
+  G = c;
+  c.lineCap='round'; c.lineJoin='round';
+  drawPerson(cvEl.width/2, cvEl.height-10, 1, false, Object.assign({}, look, { scale:scale, stage:stageOf(S.age) }));
+  G = prev;
+}
+
+function bonusText(c){
+  const b = c.bonus || {};
+  if(b.skill) return '起始加成：' + skillName(b.skill) + ' +1 级';
+  if(b.need){
+    const nm = { energy:'体力', food:'饱腹', clean:'整洁', fun:'兴致' }[b.need] || b.need;
+    return '起始加成：' + nm + ' +' + b.v;
+  }
+  if(b.warm) return '起始加成：和老周的关系 +' + b.warm;
+  if(b.money) return '起始加成：起始资金 +' + b.money + ' 文';
+  return '';
+}
+
+function renderCharStrip(){
+  const strip = document.getElementById('charStrip');
+  if(!strip) return;
+  strip.innerHTML = '';
+
+  CHARS.filter(c=>c.gender === selGender).forEach(c=>{
+    const card = document.createElement('div');
+    card.className = 'ccard' + (c.id === selChar ? ' on' : '');
+    const cvEl = document.createElement('canvas');
+    cvEl.width = 120; cvEl.height = 150;
+    const nm = document.createElement('div');
+    nm.className = 'cname';
+    nm.textContent = c.name;
+    card.appendChild(cvEl);
+    card.appendChild(nm);
+    strip.appendChild(card);
+    drawPortrait(cvEl, lookOf(c), 1.5);
+
+    card.addEventListener('click', ()=>{
+      selChar = c.id;
+      renderCharStrip();
+    });
+  });
+
+  renderCharInfo();
+}
+
+function renderCharInfo(){
+  const c = charById(selChar);
+  document.getElementById('ciName').textContent = c.name;
+  document.getElementById('ciTag').textContent = c.tag;
+  document.getElementById('ciBonus').textContent = bonusText(c) + '　·　开局 7 岁'; 
+  drawPortrait(document.getElementById('charBig'), lookOf(c), 1.9);
+}
+
+function beginGame(){
+  const c = charById(selChar);
+  rollOrigin();
+  applyCharacter(c);
+  S.slot = pendingSlot;
+  S.scene = 'home';
+  S.dayEnded = false;
+  resetPlayer();
+  genTasks();
+  S.dayStart = { money:S.money, needs:Object.assign({}, S.needs) };
+  hideScreens();
+  renderCatalog();
+  updateHUD();
+  updateTasksUI();
+  save();
+  startPrologue();
+}
+
+/* ---------------- 前置叙事 ---------------- */
+let proBeats = [], proIdx = 0, proOpen = false;
+
+function buildPrologue(){
+  const o = S.origin || {};
+  const h = HOUSE;
+  const c = S.char || { name:'你', tag:'' };
+
+  const houseLines = {
+    villa: ['你住在城西小楼。','三层。楼梯有四十二级，你数过很多遍。','夜里，能听见水管在墙里走路。'],
+    flat: ['你住在两层住宅。','你的房间在楼上，窗户朝西。','床头那面墙，被你贴满了贴纸。'],
+    rental: ['你住在巷尾的平房。','只有一间屋子。','床、灶台、写作业的桌子，挤在同一片地板上。']
+  }[h.id] || ['你住在一间普通的房子里。'];
+
+  const fam = {
+    normal: ['爸妈都上班。','饭在锅里，钥匙在门垫下面。'],
+    solo: ['爸妈在很远的城市。','视频的时候，那头总是很吵。'],
+    exam: ['你的书桌是家里最贵的家具。','台灯常常亮到很晚。'],
+    rich: ['你爸的车停在巷口，比同学家的都长一点。','他说，这叫底气。'],
+    single: ['家里只有两个人。','你学会了自己热饭，也学会了不问她为什么哭。'],
+    blend: ['家里多了一个人，多了一双筷子。','你改口叫他"叔叔"，叫得很轻。'],
+    debt: ['电话响的时候，大人会走到阳台去接。','你假装没听见。但你都听见了。'],
+    art: ['墙上挂着祖辈的字。','你够不着，但你知道那上面写的是一个"忍"字。'],
+    gran: ['奶奶的粥要熬四十分钟。','她说急不得，人也一样。'],
+    city: ['窗外就是另一栋楼。','你一伸手，能碰到对面的晾衣杆。']
+  }[o.id] || ['日子不算好，也不算坏。'];
+
+  return [
+    { v:.97, lines:['七岁那年的春天。','雨下了三天，巷子里的水漫过脚踝。'] },
+    { v:.76, lines:houseLines },
+    { v:.90, lines:fam },
+    { v:.92, lines:['你叫' + c.name + '。', c.tag || ''] },
+    { v:.95, lines:['这一年看起来会和往常一样。','只是有些事，已经在路上了。'] },
+    { v:1, lines:['你今年七岁。','接下来的二十三年，由你来过。'], final:true }
+  ];
+}
+
+function startPrologue(){
+  proBeats = buildPrologue();
+  proIdx = 0;
+  proOpen = true;
+  screenOpen = true;
+  document.getElementById('ui').classList.add('screening');
+  document.getElementById('prologue').classList.add('on');
+  renderProBeat();
+}
+
+function renderProBeat(){
+  const b = proBeats[proIdx];
+  if(!b) return;
+
+  const veil = document.querySelector('#prologue .veil');
+  if(veil) veil.style.opacity = b.v;
+
+  const wrap = document.getElementById('pro-lines');
+  wrap.innerHTML = '';
+  b.lines.filter(t=>t && t.length).forEach((t,i)=>{
+    const d = document.createElement('div');
+    d.className = 'pro-line' + (b.final ? ' final' : '') + (i>0 ? ' soft' : '');
+    d.style.setProperty('--d', (i*0.42) + 's');
+    d.textContent = t;
+    wrap.appendChild(d);
+  });
+
+  const mark = document.getElementById('pro-mark');
+  if(mark) mark.style.height = (proIdx === 0) ? '12em' : '0em';
+
+  const dots = document.getElementById('pro-dots');
+  if(dots){
+    dots.innerHTML = proBeats.map((_,i)=>'<span class="pdot'+(i<=proIdx?' on':'')+'"></span>').join('');
+  }
+
+  const foot = document.getElementById('pro-foot');
+  if(foot) foot.textContent = (proIdx >= proBeats.length-1) ? '点击开始 · 空格也可以' : '点击继续 · 空格也可以';
+}
+
+function proNext(){
+  if(!proOpen) return;
+  if(proIdx >= proBeats.length - 1){ endPrologue(); return; }
+  proIdx++;
+  renderProBeat();
+}
+
+function endPrologue(){
+  if(!proOpen) return;
+  proOpen = false;
+  document.getElementById('prologue').classList.remove('on');
+  document.getElementById('ui').classList.remove('screening');
+  screenOpen = false;
+  showOriginModal();
+}
+
+function continueGame(i){
+  const d = slotData(i);
+  if(!d) return;
+  d.slot = i;
+  if(!loadSave(d)) return;
+  hideScreens();
+  renderCatalog();
+  updateHUD();
+  updateTasksUI();
+  toast('接着过。第 ' + S.day + ' 天，' + fmtClock(S.clock));
+}
+
+/* ---------------- 暂停菜单 ---------------- */
+function showPause(){
+  const body =
+    '<div class="rows" style="margin-top:0">' +
+      '<div class="r"><span>存档位</span><b>0' + S.slot + '</b></div>' +
+      '<div class="r"><span>当前</span><b>' + (S.char?S.char.name:'—') + ' · 第 ' + S.gen + ' 代 · 第 ' + S.day + ' 天</b></div>' +
+      '<div class="r"><span>住宅</span><b>' + HOUSE.name + '（' + HOUSE.tierName + '）</b></div>' +
+      '<div class="r"><span>手头</span><b>' + S.money + ' 文</b></div>' +
+    '</div>' +
+    '<p class="dim" id="savetip" style="margin-top:.8em">自动保存每 15 秒一次，手动保存随时可以。</p>';
+
+  openModal({
+    title:'暂 停',
+    seal:'歇',
+    sub:'日子还在过，只是先停一下',
+    body: body,
+    buttons:[
+      { label:'保存一下', hint:'写进存档位 0' + S.slot, onClick(){
+          save();
+          toast('存好了。');
+          openModal({
+            title:'存好了',
+            seal:'存',
+            sub:'存档位 0' + S.slot,
+            body:'<p>' + (S.char?S.char.name:'—') + ' · 第 ' + S.gen + ' 代 · 第 ' + S.day + ' 天 · ' + S.money + ' 文</p>' +
+                 '<p class="dim">下次从这里接着过。</p>',
+            buttons:[{ label:'接着过', cls:'primary', onClick(){} }]
+          });
+        } },
+      { label:'读取存档', hint:'回到开始界面挑一个', onClick(){ save(); showHome(); } },
+      { label:'玩法说明', onClick(){ showHelp(); } },
+      { label:'回到开始界面', cls:'ghost', onClick(){ save(); showHome(); } }
+    ]
+  });
+}
+
+/* ---------------- 开场 ---------------- */
+function showOriginModal(){
+  const o = S.origin;
+  const sk = [];
+  ['paint','cook','social'].forEach(k=>{
+    if(S.skills[k].lv > 1) sk.push(skillName(k) + ' Lv.' + S.skills[k].lv);
+  });
+
+  const body =
+    '<div class="rows" style="margin-top:0">' +
+      '<div class="r" style="border-bottom:1px solid rgba(43,42,38,.3);padding-bottom:.5em">' +
+        '<span style="font-size:1.25em;letter-spacing:.1em">' + o.name + '</span>' +
+        '<b style="color:#a6402f;letter-spacing:.16em">' + stars(o.diff) + '</b>' +
+      '</div>' +
+    '</div>' +
+    '<p style="margin-top:.7em">' + o.desc + '</p>' +
+    '<div class="rows">' +
+      '<div class="r"><span>起始资金</span><b>' + S.money + ' 文</b></div>' +
+      (sk.length ? '<div class="r"><span>带在身上的手艺</span><b>' + sk.join(' / ') + '</b></div>' : '') +
+      '<div class="r"><span>住处</span><b>' + HOUSE.name + '（' + HOUSE.tierName + '）</b></div>' +
+      '<div class="r"><span>家庭底色</span><b>' + originTrait(o) + '</b></div>' +
+      '<div class="r"><span>近期变数</span><b style="letter-spacing:.2em">？？？</b></div>' +
+    '</div>' +
+    '<p class="dim">你今年七岁。这个家，就是你长大的地方。</p>' +
+    '<p class="dim">墙上贴着一张纸：「今日三件事」。看起来是上一任住户留下的。</p>' +
+    (o.diff >= 4 ? '<p class="dim" style="color:#a6402f">这一手牌不算好。但你也没打算认输，对吧？</p>' : '');
+
+  openModal({
+    title:'投胎结果',
+    seal:'命',
+    sub:'第 1 代 · 7 岁 · 第 1 周',
+    body: body,
+    buttons:[{ label:'推门进去', cls:'primary', onClick(){
+      toast('先吃口饭吧。冰箱在左边。');
+    }}]
+  });
+}
+
+const QS = new URLSearchParams(location.search);
+const SKIP = QS.get('skip') === '1';
+
+function migrateOldSave(){
+  try{
+    const old = localStorage.getItem('fusheng_paperhouse_v1');
+    if(old && !localStorage.getItem(SLOT_KEY(1))){
+      localStorage.setItem(SLOT_KEY(1), old);
+      localStorage.removeItem('fusheng_paperhouse_v1');
+    }
+  }catch(e){}
+}
+
+function boot(){
+  fit();
+  setHouse('flat');
+  migrateOldSave();
+
+  // 渲染循环
+  let last = performance.now();
+  function loop(now){
+    let dt = (now-last)/1000;
+    last = now;
+    dt = Math.min(dt, .05);
+    update(dt);
+    render();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  setInterval(()=>{ if(S.slot) save(); }, 15000);
+  window.addEventListener('beforeunload', save);
+
+  if(SKIP){
+    document.body.classList.add('noanim');
+    const c = charById(QS.get('char') || 'ding');
+    rollOrigin();
+    applyCharacter(c);
+    S.slot = 1;
+    S.dayStart = { money:S.money, needs: Object.assign({}, S.needs) };
+    genTasks();
+    resetPlayer();
+    hideScreens();
+  } else {
+    showHome();
+  }
+
+  const hourQ = QS.get('hour');
+  if(hourQ) S.clock = parseFloat(hourQ)*60;
+
+  if(SKIP){
+    const hq = QS.get('house');
+    if(hq && HOUSES[hq]){
+      S.house = hq;
+      setHouse(hq);
+      S.placed = defaultPlaced(hq);
+      resetPlayer();
+    }
+    const aq = QS.get('age');
+    if(aq){
+      S.age = parseInt(aq,10) || 7;
+      S.week = Math.max(1, S.age - 6);
+      S.growth = { body:S.week, mind:S.week, charm:Math.max(0, S.week-7) };
+    }
+    if(QS.get('at') === 'door'){ S.player.x = HOUSE.doorX - 46; S.player.y = HOUSE.f1; }
+    const sq = QS.get('scene');
+    if(sq && SCENES[sq]) travel(sq);
+  }
+
+  updateHUD();
+  updateTasksUI();
+  renderCatalog();
+
+  if(QS.get('screen') === 'create') startCreate(1);
+  if(QS.get('screen') === 'load'){ showLoad(); }
+  if(QS.get('portrait') === '1'){ PORTRAIT = true; hideScreens(); }
+
+  // 调试入口：?skip=1&panel=origin|char|help|build|summary|legacy|event
+  const panel = QS.get('panel');
+  if(panel && SKIP){
+    if(panel==='origin') showOriginModal();
+    if(panel==='char') showChar();
+    if(panel==='help') showHelp();
+    if(panel==='build'){ toggleBuild(true); S.buildType = 'plant'; renderCatalog(); }
+    if(panel==='summary'){ S.tasks.forEach((t,i)=>{ if(i<2) t.done=true; }); S.money += 45; endDay(false); }
+    if(panel==='legacy'){ S.stats.paintings = 12; S.stats.earned = 860; S.stats.rep = 9; showLegacy(); }
+    if(panel==='event'){ tryRandomEvent(); }
+    if(panel==='pause'){ showPause(); }
+    if(panel==='birthday'){ S.day = GEN_DAYS; advanceWeek(); }
+    if(panel==='prologue'){ startPrologue(); proIdx = parseInt(QS.get('beat')||'0',10); renderProBeat(); }
+  }
+
+  if(QS.get('selftest') === '1') runSelfTest();
+
+  // 流程自测：菜单 → 创建 → 开局 → 存档
+  if(QS.get('flow') === '1'){
+    const out = [];
+    startCreate(2);
+    out.push('create_open = ' + document.getElementById('create').classList.contains('on'));
+    out.push('cards_render = ' + document.querySelectorAll('#charStrip .ccard').length);
+    selGender = 'm';
+    selChar = 'wu';
+    renderCharStrip();
+    out.push('male_cards = ' + document.querySelectorAll('#charStrip .ccard').length);
+    beginGame();
+    out.push('char = ' + (S.char && S.char.name));
+    out.push('slot = ' + S.slot);
+    out.push('prologue_open = ' + proOpen);
+    out.push('prologue_beats = ' + proBeats.length);
+    let guard = 0;
+    while(proOpen && guard < 20){ proNext(); guard++; }
+    out.push('origin_modal_after = ' + modalOpen);
+    out.push('screens_hidden = ' + (!document.getElementById('create').classList.contains('on')));
+    out.push('saved = ' + !!slotData(2));
+    out.push('has_origin = ' + !!(S.origin && S.origin.name));
+    const el = document.createElement('pre');
+    el.id = 'flowtest';
+    el.style.cssText = 'position:fixed;left:0;top:0;z-index:9999;background:#fff;color:#000;font-size:12px;padding:8px';
+    el.textContent = out.join('\n');
+    document.body.appendChild(el);
+  }
+}
+
+function runSelfTest(){
+  // 允许直接 ?selftest=1：先开一局，否则 S.origin 为空
+  if(!S.origin){
+    rollOrigin();
+    applyCharacter(charById('ding'));
+    S.slot = 1;
+    S.dayStart = { money:S.money, needs:Object.assign({},S.needs) };
+    genTasks();
+    resetPlayer();
+    hideScreens();
+  }
+  const out = [];
+  const log = (k,v)=>out.push(k+' = '+v);
+
+  log('origin', S.origin ? (S.origin.name + ' / ' + S.origin.diff + '星') : 'NONE');
+  log('char', S.char ? (S.char.name + ' / ' + S.char.gender) : 'NONE');
+  log('house', S.house + ' / ' + HOUSE.name + ' / ' + HOUSE.tierName);
+  log('money_start', S.money);
+
+  // 出门链路：站在门口 → 按 E → 巷口
+  resetPlayer(true);
+  S.player.x = HOUSE.doorX - 20;
+  const nearDoor = getNear();
+  log('door_prompt', !!(nearDoor && nearDoor.t === 'door'));
+  goOut();
+  log('door_to_street', S.scene === 'street');
+  travel('store'); log('travel_store', S.scene === 'store');
+  travel('street', 330);
+  travel('book'); log('travel_book', S.scene === 'book');
+  travel('park'); log('travel_park', S.scene === 'park');
+  travel('home');
+  log('travel_home', S.scene === 'home');
+  log('home_at_door', Math.abs(S.player.x - (HOUSE.doorX - 120)) < 2);
+
+  const m0 = S.money, f0 = S.needs.food;
+  doCook();
+  log('cook_money_delta', S.money - m0);
+  log('cook_food_delta', (S.needs.food - f0).toFixed(1));
+
+  const p0 = S.stats.paintings;
+  doPaint();
+  log('paint_count_delta', S.stats.paintings - p0);
+
+  const c0 = S.needs.clean;
+  doShower();
+  log('shower_clean_delta', (S.needs.clean - c0).toFixed(1));
+
+  const clk = S.clock;
+  for(let i=0;i<120;i++) updateTime(1/60);
+  log('clock_delta', (S.clock - clk).toFixed(1));
+
+  const day0 = S.day;
+  endDay(false);
+  log('modal_open', modalOpen);
+  closeModal();
+  nextDay();
+  log('day_advanced', S.day === day0+1);
+  log('tasks_len', S.tasks.length);
+  log('needs_energy_after_sleep', Math.round(S.needs.energy));
+
+  // 年龄推进
+  S.day = 7;
+  const a0 = S.age, w0 = S.week;
+  advanceWeek();
+  log('age_up', S.age === a0+1 && S.week === w0+1);
+  log('stage_now', stageOf(S.age));
+  closeModal();
+  S.day = 7;
+  S.age = 13; S.week = 7;
+  advanceWeek();
+  log('stage_to_young', stageOf(S.age) === 'young');
+  closeModal();
+  S.day = 7;
+  S.age = 23; S.week = 17;
+  advanceWeek();
+  log('stage_to_mid', stageOf(S.age) === 'mid');
+  closeModal();
+
+  save();
+  const keepMoney = S.money, keepDay = S.day, keepOrigin = S.origin.name;
+  S.money = 0; S.day = 99; S.origin = null;
+  loadSave(slotData(S.slot));
+  log('save_roundtrip', (S.money===keepMoney && S.day===keepDay));
+  log('origin_restored', S.origin && S.origin.name === keepOrigin);
+  log('house_restored', S.house === HOUSE.id);
+
+  // 传承
+  const g0 = S.gen;
+  startNewGen(CREEDS[0]);
+  log('generation_up', S.gen === g0+1);
+  log('creed_set', S.creed && S.creed.name === '吃亏是福');
+  log('twist_fresh', !!(S.twist && !S.twist.fired));
+  closeModal();
+
+  // 建造
+  S.buildType = 'lamp';
+  S.money = 999;
+  // 清出一块空地，避免随机房型/家具布局导致用例不稳定
+  S.placed = S.placed.filter(f => !(f.y === HOUSE.f1 && Math.abs(f.x - 600) < 100));
+  const n0 = S.placed.length;
+  tryPlace(600, HOUSE.f1);
+  const n1 = S.placed.length;
+  log('build_place', n1 - n0);
+  tryRemove(600, HOUSE.f1);
+  log('build_remove', n1 - S.placed.length);
+
+  // 财富切换
+  S.money = 1300; S.wealth = 'mid'; S.house = 'flat'; setHouse('flat'); S.day = 7; S.age = 20;
+  advanceWeek();
+  log('wealth_to_rich', S.wealth === 'rich' && S.house === 'villa');
+  closeModal();
+  S.money = 40; S.wealth = 'mid'; S.house = 'flat'; setHouse('flat'); S.day = 7; S.age = 21;
+  advanceWeek();
+  log('wealth_to_poor', S.wealth === 'poor' && S.house === 'rental');
+  closeModal();
+
+  const el = document.createElement('pre');
+  el.id = 'selftest';
+  el.style.cssText = 'position:fixed;left:0;top:0;z-index:9999;background:#fff;color:#000;font-size:12px;padding:8px';
+  el.textContent = out.join('\n');
+  document.body.appendChild(el);
+}
+
+/* ---------------- 按钮绑定 ---------------- */
+document.querySelectorAll('[data-act]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    const a = b.getAttribute('data-act');
+    if(a==='speed'){
+      const i = SPEEDS.indexOf(S.speed);
+      S.speed = SPEEDS[(i+1)%SPEEDS.length];
+      document.getElementById('btnSpeed').textContent = S.speed + '×';
+    }
+    if(a==='char') showChar();
+    if(a==='build') doBuildToggle();
+    if(a==='menu') showPause();
+  });
+});
+
+/* 页面按钮 */
+const homeNew = document.getElementById('btnHomeNew');
+if(homeNew) homeNew.addEventListener('click', ()=>showCreate());
+const homeLoad = document.getElementById('btnHomeLoad');
+if(homeLoad) homeLoad.addEventListener('click', showLoad);
+const homeHelp = document.getElementById('btnHomeHelp');
+if(homeHelp) homeHelp.addEventListener('click', showHelp);
+
+document.querySelectorAll('[data-back]').forEach(b=>{
+  b.addEventListener('click', showHome);
+});
+
+document.getElementById('prologue').addEventListener('click', proNext);
+document.getElementById('pro-skip').addEventListener('click', (e)=>{ e.stopPropagation(); endPrologue(); });
+
+/* 开始界面按钮 */
+document.querySelectorAll('#genderTabs .tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('#genderTabs .tab').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    selGender = t.getAttribute('data-g');
+    const first = CHARS.filter(c=>c.gender === selGender)[0];
+    if(first) selChar = first.id;
+    renderCharStrip();
+  });
+});
+
+const createGo = document.getElementById('btnCreateGo');
+if(createGo){
+  createGo.addEventListener('click', ()=>{
+    if(!pendingSlot){ toast('三个存档位都满了，先去读取页删一个。'); return; }
+    beginGame();
+  });
+}
+
+/* ---------------- 启动 ---------------- */
+boot();
+</script>
+</body>
+</html>

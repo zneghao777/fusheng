@@ -1,0 +1,9 @@
+node_modules/
+www/
+.tools/
+output/
+android/local.properties
+android/.gradle/
+android/**/build/
+ios/DerivedData/
+.DS_Store

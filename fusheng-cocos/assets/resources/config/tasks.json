@@ -1,0 +1,58 @@
+[
+  {
+    "key": "eat",
+    "text": "@tasks.0.text",
+    "short": "@tasks.0.short",
+    "need": 1,
+    "requires": "stove"
+  },
+  {
+    "key": "shower",
+    "text": "@tasks.1.text",
+    "short": "@tasks.1.short",
+    "need": 1,
+    "requires": "shower"
+  },
+  {
+    "key": "paint",
+    "text": "@tasks.2.text",
+    "short": "@tasks.2.short",
+    "need": 1,
+    "requires": "easel"
+  },
+  {
+    "key": "talk",
+    "text": "@tasks.3.text",
+    "short": "@tasks.3.short",
+    "need": 1,
+    "requires": null
+  },
+  {
+    "key": "earn",
+    "text": "@tasks.4.text",
+    "short": "@tasks.4.short",
+    "need": 40,
+    "requires": null
+  },
+  {
+    "key": "water",
+    "text": "@tasks.5.text",
+    "short": "@tasks.5.short",
+    "need": 1,
+    "requires": "plant"
+  },
+  {
+    "key": "tv",
+    "text": "@tasks.6.text",
+    "short": "@tasks.6.short",
+    "need": 1,
+    "requires": "tv"
+  },
+  {
+    "key": "book",
+    "text": "@tasks.7.text",
+    "short": "@tasks.7.short",
+    "need": 1,
+    "requires": "bookshelf"
+  }
+]

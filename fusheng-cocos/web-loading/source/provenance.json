@@ -1,0 +1,16 @@
+{
+  "description": "User-approved hand-drawn paper-house loading illustration, with the baked loading label removed so it can animate in HTML.",
+  "source": "illustration.png",
+  "runtimeAsset": "../illustration.jpg",
+  "dimensions": {
+    "width": 1672,
+    "height": 941
+  },
+  "characterMotion": {
+    "tool": "built-in image_gen.imagegen",
+    "source": "action-clean-plate.png",
+    "runtimeAsset": "../action-clean-plate.jpg",
+    "promptFile": "action-clean-plate.prompt.txt",
+    "technique": "Only the two action regions use the clean plate. Original image pixels form clipped arm and watering-can layers, animated around the shoulders."
+  }
+}

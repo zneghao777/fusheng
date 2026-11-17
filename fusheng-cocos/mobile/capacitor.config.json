@@ -1,0 +1,26 @@
+{
+  "appId": "com.fusheng.paperhouse",
+  "appName": "浮生·纸片屋",
+  "webDir": "www",
+  "backgroundColor": "#f3eddf",
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "disable",
+      "initialViewportFitValueHint": "cover",
+      "hidden": true,
+      "style": "LIGHT"
+    }
+  },
+  "android": {
+    "backgroundColor": "#f3eddf",
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  },
+  "ios": {
+    "backgroundColor": "#f3eddf",
+    "contentInset": "never",
+    "preferredContentMode": "mobile",
+    "allowsLinkPreview": false,
+    "scrollEnabled": false
+  }
+}

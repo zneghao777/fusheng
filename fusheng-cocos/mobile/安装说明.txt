@@ -1,0 +1,59 @@
+浮生·纸片屋 0.6.0 手机试玩
+
+此版本将 Cocos Web 游戏和资源封装进 Android / iOS App。
+游戏横屏运行，资源随包携带。存档保存在 App 本地，与网页版分别保存。
+覆盖安装同包名、同签名的后续版本通常保留存档；卸载 App 会清除本地存档。
+
+安卓（小米 17 Ultra 等）
+1. 把 fusheng-0.6.0-android-debug.apk 发送到手机，用文件管理器打开。
+2. 仅为打开此文件的应用允许“安装未知应用”，按手机安装界面完成安装。
+3. 打开“浮生·纸片屋”，横屏试玩。首次启动需要等待资源加载。
+4. 可以把同一个 APK 分享给安卓朋友。这个是调试签名试玩包。
+
+同一 Wi-Fi 下也可以扫描“安卓下载二维码.png”。下载时保持这台 Mac 运行。
+下载服务停止后，可以在 Mac 双击“启动手机下载.command”重新启动。
+如果 Mac 的局域网 IP 变化，以启动窗口显示的新链接为准。
+
+iPhone（iPhone Air / iPhone 17 系列等）
+当前提供 iOS 未签名 IPA 和带完整游戏资源的 Xcode 工程。
+iOS 已完成真机目标 arm64 编译；IPA 尚未签名，不能直接点击安装。
+真机签名和实际手机测试尚未完成。通过下面的 Xcode 步骤安装到自己的手机。
+自己使用普通 Apple ID 即可进行免费真机测试，无需先购买开发者会员。
+
+1. 在 Mac 上打开 Xcode，完成首次启动的许可和必要组件设置。
+2. 在 Xcode → Settings → Accounts 登录自己的 Apple ID。
+3. 解压 iOS 工程压缩包，打开 ios/App/App.xcodeproj。
+4. 选择 TARGETS → App → Signing & Capabilities，勾选 Automatically manage
+   signing，Team 选择自己的 Personal Team。
+5. 如果包名冲突，把 Bundle Identifier 改为自己的唯一名称，例如
+   com.你的英文名.fusheng；之后保持同一个包名以保留更新关系。
+6. 用数据线连接并解锁 iPhone，在手机上信任这台 Mac。
+7. 如 Xcode 提示，在 iPhone → 设置 → 隐私与安全性 → 开发者模式中启用，
+   按手机提示重启并确认。
+8. 在 Xcode 顶部运行设备中选择该 iPhone，点击三角形 Run。
+   首次运行会下载 Capacitor 的 Swift Package 依赖，需要联网。
+
+免费 Personal Team 的描述文件 7 天到期，届时需用 Xcode 重新安装。
+免费账户最多注册 3 台设备。给朋友通过 TestFlight 或注册设备方式分发，
+需要 Apple Developer Program 会员；也可以分享网页版试玩链接。
+
+构建复现（在 fusheng-cocos/mobile 中）
+  npm ci
+  npm run sync
+  npm run android
+  npm run open:ios
+
+更新游戏资源时，先在 fusheng-cocos 中执行：
+  npm run build:web -- web-mobile
+再回 mobile 执行 npm run sync 和对应平台打包命令。
+
+Android 需要 JDK 21 或更新版本、Android SDK Platform 36 和 Build Tools 36。
+本次下载的 SDK 位于 mobile/.tools/android-sdk，不需要修改全局 SDK 设置。
+可以通过 JAVA_HOME、ANDROID_HOME 指向自己已安装的工具。
+无签名编译检查用 npm run ios；有有效签名环境时可以设置 IOS_TEAM_ID。
+
+官方说明：
+https://developer.apple.com/help/account/basics/about-your-developer-account
+https://developer.apple.com/documentation/xcode/enabling-developer-mode-on-a-device
+https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases
+https://capacitorjs.com/docs

@@ -1,0 +1,698 @@
+{
+  "version": 1,
+  "stages": [
+    {
+      "id": "child",
+      "minAge": 7,
+      "maxAge": 12,
+      "name": "童年 · 被世界轻轻托住",
+      "home": "和家人住在纸片屋，老周也是照看你的长辈。出门、义卖和大额决定都有大人陪伴。",
+      "goal": "学会观察、表达和兑现小承诺",
+      "intro": "七岁，你有了自己的画角。上学、陪伴和好奇心一起装进小小的一周，家人负责生活，你慢慢学着照顾自己。",
+      "yearGoal": "试着完成学习、观察和陪伴，把这一岁的发现留在画里。",
+      "commissionName": "社区绘画练习",
+      "commissionHint": "家人陪你接下练习；周一或周二选一份，周三带画去分享。收到的是材料奖励。",
+      "marketName": "周日 · 亲子义卖",
+      "marketHint": "家人陪你摆摊、代管收款。作品送给新朋友，收入留作零花钱。",
+      "activities": [
+        {
+          "id": "child-study",
+          "label": "完成学校功课",
+          "desc": "和家人一起读书、写作业，积累学习习惯。",
+          "metric": "learning",
+          "amount": 2,
+          "skill": "paint",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        },
+        {
+          "id": "child-observe",
+          "label": "自然观察课",
+          "desc": "在住处附近观察植物和光影，把发现画进小本子。",
+          "metric": "craft",
+          "amount": 2,
+          "skill": "paint",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        },
+        {
+          "id": "child-family",
+          "label": "和家人做家务",
+          "desc": "一起整理餐桌和小屋，练习照顾彼此。",
+          "metric": "bonds",
+          "amount": 2,
+          "skill": "cook",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        }
+      ]
+    },
+    {
+      "id": "teen",
+      "minAge": 13,
+      "maxAge": 17,
+      "name": "少年 · 找到自己的声音",
+      "home": "仍和家人生活，拥有更多自己安排的时间；生活费和材料由家人支持。",
+      "goal": "平衡学习、兴趣和同伴关系",
+      "intro": "进入少年时光，作业和社团都等着你。你可以认真准备升学，也可以练习创作、参与社区，选择会留下不同的积累。",
+      "yearGoal": "给学习和兴趣各留一点时间，练习承担自己许下的承诺。",
+      "commissionName": "社团绘画项目",
+      "commissionHint": "由家人知情、街坊指导的社团练习；周一或周二选一份，周三交画，奖励用于材料。",
+      "marketName": "周日 · 社区画展",
+      "marketHint": "与家人一起布展，向来访者介绍自己的作品，也可由家人协助出售。",
+      "activities": [
+        {
+          "id": "teen-study",
+          "label": "专注学习",
+          "desc": "安排一段完整的复习时间，准备下一段求学旅程。",
+          "metric": "learning",
+          "amount": 3,
+          "skill": "paint",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        },
+        {
+          "id": "teen-club",
+          "label": "参加绘画社团",
+          "desc": "和同伴互相点评作品，练习表达自己的看法。",
+          "metric": "craft",
+          "amount": 3,
+          "skill": "paint",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        },
+        {
+          "id": "teen-volunteer",
+          "label": "参与社区志愿",
+          "desc": "在长辈指导下整理公共空间，认识社区的需要。",
+          "metric": "bonds",
+          "amount": 3,
+          "skill": "social",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        }
+      ]
+    },
+    {
+      "id": "youth",
+      "minAge": 18,
+      "maxAge": 23,
+      "name": "青年 · 走向独立生活",
+      "home": "你开始独立管理纸片屋与预算，家人的照应变成可以主动回应的牵挂。",
+      "goal": "尝试学习、职业与独立生活",
+      "intro": "十八岁，生活的钥匙交到你手里。进修、社区工作与创作都是道路，先用小步尝试，生活预算也需要自己安排。",
+      "yearGoal": "尝试一次职业实践，照顾好生活，再决定怎样继续学习或创作。",
+      "commissionName": "街坊创作委托",
+      "commissionHint": "周一或周二选择一份正式委托，周三交付；承诺和收入都由你负责。",
+      "marketName": "周日 · 街巷市集",
+      "marketHint": "带上作品，自己决定价格、回应客人，让创作进入真实生活。",
+      "activities": [
+        {
+          "id": "youth-learn",
+          "label": "进修一门课程",
+          "desc": "通过书本与练习补足知识，为下一次选择积累能力。",
+          "metric": "learning",
+          "amount": 3,
+          "skill": "paint",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        },
+        {
+          "id": "youth-practice",
+          "label": "社区职业实践",
+          "desc": "协助书店整理展陈，完成适量工作并领取报酬。",
+          "metric": "vocation",
+          "amount": 3,
+          "skill": "social",
+          "focus": 1,
+          "minutes": 90,
+          "money": 35
+        },
+        {
+          "id": "youth-care",
+          "label": "经营独立生活",
+          "desc": "认真做饭、打理小屋并联系重要的人。",
+          "metric": "bonds",
+          "amount": 3,
+          "skill": "cook",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        }
+      ]
+    },
+    {
+      "id": "adult",
+      "minAge": 24,
+      "maxAge": 29,
+      "name": "成年 · 让日子扎下根",
+      "home": "纸片屋留下作品、朋友和独立生活的痕迹。你可以独身，也可以把陪伴留给重要的人。",
+      "goal": "让事业、生活与关系逐渐稳定",
+      "intro": "二十四岁，你已经试过一些方向。工作要走得稳，创作要留住自己，也别忘了那些愿意等你的人。",
+      "yearGoal": "持续经营一项事业，守住生活节奏，为重要关系留出时间。",
+      "commissionName": "街坊合作项目",
+      "commissionHint": "周一或周二选一项合作，周三交付；持续履约会让街坊更信任你。",
+      "marketName": "周日 · 创作者市集",
+      "marketHint": "多年积累的作品与口碑在这里相遇，收入、分享和保留都由你选择。",
+      "activities": [
+        {
+          "id": "adult-work",
+          "label": "完成工作项目",
+          "desc": "用已有经验认真交付项目，积累职业口碑与收入。",
+          "metric": "vocation",
+          "amount": 4,
+          "skill": "social",
+          "focus": 1,
+          "minutes": 90,
+          "money": 50
+        },
+        {
+          "id": "adult-craft",
+          "label": "打磨个人创作",
+          "desc": "整理草稿、研究技法，让自己的作品更进一步。",
+          "metric": "craft",
+          "amount": 4,
+          "skill": "paint",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        },
+        {
+          "id": "adult-balance",
+          "label": "照顾生活与关系",
+          "desc": "留出不被工作挤占的时间，整理小屋并回应牵挂。",
+          "metric": "bonds",
+          "amount": 4,
+          "skill": "cook",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        }
+      ]
+    },
+    {
+      "id": "midlife",
+      "minAge": 30,
+      "maxAge": 30,
+      "name": "中年序章 · 三十而立",
+      "home": "三十岁的纸片屋装着二十四年的成长。人生还有很长，先认真过好这一岁的七天。",
+      "goal": "整理来路，决定未来想守住什么",
+      "intro": "三十岁，你不必交出统一的成功答案。这一周，继续工作、创作与陪伴，然后为已经走过的日子留一页相册。",
+      "yearGoal": "过完三十岁这一周，整理代表作品与关系，完成本篇章回顾。",
+      "commissionName": "长久街坊的合作",
+      "commissionHint": "最后这一年的委托依然需要按时交付；把认真留给熟悉的人。",
+      "marketName": "周日 · 三十岁的作品集",
+      "marketHint": "向街坊介绍如今的自己。作品可以卖出、赠送，也可以留在家里。",
+      "activities": [
+        {
+          "id": "midlife-work",
+          "label": "稳稳完成一份工作",
+          "desc": "把经验交给可靠的行动，也为以后留出生活预算。",
+          "metric": "vocation",
+          "amount": 4,
+          "skill": "social",
+          "focus": 1,
+          "minutes": 90,
+          "money": 55
+        },
+        {
+          "id": "midlife-curate",
+          "label": "整理代表作品",
+          "desc": "回看年轻时的画与现在的画，决定想留下什么。",
+          "metric": "craft",
+          "amount": 4,
+          "skill": "paint",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        },
+        {
+          "id": "midlife-reconnect",
+          "label": "约重要的人聊聊",
+          "desc": "问候长久相识的人，让陪伴成为可以继续的日常。",
+          "metric": "bonds",
+          "amount": 4,
+          "skill": "social",
+          "focus": 1,
+          "minutes": 90,
+          "money": 0
+        }
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "age": 7,
+      "title": "属于你的小画角",
+      "body": "开学后的第一个周末，家人问你想怎样安排自己的小角落。",
+      "choices": [
+        {
+          "id": "7-books",
+          "label": "放一本喜欢的书",
+          "hint": "学习积累 +3，后续学习活动额外 +1。",
+          "result": "你把书放在窗边，家人答应陪你一起读。",
+          "metric": "learning",
+          "amount": 3,
+          "direction": "study"
+        },
+        {
+          "id": "7-crayons",
+          "label": "摆好彩笔和画纸",
+          "hint": "创作积累 +3，绘画经验额外 +4。",
+          "result": "你画下窗外的一束光，自己的小画角有了颜色。",
+          "metric": "craft",
+          "amount": 3,
+          "direction": "create"
+        },
+        {
+          "id": "7-family",
+          "label": "留一个一起坐的位置",
+          "hint": "关系积累 +3，陪伴活动额外 +1。",
+          "result": "小椅子挨在一起，故事有人愿意慢慢听。",
+          "metric": "bonds",
+          "amount": 3,
+          "direction": "care"
+        }
+      ]
+    },
+    {
+      "age": 12,
+      "title": "童年的毕业礼",
+      "body": "小学将要结束，你想带哪一种习惯走进少年时光？",
+      "choices": [
+        {
+          "id": "12-learn",
+          "label": "把好奇变成学习习惯",
+          "hint": "学习积累 +3，继续强化学习方向。",
+          "result": "你把这些年的问题写进本子，准备去更大的课堂。",
+          "metric": "learning",
+          "amount": 3,
+          "direction": "study"
+        },
+        {
+          "id": "12-draw",
+          "label": "带上自己的画本",
+          "hint": "创作积累 +3，继续强化创作方向。",
+          "result": "旧画本的折角提醒你，观察世界一直是你的本领。",
+          "metric": "craft",
+          "amount": 3,
+          "direction": "create"
+        },
+        {
+          "id": "12-friend",
+          "label": "珍惜一路的朋友",
+          "hint": "关系积累 +3，继续强化陪伴方向。",
+          "result": "你给朋友留下一幅小画，约好以后也常常见面。",
+          "metric": "bonds",
+          "amount": 3,
+          "direction": "care"
+        }
+      ]
+    },
+    {
+      "age": 13,
+      "title": "更大的课表",
+      "body": "进入中学，时间开始变得紧。你想先为哪件事留一个固定位置？",
+      "choices": [
+        {
+          "id": "13-study",
+          "label": "固定一段自习时间",
+          "hint": "学习积累 +3，学习活动额外 +1。",
+          "result": "课表上多了一段属于专注的时间。",
+          "metric": "learning",
+          "amount": 3,
+          "direction": "study"
+        },
+        {
+          "id": "13-club",
+          "label": "坚持每周的社团",
+          "hint": "创作积累 +3，绘画经验额外 +4。",
+          "result": "你向同伴展示画本，也学会听不同的意见。",
+          "metric": "craft",
+          "amount": 3,
+          "direction": "create"
+        },
+        {
+          "id": "13-community",
+          "label": "参加社区小组",
+          "hint": "关系积累 +3，陪伴活动额外 +1。",
+          "result": "社区里有人记住了你的名字，也开始信赖你的承诺。",
+          "metric": "bonds",
+          "amount": 3,
+          "direction": "care"
+        }
+      ]
+    },
+    {
+      "age": 17,
+      "title": "告别少年的夏天",
+      "body": "升学与下一段生活就在眼前。成绩、作品和相处的日子都组成了你。",
+      "choices": [
+        {
+          "id": "17-learn",
+          "label": "继续求学与探索",
+          "hint": "学习积累 +3，留下继续学习的方向。",
+          "result": "你认真收好课本，未来仍有许多未知值得学习。",
+          "metric": "learning",
+          "amount": 3,
+          "direction": "study"
+        },
+        {
+          "id": "17-create",
+          "label": "带着作品集出发",
+          "hint": "创作积累 +3，留下持续创作的方向。",
+          "result": "这些年的画成为第一份作品集，你想继续画下去。",
+          "metric": "craft",
+          "amount": 3,
+          "direction": "create"
+        },
+        {
+          "id": "17-practical",
+          "label": "先认识真实的工作",
+          "hint": "职业积累 +3，为成年后的实践做准备。",
+          "result": "在家人和老师的建议下，你开始了解不同的工作。",
+          "metric": "vocation",
+          "amount": 3,
+          "direction": "work"
+        }
+      ]
+    },
+    {
+      "age": 18,
+      "title": "十八岁的钥匙",
+      "body": "家人把小屋的钥匙交到你手中。独立意味着可以选择，也意味着开始照顾生活。",
+      "choices": [
+        {
+          "id": "18-learn",
+          "label": "边实践边进修",
+          "hint": "学习积累 +3，学习活动额外 +1。",
+          "result": "你保留一张书桌，也为生活列下第一份预算。",
+          "metric": "learning",
+          "amount": 3,
+          "direction": "study"
+        },
+        {
+          "id": "18-create",
+          "label": "经营自己的创作",
+          "hint": "创作积累 +3，绘画经验额外 +4。",
+          "result": "你想让作品被更多人看见，也会为日常寻找稳定收入。",
+          "metric": "craft",
+          "amount": 3,
+          "direction": "create"
+        },
+        {
+          "id": "18-work",
+          "label": "先建立稳定收入",
+          "hint": "职业积累 +3，有报酬的活动额外收入 10。",
+          "result": "你先接下一份适量的社区工作，给生活打好底。",
+          "metric": "vocation",
+          "amount": 3,
+          "direction": "work"
+        }
+      ]
+    },
+    {
+      "age": 23,
+      "title": "回望最初的尝试",
+      "body": "青年时光走到一段路口。没有一条路要求你永远不变，你想把什么带向以后？",
+      "choices": [
+        {
+          "id": "23-learn",
+          "label": "保留持续学习的能力",
+          "hint": "学习积累 +3，学习活动额外 +1。",
+          "result": "你允许自己继续学习，也允许慢一点找到答案。",
+          "metric": "learning",
+          "amount": 3,
+          "direction": "study"
+        },
+        {
+          "id": "23-craft",
+          "label": "认真打磨自己的作品",
+          "hint": "创作积累 +3，绘画经验额外 +4。",
+          "result": "你看见了作品里的变化，愿意继续投入时间。",
+          "metric": "craft",
+          "amount": 3,
+          "direction": "create"
+        },
+        {
+          "id": "23-care",
+          "label": "建立值得依靠的日常",
+          "hint": "关系积累 +3，陪伴活动额外 +1。",
+          "result": "饭桌、朋友和规律的休息，让下一段生活有了支点。",
+          "metric": "bonds",
+          "amount": 3,
+          "direction": "care"
+        }
+      ]
+    },
+    {
+      "age": 24,
+      "title": "让日子扎根",
+      "body": "工作和生活都变得具体。你想用怎样的节奏经营接下来的几年？",
+      "choices": [
+        {
+          "id": "24-work",
+          "label": "稳步经营事业",
+          "hint": "职业积累 +3，有报酬的活动额外收入 10。",
+          "result": "你把眼前的项目做好，也为长远留出余地。",
+          "metric": "vocation",
+          "amount": 3,
+          "direction": "work"
+        },
+        {
+          "id": "24-craft",
+          "label": "守住个人创作",
+          "hint": "创作积累 +3，绘画经验额外 +4。",
+          "result": "你为自己留下固定的创作时间，作品不只属于订单。",
+          "metric": "craft",
+          "amount": 3,
+          "direction": "create"
+        },
+        {
+          "id": "24-care",
+          "label": "把重要关系放进日程",
+          "hint": "关系积累 +3，陪伴活动额外 +1。",
+          "result": "你主动约好下一次相见，重要的人不必总在等待。",
+          "metric": "bonds",
+          "amount": 3,
+          "direction": "care"
+        }
+      ]
+    },
+    {
+      "age": 29,
+      "title": "三十岁之前",
+      "body": "二十多岁的最后一年，你想怎样理解这些年的得失？",
+      "choices": [
+        {
+          "id": "29-learn",
+          "label": "把变化当作成长",
+          "hint": "学习积累 +3，承认自己仍可以改变方向。",
+          "result": "你整理旧笔记，发现那些疑问已经有了新的答案。",
+          "metric": "learning",
+          "amount": 3,
+          "direction": "study"
+        },
+        {
+          "id": "29-work",
+          "label": "认可认真做过的事",
+          "hint": "职业积累 +3，继续经营可靠的行动。",
+          "result": "每一次准时交付和重新开始，都成为你的一部分。",
+          "metric": "vocation",
+          "amount": 3,
+          "direction": "work"
+        },
+        {
+          "id": "29-care",
+          "label": "珍惜还在身边的人",
+          "hint": "关系积累 +3，把陪伴延续到下一段。",
+          "result": "你给熟悉的人写下一封信，邀请他们常来坐坐。",
+          "metric": "bonds",
+          "amount": 3,
+          "direction": "care"
+        }
+      ]
+    },
+    {
+      "age": 30,
+      "title": "三十岁的答案",
+      "body": "这不是人生的终点。过好这一周之前，你想先为未来留下哪一句话？",
+      "choices": [
+        {
+          "id": "30-create",
+          "label": "继续保留好奇和创作",
+          "hint": "创作积累 +3，带着好奇进入中年序章。",
+          "result": "你在新画本第一页写下：还想继续看看这个世界。",
+          "metric": "craft",
+          "amount": 3,
+          "direction": "create"
+        },
+        {
+          "id": "30-work",
+          "label": "让生活稳定，也留有余地",
+          "hint": "职业积累 +3，带着可靠的节奏继续生活。",
+          "result": "你把计划写得具体，也给意外和休息留出空白。",
+          "metric": "vocation",
+          "amount": 3,
+          "direction": "work"
+        },
+        {
+          "id": "30-care",
+          "label": "认真生活，常常相见",
+          "hint": "关系积累 +3，带着长久的陪伴继续生活。",
+          "result": "你把另一把椅子摆在窗边，未来仍欢迎重要的人。",
+          "metric": "bonds",
+          "amount": 3,
+          "direction": "care"
+        }
+      ]
+    }
+  ],
+  "copy": {
+    "metrics.learning": "学习",
+    "metrics.craft": "创作",
+    "metrics.bonds": "陪伴",
+    "metrics.vocation": "职业",
+    "course.title": "人生手账",
+    "course.activityDone": "今天已经认真做过这件事，明天再继续。",
+    "course.focus": "今天的心力不足，休息后再来。",
+    "course.time": "已经太晚了，明天再安排这件事。",
+    "course.activityResult": "{activity}完成了。{metric}积累 +{amount}{reward}。",
+    "course.reward": "，收入 +{money}",
+    "course.choiceResult": "{result}\n\n{hint}",
+    "course.direction.study": "持续学习",
+    "course.direction.create": "个人创作",
+    "course.direction.care": "重要关系",
+    "course.direction.work": "稳定事业",
+    "course.direction.none": "仍在探索",
+    "course.dayLog": "{age}岁 · 第{day}天：{text}",
+    "course.yearLog": "{age}岁：{summary}",
+    "course.yearActive": "这一年，你为{metric}留出了时间，积累了{amount}次成长；作品和约定都留在小屋里。",
+    "course.yearQuiet": "这一年过得很安静。没有完成阶段活动也不会被困住；下一岁仍可以重新安排生活。",
+    "course.yearFinal": "三十岁这一周已经完整走过。你从七岁一路长大，留下了属于自己的作品、牵挂与选择。",
+    "course.yearBoundary": "{stage}的最后一年：{summary}",
+    "course.age": "{age}岁 · {stage}",
+    "course.yearGoal": "这一岁的目标：{goal}",
+    "course.endingTitle": "三十岁 · 敬请期待",
+    "course.endingBody": "七岁时的小小画角，已经陪你走到三十岁。\n\n这一篇章完整结束，三十一岁及之后的人生仍在制作中。未来还有工作、创作、相聚和新的选择，敬请期待。\n\n你的存档、作品、小屋陈设与街坊记忆都会保留。你可以回看人生相册，或回到标题页开始另一段人生。",
+    "course.endingShort": "三十岁这一周结束了。后续人生，敬请期待。",
+    "course.endingButton": "回看这一段人生",
+    "course.finished": "本篇章已经完成，后续人生敬请期待。",
+    "course.childBorrow": "借款是成年后的决定。现在由家人照顾你的生活。",
+    "course.support": "家人补充了{money}文零花钱，生活与绘画材料都有照应。",
+    "course.adultSupport": "十八岁，家人给了你60文起步金；以后可以通过职业实践、委托和市集经营自己的生活。",
+    "course.childSale": "家人帮你代售《{work}》，{money}文收进零花钱。",
+    "course.childCommissionAccepted": "家人陪你接下{project}。周三带来作品，和街坊分享这一周的发现。",
+    "course.childCommissionDone": "你按时完成了《{work}》，收到{money}文材料奖励。大人记住了你的认真。",
+    "course.childHelp": "和家人一起帮老周整理社区义卖，认真完成力所能及的小事。",
+    "course.childHelpDone": "你和家人一起完成了准备。老周记住你的帮助，周日会陪你介绍作品。",
+    "course.childCommission.lin.name": "小林的街巷观察画",
+    "course.childCommission.lin.desc": "周一或周二报名，周三分享：画一幅暖色的街巷观察画，品质至少45，材料奖励35文。",
+    "course.childCommission.ye.name": "叶婆婆的阅读插画",
+    "course.childCommission.ye.desc": "周一或周二报名，周三分享：画一幅水墨的旧书插画，品质至少45，材料奖励30文。",
+    "course.teenCommission.lin.name": "便利店社团海报",
+    "course.teenCommission.lin.desc": "周一或周二报名，周三交画：暖色街巷，品质至少45，社团材料奖励50文。",
+    "course.teenCommission.ye.name": "书店社团插画",
+    "course.teenCommission.ye.desc": "周一或周二报名，周三交画：水墨旧书，品质至少45，社团材料奖励45文。",
+    "course.childTalk.zhou": "老周问了问学校和画本的事。家人就在不远处，你安心说起今天的新发现。",
+    "course.childTalk.lin": "小林听你讲学校的故事，也提醒你和家人一起过马路、按时回家。",
+    "course.childTalk.ye": "叶婆婆推荐了一本适合你的书，说不懂的地方可以问老师和家人。",
+    "course.teenTalk.zhou": "老周愿意听你的烦恼，也尊重你慢慢形成的想法。",
+    "course.teenTalk.lin": "小林问起社团和学校，也提醒你别为了赶画忘了休息。",
+    "course.teenTalk.ye": "叶婆婆和你聊了书里的不同人生，选择可以认真，也可以改变。",
+    "course.minorWork": "现在的主要任务是学习和成长，家人会支持你的生活。",
+    "course.panelIntro": "{stage}\n{home}\n\n{goal}\n{yearGoal}",
+    "course.activityHint": "每项每天一次 · 消耗{focus}心力 · {minutes}分钟{reward}",
+    "course.yearOverview": "{age}岁 · {stage}\n{summary}\n\n学习 +{learning} · 创作 +{craft}\n陪伴 +{bonds} · 职业 +{vocation}\n这一年完成作品 {works} 幅，市集售出 {sold} 幅。",
+    "course.albumTitle": "人生相册 · 七岁到三十岁",
+    "course.albumEmpty": "你的故事正在这一周里发生。",
+    "course.choicePrompt": "这个选择会留下积累，也可以在以后的阶段调整方向。",
+    "course.open": "学习与人生",
+    "course.nextYear": "长大一岁 · 进入{age}岁",
+    "course.finish": "完成这一篇章",
+    "course.continue": "继续这一岁的生活",
+    "course.activity": "安排这一段时光",
+    "course.alreadyDone": "今日已完成",
+    "course.back": "回到小屋",
+    "course.album": "人生相册",
+    "course.home": "回到标题页",
+    "course.stats": "学习 {learning} · 创作 {craft} · 陪伴 {bonds} · 职业 {vocation}",
+    "course.directionLabel": "现在珍惜的方向：{direction}",
+    "course.recapTitle": "{age}岁 · 这一年留在心里",
+    "course.phase.child": "童年",
+    "course.phase.teen": "少年",
+    "course.phase.youth": "青年",
+    "course.phase.adult": "成年",
+    "course.phase.midlife": "中年序章"
+  },
+  "origins": {
+    "normal": {
+      "name": "普通家庭",
+      "desc": "你和家人住在普通的纸片屋。大人忙着工作和家务，也为你留下一张可以读书画画的小桌子。"
+    },
+    "solo": {
+      "name": "忙碌的小家庭",
+      "desc": "家人工作忙，有时由熟悉的长辈照看你。屋子不大，但回家总有人关心你的功课和晚饭。"
+    },
+    "exam": {
+      "name": "重视读书的家庭",
+      "desc": "你在小镇长大，家里重视读书，也鼓励你把课外见到的世界画下来。"
+    },
+    "rich": {
+      "name": "宽裕的家庭",
+      "desc": "家里有一间宽敞的小楼，书和画材都不缺。大人希望你慢慢找到真正喜欢的事。"
+    },
+    "single": {
+      "name": "单亲家庭",
+      "desc": "你和一位家长共同生活。日子有时忙碌，亲友和街坊也会搭把手，陪你平安长大。"
+    },
+    "blend": {
+      "name": "重组家庭",
+      "desc": "家里多了新的家人，你们正在学习彼此的习惯。你有自己的小角落，也可以慢慢说出感受。"
+    },
+    "debt": {
+      "name": "负债家庭",
+      "desc": "家里的开支比较紧，大人会承担债务和生活责任。你的任务是安心学习、照顾自己和慢慢长大。"
+    },
+    "art": {
+      "name": "艺术家庭",
+      "desc": "从小看着家人写字画画，纸墨的味道很熟悉。轮到你拿起画笔时，也可以画出不一样的世界。"
+    },
+    "gran": {
+      "name": "长辈照看的家庭",
+      "desc": "你在奶奶和家人的照看下长大。饭桌上的热粥、小院和老故事，陪着你开始这段人生。"
+    },
+    "city": {
+      "name": "租住小屋的家庭",
+      "desc": "你和家人租住在巷子里的小屋。空间虽然有限，读书和画画的角落仍被认真留下。"
+    }
+  },
+  "effectCopy": {
+    "actions.stove.9.arg0": "你和家人一起做好了热饭，吃饱后又有精神了。",
+    "actions.fridge.3.arg0": "家人准备的点心放在冰箱里，你挑了一份喜欢的。",
+    "actions.shower.6.arg0": "洗去一天的汗和灰尘，清清爽爽地继续玩耍。",
+    "actions.sofa.3.arg0": "坐在沙发上歇一会儿，和家人说说今天的小发现。",
+    "actions.tv.3.arg0": "看了一会儿喜欢的节目，也记得给眼睛休息。",
+    "actions.desk.3.then.1.arg0": "在书桌前发现一个有趣的画法，你把它记进画本。",
+    "actions.desk.3.else.0.arg0": "翻翻课本和画本，给脑袋留一点轻松的时间。",
+    "actions.tea.3.arg0": "和家人一起坐下来喝点温水，心情慢慢安静。",
+    "actions.plant.2.arg0": "你给植物浇了水，发现叶子比上次长大了一点。",
+    "actions.bookshelf.3.arg0": "读完一段故事，还有新的问题想问老师和家人。",
+    "actions.wardrobe.2.arg0": "换上干净的衣服，可以舒舒服服地出门。",
+    "actions.actBench.3.arg0": "和家人一起在长椅上歇一会儿，看看路过的人和树影。",
+    "actions.actPigeon.5.arg0": "家人准备了一点合适的谷物，你安静看着鸽子靠近。",
+    "actions.actBento.5.arg0": "家人陪你挑了一份热便当，吃过饭再继续逛逛。",
+    "actions.actDrink.5.arg0": "喝完一杯清凉的饮料，记得把杯子丢进垃圾桶。",
+    "actions.actClerk.3.arg0": "你向店员问好，也学着礼貌地表达自己的需要。",
+    "actions.actBrowse.3.arg0": "叶婆婆让你挑一本适合的旧书，读到有趣的地方可以分享。",
+    "actions.actBuyBook.6.arg0": "在家人支持下买下一本喜欢的书，约好回家一起读。",
+    "actions.actBoss.4.arg0": "叶婆婆讲起这条街的故事，你听得很认真。"
+  }
+}

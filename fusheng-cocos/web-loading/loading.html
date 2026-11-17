@@ -1,0 +1,301 @@
+<!-- fusheng-loading:start -->
+<style>
+  #fusheng-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    overflow: hidden;
+    isolation: isolate;
+    background: #f3eddf;
+    color: #332c24;
+    opacity: 1;
+    transition: opacity 220ms ease-out;
+  }
+  #fusheng-loading [hidden] { display: none !important; }
+  #fusheng-loading .loading-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 177.6833156vh;
+    max-height: 56.2799043vw;
+    margin: auto;
+    overflow: hidden;
+  }
+  #fusheng-loading .loading-room {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-origin: 60% 50%;
+    animation: fusheng-room-breathe 14s ease-in-out infinite alternate;
+  }
+  #fusheng-loading .loading-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+  #fusheng-loading .loading-character-motion {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #fusheng-loading.has-character-motion .loading-character-motion { opacity: 1; }
+  #fusheng-loading .painter-action {
+    transform-origin: 841px 534px;
+    animation: fusheng-paint 2.6s ease-in-out infinite;
+  }
+  #fusheng-loading .gardener-action {
+    transform-origin: 1311px 457px;
+    animation: fusheng-water 3s ease-in-out infinite;
+  }
+  #fusheng-loading .water-drops {
+    fill: none;
+    stroke: #7e938a;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-dasharray: 2 7;
+    animation: fusheng-water-drops 1.1s linear infinite;
+  }
+  #fusheng-loading .loading-status {
+    position: absolute;
+    right: max(28px, env(safe-area-inset-right));
+    bottom: max(26px, env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font: 16px/1.7 "Songti SC", "Noto Serif CJK SC", serif;
+    letter-spacing: 3px;
+  }
+  #fusheng-loading .loading-dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 24px;
+  }
+  #fusheng-loading .loading-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: fusheng-loading-dot 1.5s ease-in-out infinite;
+  }
+  #fusheng-loading .loading-dot:nth-child(2) { animation-delay: 180ms; }
+  #fusheng-loading .loading-dot:nth-child(3) { animation-delay: 360ms; }
+  #fusheng-loading .loading-retry {
+    min-height: 44px;
+    padding: 4px 14px;
+    border: 1px solid #81715c;
+    border-radius: 999px;
+    background: #fcf8ef;
+    box-shadow: 0 2px 0 #c9b99f, 0 4px 9px #443c3117, inset 0 1px 0 #fffaf3;
+    transition: transform 100ms ease-out, box-shadow 100ms ease-out, background-color 100ms ease-out;
+    color: inherit;
+    font: inherit;
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+  #fusheng-loading .loading-retry:hover { background: #fffaf2; }
+  #fusheng-loading .loading-retry:active {
+    transform: translateY(2px);
+    background: #eee2ce;
+    box-shadow: 0 1px 0 #baaa91, 0 3px 6px #443c311c, inset 0 1px 2px #443c3114;
+  }
+  #fusheng-loading .loading-retry:focus-visible { outline: 2px solid #6a5942; outline-offset: 3px; }
+  #fusheng-loading .loading-fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font: 28px/1.5 "Songti SC", serif;
+    letter-spacing: 5px;
+  }
+  #fusheng-loading.is-leaving { opacity: 0; pointer-events: none; }
+  #fusheng-loading.is-paused *, #fusheng-loading.has-error * { animation-play-state: paused; }
+  #fusheng-loading.has-error .loading-status {
+    max-width: calc(100% - 56px);
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: #f3eddfeb;
+  }
+  @keyframes fusheng-room-breathe {
+    from { transform: scale(1); }
+    to { transform: scale(1.018); }
+  }
+  @keyframes fusheng-loading-dot {
+    0%, 70%, 100% { opacity: .25; }
+    35% { opacity: .9; }
+  }
+  @keyframes fusheng-paint {
+    0%, 100% { transform: rotate(-3deg); }
+    35% { transform: rotate(3deg); }
+    70% { transform: rotate(-1deg); }
+  }
+  @keyframes fusheng-water {
+    0%, 100% { transform: rotate(-2deg); }
+    45%, 65% { transform: rotate(6deg); }
+  }
+  @keyframes fusheng-water-drops {
+    from { stroke-dashoffset: 9; opacity: .15; }
+    30%, 80% { opacity: .55; }
+    to { stroke-dashoffset: 0; opacity: .15; }
+  }
+  @media (max-width: 600px) {
+    #fusheng-loading .loading-status {
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(16px, env(safe-area-inset-bottom));
+      font-size: 14px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #fusheng-loading { transition-duration: 100ms; }
+    #fusheng-loading .loading-retry { transition: none; }
+    #fusheng-loading .loading-room, #fusheng-loading .loading-dot,
+    #fusheng-loading .painter-action, #fusheng-loading .gardener-action,
+    #fusheng-loading .water-drops { animation: none; }
+    #fusheng-loading .loading-character-motion { display: none; }
+    #fusheng-loading .loading-dot { opacity: .65; }
+  }
+</style>
+<div id="fusheng-loading" aria-label="浮生纸片屋，正在加载" aria-busy="true">
+  <div class="loading-scene">
+    <div class="loading-room">
+      <img class="loading-art" src="{{LOADING_ART}}" width="1672" height="941" fetchpriority="high" decoding="async" alt="纸片屋的午后，人物在画画和照料植物">
+      <svg class="loading-character-motion" viewBox="0 0 1672 941" aria-hidden="true">
+        <defs>
+          <filter id="loading-patch-soften" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="2"/></filter>
+          <mask id="loading-action-cleanup" maskUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941">
+            <g fill="white" filter="url(#loading-patch-soften)">
+              <path d="M835 522 L854 523 L869 539 L883 516 L929 484 L939 498 L918 521 L896 532 L885 570 L863 575 L838 548Z"/>
+              <path d="M1305 440 L1321 441 L1330 460 L1337 419 L1367 410 L1413 425 L1434 444 L1436 462 L1409 470 L1401 500 L1350 487 L1334 502 L1316 493 L1305 472Z"/>
+            </g>
+          </mask>
+          <clipPath id="loading-painter-arm">
+            <path d="M839 527 Q851 529 869 547 L881 525 L889 520 L909 505 L911 498 L928 491 L922 505 L916 511 L896 526 L884 556 Q877 570 868 565 L842 541Z"/>
+          </clipPath>
+          <clipPath id="loading-gardener-arm">
+            <path d="M1308 449 L1320 455 L1330 468 L1342 447 L1345 432 Q1348 420 1357 422 L1366 425 L1369 420 L1403 432 L1400 447 L1413 447 L1419 444 L1427 456 L1400 465 L1395 485 Q1393 491 1386 488 L1352 476 L1344 485 Q1332 500 1323 488 L1309 474Z"/>
+          </clipPath>
+        </defs>
+        <image class="loading-clean-plate" href="{{LOADING_CLEAN_PLATE}}" width="1672" height="941" mask="url(#loading-action-cleanup)"/>
+        <g class="painter-action"><image href="{{LOADING_ART}}" width="1672" height="941" clip-path="url(#loading-painter-arm)"/></g>
+        <g class="gardener-action">
+          <image href="{{LOADING_ART}}" width="1672" height="941" clip-path="url(#loading-gardener-arm)"/>
+          <path class="water-drops" d="M1427 454 Q1434 461 1437 476 M1423 457 Q1429 468 1429 482"/>
+        </g>
+      </svg>
+    </div>
+    <div class="loading-fallback" hidden>浮生 · 纸片屋</div>
+    <div class="loading-status" role="status" aria-live="polite">
+      <span class="loading-message">加载中</span>
+      <span class="loading-dots" aria-hidden="true"><i class="loading-dot"></i><i class="loading-dot"></i><i class="loading-dot"></i></span>
+      <button class="loading-retry" type="button" hidden>重新加载</button>
+    </div>
+  </div>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('fusheng-loading');
+  const art = root.querySelector('.loading-art');
+  const message = root.querySelector('.loading-message');
+  const dots = root.querySelector('.loading-dots');
+  const retry = root.querySelector('.loading-retry');
+  const minimumVisibleMs = 3000;
+  let state = 'loading';
+  let gameReady = false;
+  let shownAt = null;
+  let markingVisible = false;
+  let leaveTimer;
+  const timeout = setTimeout(fail, 90000);
+
+  function cleanup() {
+    clearTimeout(timeout);
+    clearTimeout(leaveTimer);
+    window.removeEventListener('fusheng:ready', ready);
+    window.removeEventListener('fusheng:load-error', fail);
+    window.removeEventListener('error', onError, true);
+    window.removeEventListener('unhandledrejection', fail);
+    document.removeEventListener('visibilitychange', visibility);
+  }
+  function ready() {
+    gameReady = true;
+    maybeLeave();
+  }
+  function maybeLeave() {
+    if (state !== 'loading' || !gameReady || shownAt === null) return;
+    clearTimeout(leaveTimer);
+    const remaining = minimumVisibleMs - (performance.now() - shownAt);
+    if (remaining > 0) {
+      leaveTimer = setTimeout(maybeLeave, remaining);
+      return;
+    }
+    leave();
+  }
+  function leave() {
+    if (state !== 'loading') return;
+    state = 'ready';
+    cleanup();
+    root.setAttribute('aria-busy', 'false');
+    root.classList.add('is-leaving');
+    const remove = () => {
+      root.remove();
+      document.getElementById('GameCanvas')?.focus();
+    };
+    root.addEventListener('transitionend', remove, { once: true });
+    setTimeout(remove, 260);
+  }
+  function fail() {
+    if (state !== 'loading') return;
+    state = 'error';
+    cleanup();
+    root.classList.add('has-error');
+    root.setAttribute('aria-busy', 'false');
+    message.textContent = '加载未完成，请重试';
+    dots.hidden = true;
+    retry.hidden = false;
+  }
+  function onError(event) {
+    if (event.error || event.target?.tagName === 'SCRIPT') fail();
+  }
+  function visibility() {
+    root.classList.toggle('is-paused', document.hidden);
+  }
+  function artFallback() {
+    art.style.visibility = 'hidden';
+    root.querySelector('.loading-fallback').hidden = false;
+    markVisible();
+  }
+  function markVisible() {
+    if (markingVisible) return;
+    markingVisible = true;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      shownAt = performance.now();
+      maybeLeave();
+    }));
+  }
+  function artReady() {
+    art.decode().then(markVisible, artFallback);
+  }
+  art.addEventListener('error', artFallback, { once: true });
+  art.addEventListener('load', artReady, { once: true });
+  if (art.complete && !art.naturalWidth) artFallback();
+  else if (art.complete) artReady();
+  const cleanPlate = new Image();
+  cleanPlate.src = root.querySelector('.loading-clean-plate').getAttribute('href');
+  Promise.all([art.decode(), cleanPlate.decode()]).then(() => {
+    root.classList.add('has-character-motion');
+  }).catch(() => {});
+  retry.addEventListener('click', () => window.location.reload());
+  window.addEventListener('fusheng:ready', ready);
+  window.addEventListener('fusheng:load-error', fail);
+  window.addEventListener('error', onError, true);
+  window.addEventListener('unhandledrejection', fail);
+  document.addEventListener('visibilitychange', visibility);
+  visibility();
+})();
+</script>
+<!-- fusheng-loading:end -->

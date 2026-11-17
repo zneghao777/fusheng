@@ -1,0 +1,63 @@
+[
+  {
+    "__type__": "cc.SceneAsset",
+    "_name": "BootScene",
+    "scene": {
+      "__id__": 1
+    }
+  },
+  {
+    "__type__": "cc.Scene",
+    "_name": "BootScene",
+    "_children": [
+      {
+        "__id__": 2
+      }
+    ],
+    "_active": true,
+    "_components": [],
+    "autoReleaseAssets": false,
+    "_id": "bf6e7efb-ead0-4034-b558-7966c5f2e073"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "Services",
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 3
+      }
+    ],
+    "_layer": 1073741824,
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  {
+    "__type__": "f3ebcLknAlBq7x0Bp0iINAS",
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true
+  }
+]

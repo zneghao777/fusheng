@@ -1,0 +1,189 @@
+{
+  "simStep": 0.1,
+  "gameMinutesPerSecond": 12,
+  "daysPerYear": 7,
+  "startAge": 7,
+  "maxAge": 30,
+  "startClock": 420,
+  "endClock": 1440,
+  "speeds": [
+    1,
+    2,
+    4
+  ],
+  "autosaveSeconds": 15,
+  "needs": {
+    "energy": 78,
+    "food": 56,
+    "clean": 70,
+    "fun": 62
+  },
+  "rel": {
+    "warm": 18,
+    "trust": 12,
+    "tension": 4
+  },
+  "decay": {
+    "energy": 0.05,
+    "food": 0.075,
+    "clean": 0.04,
+    "fun": 0.05
+  },
+  "bodyDecayCap": 0.25,
+  "bodyDecayFactor": 0.008,
+  "xpBase": 30,
+  "xpLevel": 22,
+  "mindXpFactor": 0.02,
+  "charmWarmFactor": 0.01,
+  "skillMax": 10,
+  "taskReward": {
+    "fun": 6,
+    "rep": 1
+  },
+  "buffMax": 5,
+  "mood": {
+    "center": 50,
+    "valenceFactor": 1.25,
+    "arousalBase": 30,
+    "funFactor": 0.45,
+    "energyFactor": 0.25,
+    "excitedV": 18,
+    "excitedA": 58,
+    "calmV": -8,
+    "lowV": -34,
+    "irritatedA": 48
+  },
+  "paint": {
+    "base": 46,
+    "levelFactor": 6,
+    "moodFactor": 0.24,
+    "randomMin": -9,
+    "randomMax": 9,
+    "min": 22,
+    "max": 100,
+    "priceFactor": 0.85,
+    "fun": 9,
+    "energy": -9,
+    "clean": -3,
+    "xp": 20
+  },
+  "event": {
+    "chance": 0.08,
+    "maxPerDay": 2,
+    "earliestHour": 8
+  },
+  "npc": {
+    "startHour": 9,
+    "endHour": 21,
+    "x": 764,
+    "reach": 66
+  },
+  "movement": {
+    "speed": 205,
+    "climbSpeed": 150,
+    "gravity": 1500,
+    "jump": -430
+  },
+  "wealth": {
+    "upMid": 450,
+    "upRich": 1100,
+    "downMid": 500,
+    "downPoor": 90
+  },
+  "growth": {
+    "doubleChance": 0.22,
+    "childCharmChance": 0.45,
+    "adultAge": 14,
+    "midAge": 24
+  },
+  "wakeNeeds": {
+    "food": -14,
+    "clean": -8,
+    "fun": -5
+  },
+  "legacy": {
+    "moneyFactor": 0.5,
+    "moneyBase": 60,
+    "skillFactor": 0.7,
+    "rep": 2,
+    "needs": {
+      "energy": 100,
+      "food": 70,
+      "clean": 80,
+      "fun": 60
+    },
+    "rel": {
+      "warm": 10,
+      "trust": 8,
+      "tension": 0
+    }
+  },
+  "build": {
+    "grid": 20,
+    "floorReach": 90,
+    "margin": 18,
+    "collisionInset": 6,
+    "refund": 0.6,
+    "longPress": 0.55
+  },
+  "originWealth": {
+    "rich": "rich",
+    "art": "rich",
+    "normal": "mid",
+    "solo": "mid",
+    "blend": "mid",
+    "gran": "mid",
+    "exam": "poor",
+    "single": "poor",
+    "city": "poor",
+    "debt": "poor"
+  },
+  "wealthHouse": {
+    "rich": "villa",
+    "mid": "flat",
+    "poor": "rental"
+  },
+  "arrival": {
+    "street": "@rules.arrival.street",
+    "park": "@rules.arrival.park",
+    "store": "@rules.arrival.store",
+    "book": "@rules.arrival.book"
+  },
+  "taskCount": 3,
+  "wakeEnergy": 100,
+  "twist": {
+    "minDay": 2,
+    "maxDay": 5,
+    "avoidDays": [
+      2,
+      4,
+      6
+    ],
+    "refreshWeeks": 3
+  },
+  "travel": {
+    "minutes": 20,
+    "latestClock": 1439
+  },
+  "ending": {
+    "paintingWeight": 2,
+    "moneyDivisor": 40,
+    "warmDivisor": 8,
+    "thresholds": [
+      22,
+      12,
+      5
+    ]
+  },
+  "interaction": {
+    "floorTolerance": 14,
+    "propFloorTolerance": 16,
+    "minFurnitureReach": 54,
+    "furnitureReachPad": 20,
+    "minPropReach": 60,
+    "propReachPad": 22,
+    "npcReach": 66,
+    "doorReach": 70,
+    "doorPriorityReach": 46
+  }
+}

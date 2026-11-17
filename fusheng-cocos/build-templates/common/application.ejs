@@ -1,0 +1,28 @@
+<%- include(versionCheckTemplate, { version: '1.0.0' }) %>
+let cc;
+
+export class Application {
+    constructor () {
+        this.settingsPath = '<%= settingsJsonPath %>';
+        this.showFPS = <%= showFPS %>;
+    }
+
+    init (engine) {
+        cc = engine;
+    }
+
+    start () {
+        return cc.game.init({
+            debugMode: <%= debugMode %> ? cc.DebugMode.INFO : cc.DebugMode.ERROR,
+            settingsPath: this.settingsPath,
+            overrideSettings: {
+                // The HTML illustration stays visible until Boot draws the game.
+                splashScreen: { totalTime: 0 },
+                profiling: { showFPS: this.showFPS },
+            },
+        }).then(() => cc.game.run()).catch((error) => {
+            window.dispatchEvent(new Event('fusheng:load-error'));
+            throw error;
+        });
+    }
+}

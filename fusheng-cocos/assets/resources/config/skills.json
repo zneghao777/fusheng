@@ -1,0 +1,14 @@
+[
+  {
+    "id": "paint",
+    "name": "@skills.0.name"
+  },
+  {
+    "id": "cook",
+    "name": "@skills.1.name"
+  },
+  {
+    "id": "social",
+    "name": "@skills.2.name"
+  }
+]

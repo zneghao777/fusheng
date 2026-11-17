@@ -1,0 +1,21 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { root, run, sync } from './sync.mjs';
+
+await sync();
+const args = ['-project', 'ios/App/App.xcodeproj', '-scheme', 'App', '-configuration', 'Debug', '-sdk', 'iphoneos', '-destination', 'generic/platform=iOS', '-derivedDataPath', 'output/ios-derived'];
+if (process.env.IOS_TEAM_ID) args.push(`DEVELOPMENT_TEAM=${process.env.IOS_TEAM_ID}`, '-allowProvisioningUpdates');
+else args.push('CODE_SIGNING_ALLOWED=NO');
+run('xcodebuild', [...args, 'build']);
+const source = path.join(root, 'output/ios-derived/Build/Products/Debug-iphoneos/App.app');
+const target = path.join(root, 'output', process.env.IOS_TEAM_ID ? 'ios-device/App.app' : 'ios-unsigned/App.app');
+await fs.rm(target, { recursive: true, force: true });
+await fs.cp(source, target, { recursive: true });
+const staging = path.join(root, 'output/ios-ipa');
+await fs.rm(staging, { recursive: true, force: true });
+await fs.mkdir(path.join(staging, 'Payload'), { recursive: true });
+await fs.cp(target, path.join(staging, 'Payload/App.app'), { recursive: true });
+const ipa = path.join(root, 'output', `fusheng-0.6.5-ios-${process.env.IOS_TEAM_ID ? 'development' : 'unsigned'}.ipa`);
+run('/usr/bin/ditto', ['-c', '-k', '--keepParent', path.join(staging, 'Payload'), ipa]);
+console.log(`iOS 包：${ipa}`);
+console.log(process.env.IOS_TEAM_ID ? `iOS 开发签名产物：${target}` : `iOS 未签名编译产物：${target}；真机安装需在 Xcode 选择开发团队并签名。`);

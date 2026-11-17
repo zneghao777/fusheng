@@ -1,0 +1,51 @@
+# Local tools, caches, and generated builds
+.DS_Store
+.playwright-cli/
+.playwright-mcp/
+.workbuddy/
+.wbapp_*
+**/node_modules/
+**/library/
+**/temp/
+**/build/
+**/output/
+**/publish/
+**/.impeccable/
+**/.playwright-cli/
+**/__pycache__/
+*.py[cod]
+dist/
+手机试玩包/
+*.log
+
+# Local editor integration and deployment information
+fusheng-cocos/extensions/
+fusheng-cocos/settings/mcp-server.json
+fusheng-cocos/settings/tool-manager.json
+fusheng-cocos/settings/v2/packages/information.json
+docs/线上发布说明.md
+
+# Generated music catalog differs according to the locally available tracks.
+fusheng-cocos/assets/resources/config/music.json
+
+# OpenTracks does not permit redistributing music as standalone assets.
+fusheng-cocos/assets/resources/music/title.bin
+fusheng-cocos/assets/resources/music/title.bin.meta
+fusheng-cocos/assets/resources/music/day.bin
+fusheng-cocos/assets/resources/music/day.bin.meta
+fusheng-cocos/assets/resources/music/book.bin
+fusheng-cocos/assets/resources/music/book.bin.meta
+
+# Secrets and machine-specific settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.p8
+*.mobileprovision
+*.jks
+*.keystore
+**/xcuserdata/
+**/local.properties

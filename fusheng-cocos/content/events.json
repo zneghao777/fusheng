@@ -1,0 +1,816 @@
+[
+  {
+    "id": "delivery",
+    "title": "@events.0.title",
+    "body": "@events.0.body",
+    "weight": 10,
+    "where": "home",
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "delivery_0",
+        "label": "@events.0.options.0.label",
+        "hint": "@events.0.options.0.hint",
+        "effects": [
+          {
+            "type": "branch",
+            "condition": {
+              "type": "chance",
+              "p": 0.5
+            },
+            "then": [
+              {
+                "type": "money",
+                "delta": 45
+              },
+              {
+                "type": "need",
+                "key": "fun",
+                "delta": 9
+              },
+              {
+                "type": "reply",
+                "whoKey": "",
+                "textKey": "@events.delivery.option0.0.then.2.arg1"
+              }
+            ],
+            "else": [
+              {
+                "type": "need",
+                "key": "fun",
+                "delta": 5
+              },
+              {
+                "type": "reply",
+                "whoKey": "",
+                "textKey": "@events.delivery.option0.0.else.1.arg1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "delivery_1",
+        "label": "@events.0.options.1.label",
+        "hint": "@events.0.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                3
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.delivery.option1.1.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "emo",
+    "title": "@events.1.title",
+    "body": "@events.1.body",
+    "weight": 9,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [
+      {
+        "type": "hourBetween",
+        "from": 21,
+        "to": 2
+      }
+    ],
+    "options": [
+      {
+        "id": "emo_0",
+        "label": "@events.1.options.0.label",
+        "hint": "@events.1.options.0.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": {
+              "op": "neg",
+              "args": [
+                12
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 14
+          },
+          {
+            "type": "xp",
+            "skill": "paint",
+            "amount": 12
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.emo.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "emo_1",
+        "label": "@events.1.options.1.label",
+        "hint": "@events.1.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": 4
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                4
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.emo.option1.2.arg1"
+          }
+        ]
+      },
+      {
+        "id": "emo_2",
+        "label": "@events.1.options.2.label",
+        "hint": "@events.1.options.2.hint",
+        "effects": [
+          {
+            "type": "warm",
+            "delta": 3
+          },
+          {
+            "type": "xp",
+            "skill": "social",
+            "amount": 6
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 8
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.emo.option2.3.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sauce",
+    "title": "@events.2.title",
+    "body": "@events.2.body",
+    "weight": 10,
+    "where": "home",
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "sauce_0",
+        "label": "@events.2.options.0.label",
+        "hint": "@events.2.options.0.hint",
+        "effects": [
+          {
+            "type": "warm",
+            "delta": 6
+          },
+          {
+            "type": "rel",
+            "key": "trust",
+            "delta": 8
+          },
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                2
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "@events.sauce.option0.3.arg0",
+            "textKey": "@events.sauce.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "sauce_1",
+        "label": "@events.2.options.1.label",
+        "hint": "@events.2.options.1.hint",
+        "effects": [
+          {
+            "type": "rel",
+            "key": "trust",
+            "delta": {
+              "op": "neg",
+              "args": [
+                3
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "@events.sauce.option0.3.arg0",
+            "textKey": "@events.sauce.option1.1.arg1"
+          }
+        ]
+      },
+      {
+        "id": "sauce_2",
+        "label": "@events.2.options.2.label",
+        "hint": "@events.2.options.2.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                15
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "food",
+            "delta": 20
+          },
+          {
+            "type": "warm",
+            "delta": 10
+          },
+          {
+            "type": "rel",
+            "key": "trust",
+            "delta": 6
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.sauce.option2.4.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "landlord",
+    "title": "@events.3.title",
+    "body": "@events.3.body",
+    "weight": 8,
+    "where": "home",
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "landlord_0",
+        "label": "@events.3.options.0.label",
+        "hint": "@events.3.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                60
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@events.landlord.option0.1.arg0",
+            "v": 8,
+            "a": 0,
+            "hours": 8
+          },
+          {
+            "type": "reply",
+            "whoKey": "@events.landlord.option0.2.arg0",
+            "textKey": "@events.landlord.option0.2.arg1"
+          }
+        ]
+      },
+      {
+        "id": "landlord_1",
+        "label": "@events.3.options.1.label",
+        "hint": "@events.3.options.1.hint",
+        "effects": [
+          {
+            "type": "warm",
+            "delta": {
+              "op": "neg",
+              "args": [
+                2
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@events.landlord.option1.1.arg0",
+            "v": {
+              "op": "neg",
+              "args": [
+                8
+              ]
+            },
+            "a": {
+              "op": "neg",
+              "args": [
+                4
+              ]
+            },
+            "hours": 6
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.landlord.option1.2.arg1"
+          }
+        ]
+      },
+      {
+        "id": "landlord_2",
+        "label": "@events.3.options.2.label",
+        "hint": "@events.3.options.2.hint",
+        "effects": [
+          {
+            "type": "branch",
+            "condition": {
+              "type": "chance",
+              "p": 0.55
+            },
+            "then": [
+              {
+                "type": "reply",
+                "whoKey": "@events.landlord.option0.2.arg0",
+                "textKey": "@events.landlord.option2.0.then.0.arg1"
+              },
+              {
+                "type": "rel",
+                "key": "tension",
+                "delta": 4
+              }
+            ],
+            "else": [
+              {
+                "type": "money",
+                "delta": {
+                  "op": "neg",
+                  "args": [
+                    60
+                  ]
+                }
+              },
+              {
+                "type": "reply",
+                "whoKey": "@events.landlord.option0.2.arg0",
+                "textKey": "@events.landlord.option2.0.else.1.arg1"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "inspire",
+    "title": "@events.4.title",
+    "body": "@events.4.body",
+    "weight": 7,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "inspire_0",
+        "label": "@events.4.options.0.label",
+        "hint": "@events.4.options.0.hint",
+        "effects": [
+          {
+            "type": "xp",
+            "skill": "paint",
+            "amount": 25
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 12
+          },
+          {
+            "type": "need",
+            "key": "energy",
+            "delta": {
+              "op": "neg",
+              "args": [
+                10
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@events.inspire.option0.3.arg0",
+            "v": 14,
+            "a": 12,
+            "hours": 4
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.inspire.option0.4.arg1"
+          }
+        ]
+      },
+      {
+        "id": "inspire_1",
+        "label": "@events.4.options.1.label",
+        "hint": "@events.4.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 4
+          },
+          {
+            "type": "buff",
+            "nameKey": "@events.inspire.option1.1.arg0",
+            "v": 7,
+            "a": 2,
+            "hours": 8
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.inspire.option1.2.arg1"
+          }
+        ]
+      },
+      {
+        "id": "inspire_2",
+        "label": "@events.4.options.2.label",
+        "hint": "@events.4.options.2.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                6
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.inspire.option2.1.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cat",
+    "title": "@events.5.title",
+    "body": "@events.5.body",
+    "weight": 8,
+    "where": "home",
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "cat_0",
+        "label": "@events.5.options.0.label",
+        "hint": "@events.5.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                10
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 18
+          },
+          {
+            "type": "buff",
+            "nameKey": "@events.cat.option0.2.arg0",
+            "v": 14,
+            "a": 6,
+            "hours": 6
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.cat.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "cat_1",
+        "label": "@events.5.options.1.label",
+        "hint": "@events.5.options.1.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 9
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.cat.option1.1.arg1"
+          }
+        ]
+      },
+      {
+        "id": "cat_2",
+        "label": "@events.5.options.2.label",
+        "hint": "@events.5.options.2.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                4
+              ]
+            }
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.cat.option2.1.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "takeout",
+    "title": "@events.6.title",
+    "body": "@events.6.body",
+    "weight": 9,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "takeout_0",
+        "label": "@events.6.options.0.label",
+        "hint": "@events.6.options.0.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                12
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "food",
+            "delta": 26
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 7
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.takeout.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "takeout_1",
+        "label": "@events.6.options.1.label",
+        "hint": "@events.6.options.1.hint",
+        "effects": [
+          {
+            "type": "money",
+            "delta": {
+              "op": "neg",
+              "args": [
+                18
+              ]
+            }
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 15
+          },
+          {
+            "type": "need",
+            "key": "food",
+            "delta": 4
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.takeout.option1.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "takeout_2",
+        "label": "@events.6.options.2.label",
+        "hint": "@events.6.options.2.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "food",
+            "delta": 16
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                4
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@events.takeout.option2.2.arg0",
+            "v": 9,
+            "a": 0,
+            "hours": 5
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.takeout.option2.3.arg1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "oldfriend",
+    "title": "@events.7.title",
+    "body": "@events.7.body",
+    "weight": 6,
+    "where": null,
+    "day": null,
+    "seal": "",
+    "sub": "",
+    "conditions": [],
+    "options": [
+      {
+        "id": "oldfriend_0",
+        "label": "@events.7.options.0.label",
+        "hint": "@events.7.options.0.hint",
+        "effects": [
+          {
+            "type": "xp",
+            "skill": "social",
+            "amount": 12
+          },
+          {
+            "type": "warm",
+            "delta": 5
+          },
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": 7
+          },
+          {
+            "type": "reply",
+            "whoKey": "@events.oldfriend.option0.3.arg0",
+            "textKey": "@events.oldfriend.option0.3.arg1"
+          }
+        ]
+      },
+      {
+        "id": "oldfriend_1",
+        "label": "@events.7.options.1.label",
+        "hint": "@events.7.options.1.hint",
+        "effects": [
+          {
+            "type": "branch",
+            "condition": {
+              "type": "chance",
+              "p": 0.5
+            },
+            "then": [
+              {
+                "type": "need",
+                "key": "fun",
+                "delta": {
+                  "op": "neg",
+                  "args": [
+                    6
+                  ]
+                }
+              },
+              {
+                "type": "reply",
+                "whoKey": "@events.oldfriend.option0.3.arg0",
+                "textKey": "@events.oldfriend.option1.0.then.1.arg1"
+              }
+            ],
+            "else": [
+              {
+                "type": "warm",
+                "delta": 8
+              },
+              {
+                "type": "need",
+                "key": "fun",
+                "delta": 10
+              },
+              {
+                "type": "reply",
+                "whoKey": "@events.oldfriend.option0.3.arg0",
+                "textKey": "@events.oldfriend.option1.0.else.2.arg1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oldfriend_2",
+        "label": "@events.7.options.2.label",
+        "hint": "@events.7.options.2.hint",
+        "effects": [
+          {
+            "type": "need",
+            "key": "fun",
+            "delta": {
+              "op": "neg",
+              "args": [
+                2
+              ]
+            }
+          },
+          {
+            "type": "buff",
+            "nameKey": "@events.oldfriend.option2.1.arg0",
+            "v": {
+              "op": "neg",
+              "args": [
+                6
+              ]
+            },
+            "a": 0,
+            "hours": 5
+          },
+          {
+            "type": "reply",
+            "whoKey": "",
+            "textKey": "@events.oldfriend.option2.2.arg1"
+          }
+        ]
+      }
+    ]
+  }
+]

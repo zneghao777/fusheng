@@ -1,0 +1,154 @@
+{
+  "x": 764,
+  "y": 620,
+  "name": "@npc.name",
+  "title": "@npc.name",
+  "body": "@npc.body",
+  "sub": "@npc.sub",
+  "options": [
+    {
+      "id": "npc_0",
+      "label": "@npc.options.0.label",
+      "hint": "@npc.options.0.hint",
+      "effects": [
+        {
+          "type": "warm",
+          "delta": 4
+        },
+        {
+          "type": "xp",
+          "skill": "social",
+          "amount": 8
+        },
+        {
+          "type": "task",
+          "key": "talk",
+          "amount": 1
+        },
+        {
+          "type": "reply",
+          "whoKey": "@events.sauce.option0.3.arg0",
+          "textKey": "@npc.option0.3.arg1"
+        }
+      ]
+    },
+    {
+      "id": "npc_1",
+      "label": "@npc.options.1.label",
+      "hint": "@npc.options.1.hint",
+      "effects": [
+        {
+          "type": "warm",
+          "delta": 7
+        },
+        {
+          "type": "need",
+          "key": "fun",
+          "delta": 7
+        },
+        {
+          "type": "need",
+          "key": "clean",
+          "delta": {
+            "op": "neg",
+            "args": [
+              2
+            ]
+          }
+        },
+        {
+          "type": "rel",
+          "key": "trust",
+          "delta": 5
+        },
+        {
+          "type": "xp",
+          "skill": "social",
+          "amount": 10
+        },
+        {
+          "type": "task",
+          "key": "talk",
+          "amount": 1
+        },
+        {
+          "type": "clock",
+          "minutes": 40
+        },
+        {
+          "type": "reply",
+          "whoKey": "@events.sauce.option0.3.arg0",
+          "textKey": "@npc.option1.7.arg1"
+        }
+      ]
+    },
+    {
+      "id": "npc_2",
+      "label": "@npc.options.2.label",
+      "hint": "@npc.options.2.hint",
+      "effects": [
+        {
+          "type": "branch",
+          "condition": {
+            "type": "trustAtLeast",
+            "value": 30
+          },
+          "then": [
+            {
+              "type": "money",
+              "delta": 60
+            },
+            {
+              "type": "warm",
+              "delta": 3
+            },
+            {
+              "type": "reply",
+              "whoKey": "@events.sauce.option0.3.arg0",
+              "textKey": "@npc.option2.0.then.2.arg1"
+            }
+          ],
+          "else": [
+            {
+              "type": "rel",
+              "key": "trust",
+              "delta": {
+                "op": "neg",
+                "args": [
+                  4
+                ]
+              }
+            },
+            {
+              "type": "reply",
+              "whoKey": "@events.sauce.option0.3.arg0",
+              "textKey": "@npc.option2.0.else.1.arg1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "npc_3",
+      "label": "@npc.options.3.label",
+      "hint": "@npc.options.3.hint",
+      "effects": [
+        {
+          "type": "need",
+          "key": "fun",
+          "delta": {
+            "op": "neg",
+            "args": [
+              2
+            ]
+          }
+        },
+        {
+          "type": "reply",
+          "whoKey": "@events.sauce.option0.3.arg0",
+          "textKey": "@npc.option3.1.arg1"
+        }
+      ]
+    }
+  ]
+}

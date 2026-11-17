@@ -1,0 +1,177 @@
+[
+  {
+    "id": "normal",
+    "name": "@origins.0.name",
+    "diff": 2,
+    "money": 120,
+    "needs": {},
+    "skills": {},
+    "rel": {},
+    "mods": {},
+    "desc": "@origins.0.desc"
+  },
+  {
+    "id": "solo",
+    "name": "@origins.1.name",
+    "diff": 2,
+    "money": 90,
+    "needs": {
+      "fun": -12,
+      "clean": -8
+    },
+    "skills": {},
+    "rel": {},
+    "mods": {},
+    "remove": [
+      "sofa"
+    ],
+    "desc": "@origins.1.desc"
+  },
+  {
+    "id": "exam",
+    "name": "@origins.2.name",
+    "diff": 3,
+    "money": 60,
+    "needs": {
+      "energy": -12
+    },
+    "skills": {
+      "paint": 2
+    },
+    "rel": {},
+    "mods": {
+      "income": 0.9
+    },
+    "desc": "@origins.2.desc"
+  },
+  {
+    "id": "rich",
+    "name": "@origins.3.name",
+    "diff": 1,
+    "money": 800,
+    "needs": {
+      "fun": 12
+    },
+    "skills": {},
+    "rel": {},
+    "mods": {
+      "income": 0.8,
+      "warm": 0.9
+    },
+    "extra": [
+      "lamp",
+      "rug"
+    ],
+    "desc": "@origins.3.desc"
+  },
+  {
+    "id": "single",
+    "name": "@origins.4.name",
+    "diff": 4,
+    "money": 70,
+    "needs": {
+      "energy": -8,
+      "fun": -8
+    },
+    "skills": {
+      "cook": 2
+    },
+    "rel": {},
+    "mods": {
+      "warm": 0.85
+    },
+    "desc": "@origins.4.desc"
+  },
+  {
+    "id": "blend",
+    "name": "@origins.5.name",
+    "diff": 3,
+    "money": 110,
+    "needs": {},
+    "skills": {},
+    "rel": {
+      "warm": -8,
+      "tension": 18
+    },
+    "mods": {
+      "warm": 1.15
+    },
+    "desc": "@origins.5.desc"
+  },
+  {
+    "id": "debt",
+    "name": "@origins.6.name",
+    "diff": 5,
+    "money": 30,
+    "needs": {
+      "fun": -10
+    },
+    "skills": {},
+    "rel": {},
+    "mods": {
+      "income": 0.95
+    },
+    "remove": [
+      "tv"
+    ],
+    "debt": 6,
+    "desc": "@origins.6.desc"
+  },
+  {
+    "id": "art",
+    "name": "@origins.7.name",
+    "diff": 2,
+    "money": 100,
+    "needs": {
+      "fun": -6
+    },
+    "skills": {
+      "paint": 3
+    },
+    "rel": {},
+    "mods": {
+      "paint": 1.15,
+      "income": 0.95
+    },
+    "desc": "@origins.7.desc"
+  },
+  {
+    "id": "gran",
+    "name": "@origins.8.name",
+    "diff": 3,
+    "money": 80,
+    "needs": {
+      "clean": -6
+    },
+    "skills": {
+      "cook": 3
+    },
+    "rel": {
+      "warm": 12,
+      "trust": 8
+    },
+    "mods": {
+      "foodDecay": 0.85
+    },
+    "desc": "@origins.8.desc"
+  },
+  {
+    "id": "city",
+    "name": "@origins.9.name",
+    "diff": 4,
+    "money": 50,
+    "needs": {
+      "clean": -12,
+      "energy": -6
+    },
+    "skills": {},
+    "rel": {},
+    "mods": {
+      "income": 1.05
+    },
+    "remove": [
+      "bookshelf"
+    ],
+    "desc": "@origins.9.desc"
+  }
+]

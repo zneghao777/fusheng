@@ -1,0 +1,400 @@
+{
+  "villa": {
+    "id": "villa",
+    "name": "@houses.villa.name",
+    "tierName": "@houses.villa.tierName",
+    "tier": 0,
+    "x1": 70,
+    "x2": 1210,
+    "roofY": 78,
+    "f1": 600,
+    "f2": 430,
+    "f3": 250,
+    "floors": [
+      600,
+      430,
+      250
+    ],
+    "ladder": {
+      "x1": 1040,
+      "x2": 1078,
+      "top": 250,
+      "bot": 600
+    },
+    "doorX": 1150,
+    "windows": [
+      {
+        "x": 430,
+        "y": 430,
+        "w": 150,
+        "h": 112
+      },
+      {
+        "x": 230,
+        "y": 280,
+        "w": 140,
+        "h": 110
+      },
+      {
+        "x": 820,
+        "y": 100,
+        "w": 130,
+        "h": 108
+      }
+    ],
+    "labels": [
+      [
+        "@houses.villa.labels.0.0",
+        158,
+        470,
+        17
+      ],
+      [
+        "@houses.villa.labels.1.0",
+        742,
+        470,
+        17
+      ],
+      [
+        "@houses.villa.labels.2.0",
+        940,
+        470,
+        17
+      ],
+      [
+        "@houses.villa.labels.3.0",
+        172,
+        326,
+        17
+      ],
+      [
+        "@houses.villa.labels.4.0",
+        640,
+        326,
+        17
+      ],
+      [
+        "@houses.villa.labels.5.0",
+        900,
+        140,
+        17
+      ]
+    ],
+    "placed": [
+      {
+        "x": 180,
+        "y": 600,
+        "furnitureId": "fridge"
+      },
+      {
+        "x": 280,
+        "y": 600,
+        "furnitureId": "stove"
+      },
+      {
+        "x": 360,
+        "y": 600,
+        "furnitureId": "plant"
+      },
+      {
+        "x": 500,
+        "y": 600,
+        "furnitureId": "sofa"
+      },
+      {
+        "x": 600,
+        "y": 600,
+        "furnitureId": "rug"
+      },
+      {
+        "x": 700,
+        "y": 600,
+        "furnitureId": "tv"
+      },
+      {
+        "x": 830,
+        "y": 600,
+        "furnitureId": "tea"
+      },
+      {
+        "x": 950,
+        "y": 600,
+        "furnitureId": "shower"
+      },
+      {
+        "x": 230,
+        "y": 430,
+        "furnitureId": "bed"
+      },
+      {
+        "x": 320,
+        "y": 430,
+        "furnitureId": "lamp"
+      },
+      {
+        "x": 400,
+        "y": 430,
+        "furnitureId": "wardrobe"
+      },
+      {
+        "x": 580,
+        "y": 430,
+        "furnitureId": "easel"
+      },
+      {
+        "x": 720,
+        "y": 430,
+        "furnitureId": "desk"
+      },
+      {
+        "x": 860,
+        "y": 430,
+        "furnitureId": "plant"
+      },
+      {
+        "x": 400,
+        "y": 250,
+        "furnitureId": "bookshelf"
+      },
+      {
+        "x": 620,
+        "y": 250,
+        "furnitureId": "tea"
+      },
+      {
+        "x": 780,
+        "y": 250,
+        "furnitureId": "plant"
+      },
+      {
+        "x": 900,
+        "y": 250,
+        "furnitureId": "lamp"
+      }
+    ]
+  },
+  "flat": {
+    "id": "flat",
+    "name": "@houses.flat.name",
+    "tierName": "@houses.flat.tierName",
+    "tier": 1,
+    "x1": 110,
+    "x2": 1170,
+    "roofY": 90,
+    "f1": 600,
+    "f2": 344,
+    "floors": [
+      600,
+      344
+    ],
+    "ladder": {
+      "x1": 1020,
+      "x2": 1058,
+      "top": 344,
+      "bot": 600
+    },
+    "doorX": 1118,
+    "windows": [
+      {
+        "x": 466,
+        "y": 412,
+        "w": 132,
+        "h": 118
+      },
+      {
+        "x": 196,
+        "y": 142,
+        "w": 132,
+        "h": 122
+      }
+    ],
+    "labels": [
+      [
+        "@houses.villa.labels.0.0",
+        168,
+        416,
+        18
+      ],
+      [
+        "@houses.flat.labels.1.0",
+        758,
+        416,
+        18
+      ],
+      [
+        "@houses.flat.labels.2.0",
+        900,
+        416,
+        18
+      ],
+      [
+        "@houses.villa.labels.3.0",
+        172,
+        180,
+        18
+      ],
+      [
+        "@houses.villa.labels.4.0",
+        618,
+        180,
+        18
+      ]
+    ],
+    "placed": [
+      {
+        "x": 198,
+        "y": 600,
+        "furnitureId": "fridge"
+      },
+      {
+        "x": 288,
+        "y": 600,
+        "furnitureId": "stove"
+      },
+      {
+        "x": 376,
+        "y": 600,
+        "furnitureId": "plant"
+      },
+      {
+        "x": 522,
+        "y": 600,
+        "furnitureId": "sofa"
+      },
+      {
+        "x": 612,
+        "y": 600,
+        "furnitureId": "rug"
+      },
+      {
+        "x": 690,
+        "y": 600,
+        "furnitureId": "tv"
+      },
+      {
+        "x": 826,
+        "y": 600,
+        "furnitureId": "tea"
+      },
+      {
+        "x": 948,
+        "y": 600,
+        "furnitureId": "shower"
+      },
+      {
+        "x": 230,
+        "y": 344,
+        "furnitureId": "bed"
+      },
+      {
+        "x": 320,
+        "y": 344,
+        "furnitureId": "lamp"
+      },
+      {
+        "x": 394,
+        "y": 344,
+        "furnitureId": "wardrobe"
+      },
+      {
+        "x": 562,
+        "y": 344,
+        "furnitureId": "easel"
+      },
+      {
+        "x": 722,
+        "y": 344,
+        "furnitureId": "desk"
+      },
+      {
+        "x": 886,
+        "y": 344,
+        "furnitureId": "bookshelf"
+      },
+      {
+        "x": 980,
+        "y": 344,
+        "furnitureId": "plant"
+      }
+    ]
+  },
+  "rental": {
+    "id": "rental",
+    "name": "@houses.rental.name",
+    "tierName": "@houses.rental.tierName",
+    "tier": 2,
+    "x1": 150,
+    "x2": 1130,
+    "roofY": 120,
+    "f1": 600,
+    "floors": [
+      600
+    ],
+    "ladder": null,
+    "doorX": 1086,
+    "windows": [
+      {
+        "x": 700,
+        "y": 250,
+        "w": 110,
+        "h": 110
+      },
+      {
+        "x": 300,
+        "y": 330,
+        "w": 84,
+        "h": 72
+      }
+    ],
+    "labels": [
+      [
+        "@houses.rental.labels.0.0",
+        186,
+        470,
+        18
+      ]
+    ],
+    "placed": [
+      {
+        "x": 200,
+        "y": 600,
+        "furnitureId": "fridge"
+      },
+      {
+        "x": 290,
+        "y": 600,
+        "furnitureId": "stove"
+      },
+      {
+        "x": 370,
+        "y": 600,
+        "furnitureId": "plant"
+      },
+      {
+        "x": 470,
+        "y": 600,
+        "furnitureId": "bed"
+      },
+      {
+        "x": 640,
+        "y": 600,
+        "furnitureId": "sofa"
+      },
+      {
+        "x": 760,
+        "y": 600,
+        "furnitureId": "easel"
+      },
+      {
+        "x": 880,
+        "y": 600,
+        "furnitureId": "desk"
+      },
+      {
+        "x": 1010,
+        "y": 600,
+        "furnitureId": "shower"
+      }
+    ]
+  }
+}

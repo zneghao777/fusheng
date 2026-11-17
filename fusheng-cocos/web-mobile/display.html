@@ -1,0 +1,53 @@
+<!-- fusheng-mobile-display:start -->
+<style>
+ html,body{overscroll-behavior:none;-webkit-text-size-adjust:100%;height:100%;height:100dvh}
+ body{position:fixed;inset:0;touch-action:none}
+ #GameDiv{height:100%;height:100dvh;width:100%;max-width:none}
+ #fusheng-fullscreen{position:fixed;z-index:9000;right:calc(env(safe-area-inset-right,0px) + var(--fusheng-rail-width,64px)/2 - 22px);bottom:max(8px,env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:44px;height:44px;padding:0;border:1px solid #b8a58a;border-bottom:2px solid #b09d80;border-radius:50%;background:#f4ead7;color:#625849;font:13px/1.4 sans-serif;box-shadow:0 2px 4px #58472d18,inset 0 1px 0 #fffaf0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background-color 120ms,border-color 120ms,box-shadow 120ms}
+ #fusheng-fullscreen[hidden],#fusheng-fullscreen-hint[hidden]{display:none}
+ #fusheng-fullscreen svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4;transition:transform 80ms}
+ #fusheng-fullscreen:active{border-bottom-width:1px;background:#e4d4b9;box-shadow:inset 0 1px 2px #67533326}
+ #fusheng-fullscreen:active svg{transform:translateY(1px)}
+ #fusheng-fullscreen:focus-visible{outline:2px solid #a6402f;outline-offset:2px}
+ #fusheng-fullscreen-hint{position:fixed;z-index:11000;inset:0;display:grid;place-items:center;padding:24px;background:#27221966}
+ #fusheng-fullscreen-hint>div{box-sizing:border-box;width:min(420px,100%);max-height:85dvh;overflow:auto;padding:24px;background:#f3eddf;border:1px solid #b5a78e;color:#443b2d;font:16px/1.8 sans-serif}
+ #fusheng-fullscreen-hint p{margin:0 0 16px}
+ #fusheng-fullscreen-hint button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:44px;min-height:44px;min-width:88px;padding:0 20px;border:1px solid #853b2c;border-bottom:2px solid #853d2e;border-radius:999px;background:#a94b38;color:#fff7e9;font:inherit;box-shadow:0 2px 4px #6332221f,inset 0 1px 0 #cf8068;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background-color 120ms,border-color 120ms,box-shadow 120ms}
+ #fusheng-fullscreen-hint button:active{border-bottom-width:1px;background:#8e3e2f;box-shadow:inset 0 1px 2px #54241833}
+ #fusheng-fullscreen-hint button:focus-visible{outline:2px solid #a6402f;outline-offset:3px}
+ @media (hover:hover){#fusheng-fullscreen:hover:not(:active){background:#fff4df}#fusheng-fullscreen-hint button:hover:not(:active){background:#b45942}}
+ @media (prefers-reduced-motion:reduce){#fusheng-fullscreen,#fusheng-fullscreen svg,#fusheng-fullscreen-hint button{transition:none}}
+ @media (pointer:fine){#fusheng-fullscreen{display:none}}
+ html[data-touch-test] #fusheng-fullscreen:not([hidden]){display:flex}
+</style>
+<button id="fusheng-fullscreen" type="button" hidden aria-label="进入全屏">
+ <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m6 0h6v-6"/></svg>
+</button>
+<div id="fusheng-fullscreen-hint" role="dialog" aria-modal="true" aria-label="全屏游玩方法" hidden><div><p></p><button type="button">知道了</button></div></div>
+<script>
+(()=>{
+ const button=document.getElementById('fusheng-fullscreen'),hint=document.getElementById('fusheng-fullscreen-hint');
+ const native=window.Capacitor?.isNativePlatform?.()||/^(capacitor|ionic):$/.test(location.protocol)||location.hostname==='localhost'&&!!window.Capacitor;
+ const standalone=navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches;
+ const touch=new URLSearchParams(location.search).get('touch')==='1';
+ if(touch)document.documentElement.setAttribute('data-touch-test','');
+ if(native||standalone)return;
+ let ready=false;
+ const update=()=>{const active=!!(document.fullscreenElement||document.webkitFullscreenElement);button.title=active?'退出全屏':'进入全屏';button.setAttribute('aria-label',active?'退出全屏':'进入全屏');button.hidden=!ready;};
+ const showHint=text=>{hint.querySelector('p').textContent=text;hint.hidden=false;hint.querySelector('button').focus();};
+ button.addEventListener('click',async()=>{
+  try{
+   if(document.fullscreenElement||document.webkitFullscreenElement){await (document.exitFullscreen?.()??document.webkitExitFullscreen?.());return;}
+   const request=document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen;
+   if(!request){showHint(/iPhone|iPad|iPod/.test(navigator.userAgent)?'想铺满屏幕游玩，请用 Safari 打开游戏，点“分享”→“添加到主屏幕”，再从桌面图标打开，并横屏游玩。':'请在浏览器菜单中开启全屏，或将游戏添加到主屏幕后打开。');return;}
+   await request.call(document.documentElement,{navigationUI:'hide'});
+   try{await screen.orientation?.lock?.('landscape');}catch{}
+  }catch{showHint('浏览器暂未允许全屏。可以从浏览器菜单开启全屏，或添加到主屏幕后横屏游玩。');}
+ });
+ hint.querySelector('button').addEventListener('click',()=>{hint.hidden=true;button.focus();});
+ hint.addEventListener('keydown',event=>{if(event.key==='Escape'){hint.hidden=true;button.focus();}if(event.key==='Tab'){event.preventDefault();hint.querySelector('button').focus();}});
+ document.addEventListener('fullscreenchange',update);document.addEventListener('webkitfullscreenchange',update);
+ window.addEventListener('fusheng:ready',()=>{ready=true;setTimeout(update,3250);},{once:true});
+})();
+</script>
+<!-- fusheng-mobile-display:end -->

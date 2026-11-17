@@ -1,0 +1,668 @@
+{
+  "bed": [
+    {
+      "type": "sleep"
+    }
+  ],
+  "stove": [
+    {
+      "type": "let",
+      "key": "cost",
+      "value": {
+        "op": "round",
+        "args": [
+          {
+            "op": "*",
+            "args": [
+              8,
+              {
+                "mod": "cookCost"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "branch",
+      "condition": {
+        "type": "compare",
+        "left": {
+          "path": "money"
+        },
+        "op": "<",
+        "right": {
+          "variable": "cost"
+        }
+      },
+      "then": [
+        {
+          "type": "toast",
+          "textKey": "@actions.stove.0.then.0.arg0"
+        },
+        {
+          "type": "stop"
+        }
+      ],
+      "else": []
+    },
+    {
+      "type": "money",
+      "delta": {
+        "op": "neg",
+        "args": [
+          {
+            "variable": "cost"
+          }
+        ]
+      }
+    },
+    {
+      "type": "need",
+      "key": "food",
+      "delta": 46
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 5
+    },
+    {
+      "type": "need",
+      "key": "clean",
+      "delta": {
+        "op": "neg",
+        "args": [
+          4
+        ]
+      }
+    },
+    {
+      "type": "buff",
+      "nameKey": "@actions.stove.5.arg0",
+      "v": 10,
+      "a": 6,
+      "hours": 4
+    },
+    {
+      "type": "xp",
+      "skill": "cook",
+      "amount": 14
+    },
+    {
+      "type": "stat",
+      "key": "meals",
+      "delta": 1
+    },
+    {
+      "type": "task",
+      "key": "eat",
+      "amount": 1
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.stove.9.arg0"
+    }
+  ],
+  "fridge": [
+    {
+      "type": "need",
+      "key": "food",
+      "delta": 18
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 3
+    },
+    {
+      "type": "branch",
+      "condition": {
+        "type": "chance",
+        "p": 0.35
+      },
+      "then": [
+        {
+          "type": "buff",
+          "nameKey": "@actions.fridge.2.then.arg0",
+          "v": 8,
+          "a": 4,
+          "hours": 3
+        }
+      ],
+      "else": []
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.fridge.3.arg0"
+    }
+  ],
+  "shower": [
+    {
+      "type": "need",
+      "key": "clean",
+      "delta": 66
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 4
+    },
+    {
+      "type": "need",
+      "key": "energy",
+      "delta": 3
+    },
+    {
+      "type": "buff",
+      "nameKey": "@actions.shower.3.arg0",
+      "v": 9,
+      "a": 2,
+      "hours": 5
+    },
+    {
+      "type": "xp",
+      "skill": "social",
+      "amount": 3
+    },
+    {
+      "type": "task",
+      "key": "shower",
+      "amount": 1
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.shower.6.arg0"
+    }
+  ],
+  "sofa": [
+    {
+      "type": "need",
+      "key": "energy",
+      "delta": 12
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 10
+    },
+    {
+      "type": "need",
+      "key": "clean",
+      "delta": {
+        "op": "neg",
+        "args": [
+          2
+        ]
+      }
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.sofa.3.arg0"
+    }
+  ],
+  "tv": [
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 24
+    },
+    {
+      "type": "need",
+      "key": "energy",
+      "delta": {
+        "op": "neg",
+        "args": [
+          3
+        ]
+      }
+    },
+    {
+      "type": "task",
+      "key": "tv",
+      "amount": 1
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.tv.3.arg0"
+    }
+  ],
+  "easel": [
+    {
+      "type": "paint"
+    }
+  ],
+  "desk": [
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 13
+    },
+    {
+      "type": "need",
+      "key": "energy",
+      "delta": {
+        "op": "neg",
+        "args": [
+          2
+        ]
+      }
+    },
+    {
+      "type": "xp",
+      "skill": "paint",
+      "amount": 5
+    },
+    {
+      "type": "branch",
+      "condition": {
+        "type": "chance",
+        "p": 0.28
+      },
+      "then": [
+        {
+          "type": "buff",
+          "nameKey": "@actions.desk.3.then.0.arg0",
+          "v": 12,
+          "a": 10,
+          "hours": 4
+        },
+        {
+          "type": "toast",
+          "textKey": "@actions.desk.3.then.1.arg0"
+        }
+      ],
+      "else": [
+        {
+          "type": "toast",
+          "textKey": "@actions.desk.3.else.0.arg0"
+        }
+      ]
+    }
+  ],
+  "tea": [
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 10
+    },
+    {
+      "type": "need",
+      "key": "energy",
+      "delta": 7
+    },
+    {
+      "type": "buff",
+      "nameKey": "@actions.tea.2.arg0",
+      "v": 11,
+      "a": {
+        "op": "neg",
+        "args": [
+          8
+        ]
+      },
+      "hours": 5
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.tea.3.arg0"
+    }
+  ],
+  "plant": [
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 7
+    },
+    {
+      "type": "task",
+      "key": "water",
+      "amount": 1
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.plant.2.arg0"
+    }
+  ],
+  "bookshelf": [
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 11
+    },
+    {
+      "type": "xp",
+      "skill": "paint",
+      "amount": 8
+    },
+    {
+      "type": "task",
+      "key": "book",
+      "amount": 1
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.bookshelf.3.arg0"
+    }
+  ],
+  "wardrobe": [
+    {
+      "type": "need",
+      "key": "clean",
+      "delta": 9
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 5
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.wardrobe.2.arg0"
+    }
+  ],
+  "actBench": [
+    {
+      "type": "clock",
+      "minutes": 45
+    },
+    {
+      "type": "need",
+      "key": "energy",
+      "delta": 10
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 12
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actBench.3.arg0"
+    }
+  ],
+  "actPigeon": [
+    {
+      "type": "branch",
+      "condition": {
+        "type": "moneyBelow",
+        "value": 3
+      },
+      "then": [
+        {
+          "type": "toast",
+          "textKey": "@actions.actPigeon.0.then.0.arg0"
+        },
+        {
+          "type": "stop"
+        }
+      ],
+      "else": []
+    },
+    {
+      "type": "clock",
+      "minutes": 20
+    },
+    {
+      "type": "money",
+      "delta": {
+        "op": "neg",
+        "args": [
+          3
+        ]
+      }
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 15
+    },
+    {
+      "type": "xp",
+      "skill": "social",
+      "amount": 4
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actPigeon.5.arg0"
+    }
+  ],
+  "actPond": [
+    {
+      "type": "clock",
+      "minutes": 30
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 10
+    },
+    {
+      "type": "buff",
+      "nameKey": "@actions.actPond.2.arg0",
+      "v": 8,
+      "a": {
+        "op": "neg",
+        "args": [
+          6
+        ]
+      },
+      "hours": 4
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actPond.3.arg0"
+    }
+  ],
+  "actBento": [
+    {
+      "type": "branch",
+      "condition": {
+        "type": "moneyBelow",
+        "value": 14
+      },
+      "then": [
+        {
+          "type": "toast",
+          "textKey": "@actions.actBento.0.then.0.arg0"
+        },
+        {
+          "type": "stop"
+        }
+      ],
+      "else": []
+    },
+    {
+      "type": "clock",
+      "minutes": 30
+    },
+    {
+      "type": "money",
+      "delta": {
+        "op": "neg",
+        "args": [
+          14
+        ]
+      }
+    },
+    {
+      "type": "need",
+      "key": "food",
+      "delta": 42
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 5
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actBento.5.arg0"
+    }
+  ],
+  "actDrink": [
+    {
+      "type": "branch",
+      "condition": {
+        "type": "moneyBelow",
+        "value": 7
+      },
+      "then": [
+        {
+          "type": "toast",
+          "textKey": "@actions.actDrink.0.then.0.arg0"
+        },
+        {
+          "type": "stop"
+        }
+      ],
+      "else": []
+    },
+    {
+      "type": "clock",
+      "minutes": 10
+    },
+    {
+      "type": "money",
+      "delta": {
+        "op": "neg",
+        "args": [
+          7
+        ]
+      }
+    },
+    {
+      "type": "need",
+      "key": "energy",
+      "delta": 10
+    },
+    {
+      "type": "buff",
+      "nameKey": "@actions.actDrink.4.arg0",
+      "v": 7,
+      "a": 6,
+      "hours": 3
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actDrink.5.arg0"
+    }
+  ],
+  "actClerk": [
+    {
+      "type": "clock",
+      "minutes": 25
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 7
+    },
+    {
+      "type": "xp",
+      "skill": "social",
+      "amount": 8
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actClerk.3.arg0"
+    }
+  ],
+  "actBrowse": [
+    {
+      "type": "clock",
+      "minutes": 50
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 14
+    },
+    {
+      "type": "xp",
+      "skill": "paint",
+      "amount": 10
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actBrowse.3.arg0"
+    }
+  ],
+  "actBuyBook": [
+    {
+      "type": "branch",
+      "condition": {
+        "type": "moneyBelow",
+        "value": 36
+      },
+      "then": [
+        {
+          "type": "toast",
+          "textKey": "@actions.actBuyBook.0.then.0.arg0"
+        },
+        {
+          "type": "stop"
+        }
+      ],
+      "else": []
+    },
+    {
+      "type": "clock",
+      "minutes": 25
+    },
+    {
+      "type": "money",
+      "delta": {
+        "op": "neg",
+        "args": [
+          36
+        ]
+      }
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 13
+    },
+    {
+      "type": "xp",
+      "skill": "paint",
+      "amount": 16
+    },
+    {
+      "type": "buff",
+      "nameKey": "@actions.actBuyBook.5.arg0",
+      "v": 10,
+      "a": 2,
+      "hours": 8
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actBuyBook.6.arg0"
+    }
+  ],
+  "actBoss": [
+    {
+      "type": "clock",
+      "minutes": 35
+    },
+    {
+      "type": "need",
+      "key": "fun",
+      "delta": 8
+    },
+    {
+      "type": "xp",
+      "skill": "social",
+      "amount": 10
+    },
+    {
+      "type": "warm",
+      "delta": 3
+    },
+    {
+      "type": "toast",
+      "textKey": "@actions.actBoss.4.arg0"
+    }
+  ]
+}

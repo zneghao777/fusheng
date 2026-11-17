@@ -1,0 +1,93 @@
+[
+  {
+    "id": "ding",
+    "name": "@characters.0.name",
+    "gender": "f",
+    "hair": "bob",
+    "cloth": "#e3c9a6",
+    "skin": "#f7eedf",
+    "skirt": true,
+    "acc": "none",
+    "scale": 1,
+    "tag": "@characters.0.tag",
+    "bonus": {
+      "skill": "paint"
+    }
+  },
+  {
+    "id": "shuang",
+    "name": "@characters.1.name",
+    "gender": "f",
+    "hair": "braid",
+    "cloth": "#d9b6c0",
+    "skin": "#f7e9dc",
+    "skirt": true,
+    "acc": "none",
+    "scale": 1.02,
+    "tag": "@characters.1.tag",
+    "bonus": {
+      "skill": "social"
+    }
+  },
+  {
+    "id": "xin",
+    "name": "@characters.2.name",
+    "gender": "f",
+    "hair": "pony",
+    "cloth": "#a7bcc2",
+    "skin": "#f2e4d2",
+    "skirt": false,
+    "acc": "cap",
+    "scale": 0.98,
+    "tag": "@characters.2.tag",
+    "bonus": {
+      "skill": "cook"
+    }
+  },
+  {
+    "id": "liu",
+    "name": "@characters.3.name",
+    "gender": "f",
+    "hair": "curl",
+    "cloth": "#c7c0ac",
+    "skin": "#f6eadb",
+    "skirt": false,
+    "acc": "none",
+    "scale": 0.96,
+    "tag": "@characters.3.tag",
+    "bonus": {
+      "need": "energy",
+      "v": 10
+    }
+  },
+  {
+    "id": "kang",
+    "name": "@characters.4.name",
+    "gender": "m",
+    "hair": "short",
+    "cloth": "#b7afa0",
+    "skin": "#f0e2cd",
+    "skirt": false,
+    "acc": "none",
+    "scale": 1.06,
+    "tag": "@characters.4.tag",
+    "bonus": {
+      "warm": 14
+    }
+  },
+  {
+    "id": "wu",
+    "name": "@characters.5.name",
+    "gender": "m",
+    "hair": "buzz",
+    "cloth": "#9fa8ae",
+    "skin": "#f2e6d6",
+    "skirt": false,
+    "acc": "glasses",
+    "scale": 1,
+    "tag": "@characters.5.tag",
+    "bonus": {
+      "money": 40
+    }
+  }
+]

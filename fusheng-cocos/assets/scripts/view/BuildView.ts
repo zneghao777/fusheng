@@ -1,0 +1,11 @@
+import { Color, Graphics, Layers, Node, UITransform, UIOpacity } from 'cc';
+import { Sim } from '../core/Sim';
+import { I18n } from '../data/I18n';
+import { ArtAssets } from './ArtAssets';
+export class BuildView {
+ readonly node:Node;private grid:Graphics;private ghost:Node;private marker:Graphics;private hash='';
+ constructor(parent:Node,private readonly i18n:I18n){this.node=new Node('FurniturePlacement');this.node.layer=Layers.Enum.UI_2D;parent.addChild(this.node);this.node.setSiblingIndex(1);this.node.setPosition(-640,360);this.node.addComponent(UITransform).setContentSize(1280,720);this.grid=this.node.addComponent(Graphics);this.ghost=new Node('PlacementGhost');this.ghost.layer=Layers.Enum.UI_2D;this.node.addChild(this.ghost);this.ghost.addComponent(UITransform).setContentSize(1280,720);this.ghost.addComponent(UIOpacity).opacity=125;const marker=new Node('PlacementValidity');marker.layer=Layers.Enum.UI_2D;this.node.addChild(marker);marker.addComponent(UITransform);this.marker=marker.addComponent(Graphics);this.node.active=false;}
+ private horizontalCompensation=1;
+ setHorizontalCompensation(value:number):void{if(value!==this.horizontalCompensation){this.horizontalCompensation=value;this.hash='';}this.ghost.setScale(value,1,1);}
+ update(sim:Sim,enabled:boolean,id:string|null,x:number,y:number):void{this.node.active=enabled;if(!enabled){this.hash='';return;}const hash=sim.state.house+':'+id+':'+Math.round(x/20)+':'+Math.round(y/20)+':'+sim.state.money+':'+sim.state.placed.length;if(hash===this.hash)return;this.hash=hash;this.grid.clear();this.grid.strokeColor=new Color(43,42,38,45);this.grid.lineWidth=1;for(const fy of sim.house.floors)for(let gx=sim.house.x1;gx<sim.house.x2;gx+=sim.content.rules.build.grid){this.grid.moveTo(gx,-fy);this.grid.lineTo(gx,-fy+8);}this.grid.stroke();this.marker.clear();this.ghost.active=!!id;if(!id)return;const target=sim.canPlace(id,x,y);const d=sim.content.furniture[id];this.ghost.setPosition(target.x,-target.y-12);this.ghost.getComponent(UITransform)!.setAnchorPoint(.5,0);void ArtAssets.paint(this.ghost,'furniture/'+id,d.w+32,d.h+28);this.marker.strokeColor=new Color(target.ok?'#557251':'#a6402f');this.marker.lineWidth=3;const w=sim.content.furniture[id].w;this.marker.moveTo(target.x-w/2,-target.y-4);this.marker.lineTo(target.x+w/2,-target.y-4);this.marker.stroke();}
+}
